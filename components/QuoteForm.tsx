@@ -2,9 +2,23 @@
 
 import { useEffect, useState } from "react";
 import RouteProgress from "./RouteProgress";
-import { quoteRequestSchema, FLEXIBILITY_LABELS } from "@/lib/validation";
+import { quoteRequestSchema, FLEXIBILITY_LABELS, VEHICLE_TYPES, VEHICLE_TYPE_LABELS } from "@/lib/validation";
 
 const STEPS = ["Service", "Vehicle", "Route", "Timing", "Contact"];
+
+// Common makes for the manual-entry dropdown. Not exhaustive -- "Other" falls
+// back to a free-text box so an uncommon make never blocks the customer.
+const COMMON_MAKES = [
+  "Acura", "Audi", "BMW", "Buick", "Cadillac", "Chevrolet", "Chrysler", "Dodge",
+  "Ford", "GMC", "Honda", "Hyundai", "Infiniti", "Jaguar", "Jeep", "Kia",
+  "Land Rover", "Lexus", "Lincoln", "Mazda", "Mercedes-Benz", "Mini",
+  "Mitsubishi", "Nissan", "Porsche", "Ram", "Subaru", "Tesla", "Toyota",
+  "Volkswagen", "Volvo",
+];
+const OTHER_MAKE = "__other__";
+
+const CURRENT_YEAR = new Date().getFullYear();
+const VEHICLE_YEARS = Array.from({ length: CURRENT_YEAR + 1 - 1980 + 1 }, (_, i) => String(CURRENT_YEAR + 1 - i));
 
 type FormState = {
   serviceType: "carrier" | "personal_driver" | "";
@@ -12,6 +26,7 @@ type FormState = {
   vehicleYear: string;
   vehicleMake: string;
   vehicleModel: string;
+  vehicleType: (typeof VEHICLE_TYPES)[number] | "";
   isRunning: "running" | "not_running" | "";
   enclosed: "open" | "enclosed" | "";
   pickupZip: string;
@@ -29,6 +44,7 @@ const EMPTY_FORM: FormState = {
   vehicleYear: "",
   vehicleMake: "",
   vehicleModel: "",
+  vehicleType: "",
   isRunning: "",
   enclosed: "",
   pickupZip: "",
@@ -55,11 +71,27 @@ export default function QuoteForm() {
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
   const [vinDecodeStatus, setVinDecodeStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [entryMode, setEntryMode] = useState<"vin" | "manual">("vin");
+  const [makeIsOther, setMakeIsOther] = useState(false);
   const [estimate, setEstimate] = useState<{ lowCents: number; highCents: number } | null>(null);
   const [estimateStatus, setEstimateStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  // Switching modes clears the fields the other mode owns, so stale data
+  // from one path never silently rides along hidden in the other.
+  function switchToManual() {
+    setEntryMode("manual");
+    setVinDecodeStatus("idle");
+    setForm((prev) => ({ ...prev, vin: "" }));
+  }
+
+  function switchToVin() {
+    setEntryMode("vin");
+    setMakeIsOther(false);
+    setForm((prev) => ({ ...prev, vehicleYear: "", vehicleMake: "", vehicleModel: "", vehicleType: "" }));
   }
 
   // Auto-fills Year/Make/Model from the VIN once it's 17 valid characters,
@@ -156,10 +188,15 @@ export default function QuoteForm() {
     switch (STEPS[index]) {
       case "Service":
         return ["serviceType"];
-      case "Vehicle":
+      case "Vehicle": {
+        const vehicleFields: (keyof FormState)[] =
+          entryMode === "vin"
+            ? ["vin", "vehicleYear", "vehicleMake", "vehicleModel"]
+            : ["vehicleYear", "vehicleMake", "vehicleModel", "vehicleType"];
         return form.serviceType === "carrier"
-          ? ["vin", "vehicleYear", "vehicleMake", "vehicleModel", "isRunning", "enclosed"]
-          : ["vin", "vehicleYear", "vehicleMake", "vehicleModel", "isRunning"];
+          ? [...vehicleFields, "isRunning", "enclosed"]
+          : [...vehicleFields, "isRunning"];
+      }
       case "Route":
         return ["pickupZip", "dropoffZip"];
       case "Timing":
@@ -178,6 +215,7 @@ export default function QuoteForm() {
     return {
       ...f,
       vehicleYear: f.vehicleYear || undefined,
+      vehicleType: f.vehicleType || undefined,
       enclosed: f.serviceType === "carrier" ? f.enclosed || undefined : undefined,
     };
   }
@@ -310,63 +348,134 @@ export default function QuoteForm() {
 
         {step === "Vehicle" && (
           <div className="space-y-5">
-            <div>
-              <label htmlFor="vin" className="manifest-label">VIN</label>
-              <input
-                id="vin"
-                value={form.vin}
-                onChange={(e) => update("vin", e.target.value.toUpperCase())}
-                maxLength={17}
-                placeholder="17-character Vehicle ID Number"
-                className={`${inputClass(!!fieldErrors.vin)} font-mono uppercase`}
-              />
-              <p className="mt-1 text-xs text-slate">
-                On your registration, insurance card, or the dashboard on the driver&apos;s side.
-              </p>
-              {vinDecodeStatus === "loading" && (
-                <p className="mt-1 text-xs text-slate">Looking up your vehicle&hellip;</p>
-              )}
-              {vinDecodeStatus === "done" && (
-                <p className="mt-1 text-xs text-highway">
-                  Filled in below from your VIN &mdash; double-check it and edit anything that&apos;s off.
+            {entryMode === "vin" ? (
+              <div>
+                <label htmlFor="vin" className="manifest-label">VIN</label>
+                <input
+                  id="vin"
+                  value={form.vin}
+                  onChange={(e) => update("vin", e.target.value.toUpperCase())}
+                  maxLength={17}
+                  placeholder="17-character Vehicle ID Number"
+                  className={`${inputClass(!!fieldErrors.vin)} font-mono uppercase`}
+                />
+                <p className="mt-1 text-xs text-slate">
+                  On your registration, insurance card, or the dashboard on the driver&apos;s side.
                 </p>
-              )}
-              {fieldErrors.vin && <p className="mt-1 text-sm text-rust">{fieldErrors.vin}</p>}
-            </div>
+                {vinDecodeStatus === "loading" && (
+                  <p className="mt-1 text-xs text-slate">Looking up your vehicle&hellip;</p>
+                )}
+                {vinDecodeStatus === "done" && (
+                  <p className="mt-1 text-xs text-highway">Got it &mdash; we&apos;ll confirm the details with you later.</p>
+                )}
+                {vinDecodeStatus === "error" && (
+                  <p className="mt-1 text-xs text-rust">
+                    Couldn&apos;t look that VIN up. You can try again, or enter the details manually below.
+                  </p>
+                )}
+                {(fieldErrors.vin || fieldErrors.vehicleYear || fieldErrors.vehicleMake || fieldErrors.vehicleModel) && (
+                  <p className="mt-1 text-sm text-rust">
+                    {fieldErrors.vin ?? "We need a valid VIN, or you can enter the vehicle details manually."}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  onClick={switchToManual}
+                  className="mt-2 text-sm text-highway underline underline-offset-2"
+                >
+                  Don&apos;t have the VIN handy? Enter vehicle details manually
+                </button>
+              </div>
+            ) : (
+              <div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="vehicleYear" className="manifest-label">Year</label>
+                    <select
+                      id="vehicleYear"
+                      value={form.vehicleYear}
+                      onChange={(e) => update("vehicleYear", e.target.value)}
+                      className={inputClass(!!fieldErrors.vehicleYear)}
+                    >
+                      <option value="">Select year&hellip;</option>
+                      {VEHICLE_YEARS.map((year) => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                    {fieldErrors.vehicleYear && <p className="mt-1 text-sm text-rust">{fieldErrors.vehicleYear}</p>}
+                  </div>
+                  <div>
+                    <label htmlFor="vehicleType" className="manifest-label">Type</label>
+                    <select
+                      id="vehicleType"
+                      value={form.vehicleType}
+                      onChange={(e) => update("vehicleType", e.target.value as FormState["vehicleType"])}
+                      className={inputClass(!!fieldErrors.vehicleType)}
+                    >
+                      <option value="">Select type&hellip;</option>
+                      {VEHICLE_TYPES.map((type) => (
+                        <option key={type} value={type}>{VEHICLE_TYPE_LABELS[type]}</option>
+                      ))}
+                    </select>
+                    {fieldErrors.vehicleType && <p className="mt-1 text-sm text-rust">{fieldErrors.vehicleType}</p>}
+                  </div>
+                </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div>
-                <label htmlFor="vehicleYear" className="manifest-label">Year</label>
-                <input
-                  id="vehicleYear"
-                  inputMode="numeric"
-                  value={form.vehicleYear}
-                  onChange={(e) => update("vehicleYear", e.target.value)}
-                  className={inputClass(!!fieldErrors.vehicleYear)}
-                />
-                {fieldErrors.vehicleYear && <p className="mt-1 text-sm text-rust">{fieldErrors.vehicleYear}</p>}
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="vehicleMake" className="manifest-label">Make</label>
+                    {makeIsOther ? (
+                      <input
+                        id="vehicleMake"
+                        value={form.vehicleMake}
+                        onChange={(e) => update("vehicleMake", e.target.value)}
+                        placeholder="Type the make"
+                        className={inputClass(!!fieldErrors.vehicleMake)}
+                      />
+                    ) : (
+                      <select
+                        id="vehicleMake"
+                        value={form.vehicleMake}
+                        onChange={(e) => {
+                          if (e.target.value === OTHER_MAKE) {
+                            setMakeIsOther(true);
+                            update("vehicleMake", "");
+                          } else {
+                            update("vehicleMake", e.target.value);
+                          }
+                        }}
+                        className={inputClass(!!fieldErrors.vehicleMake)}
+                      >
+                        <option value="">Select make&hellip;</option>
+                        {COMMON_MAKES.map((make) => (
+                          <option key={make} value={make}>{make}</option>
+                        ))}
+                        <option value={OTHER_MAKE}>Other&hellip;</option>
+                      </select>
+                    )}
+                    {fieldErrors.vehicleMake && <p className="mt-1 text-sm text-rust">{fieldErrors.vehicleMake}</p>}
+                  </div>
+                  <div>
+                    <label htmlFor="vehicleModel" className="manifest-label">Model</label>
+                    <input
+                      id="vehicleModel"
+                      value={form.vehicleModel}
+                      onChange={(e) => update("vehicleModel", e.target.value)}
+                      className={inputClass(!!fieldErrors.vehicleModel)}
+                    />
+                    {fieldErrors.vehicleModel && <p className="mt-1 text-sm text-rust">{fieldErrors.vehicleModel}</p>}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={switchToVin}
+                  className="mt-3 text-sm text-highway underline underline-offset-2"
+                >
+                  Have the VIN? Enter it instead
+                </button>
               </div>
-              <div>
-                <label htmlFor="vehicleMake" className="manifest-label">Make</label>
-                <input
-                  id="vehicleMake"
-                  value={form.vehicleMake}
-                  onChange={(e) => update("vehicleMake", e.target.value)}
-                  className={inputClass(!!fieldErrors.vehicleMake)}
-                />
-                {fieldErrors.vehicleMake && <p className="mt-1 text-sm text-rust">{fieldErrors.vehicleMake}</p>}
-              </div>
-              <div>
-                <label htmlFor="vehicleModel" className="manifest-label">Model</label>
-                <input
-                  id="vehicleModel"
-                  value={form.vehicleModel}
-                  onChange={(e) => update("vehicleModel", e.target.value)}
-                  className={inputClass(!!fieldErrors.vehicleModel)}
-                />
-                {fieldErrors.vehicleModel && <p className="mt-1 text-sm text-rust">{fieldErrors.vehicleModel}</p>}
-              </div>
-            </div>
+            )}
 
             <div>
               <span className="manifest-label">Condition</span>

@@ -64,8 +64,10 @@ export async function sendOwnerAlertEmail(quote: QuoteRequestRow) {
     subject: `New quote request: ${quote.contact_name} (${serviceLabel})`,
     text: [
       `Service: ${serviceLabel}`,
-      `VIN: ${quote.vin}`,
-      `Vehicle: ${quote.vehicle_year ?? "?"} ${quote.vehicle_make ?? ""} ${quote.vehicle_model ?? ""}`,
+      `VIN: ${quote.vin ?? "not provided — confirm with customer"}`,
+      `Vehicle: ${quote.vehicle_year ?? "?"} ${quote.vehicle_make ?? ""} ${quote.vehicle_model ?? ""}${
+        quote.vehicle_type ? ` (${quote.vehicle_type})` : ""
+      }`,
       `Running: ${quote.is_running ? "Yes" : "No"}`,
       quote.service_type === "carrier" ? `Enclosed: ${quote.enclosed ? "Yes" : "No (open)"}` : null,
       `Route: ${quote.pickup_zip} \u2192 ${quote.dropoff_zip}`,

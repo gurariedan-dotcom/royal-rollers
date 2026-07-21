@@ -13,10 +13,11 @@ create extension if not exists "pgcrypto";
 create table quote_requests (
   id uuid primary key default gen_random_uuid(),
   service_type text not null check (service_type in ('carrier', 'personal_driver')),
-  vin text not null,
+  vin text, -- nullable: customers without a VIN handy can enter vehicle info manually instead
   vehicle_year integer,
   vehicle_make text,
   vehicle_model text,
+  vehicle_type text, -- body style (sedan/suv/truck/etc), only collected in manual-entry mode
   is_running boolean,
   enclosed boolean, -- null when service_type = 'personal_driver'
   pickup_zip text not null,

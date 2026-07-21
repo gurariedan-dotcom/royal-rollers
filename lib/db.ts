@@ -41,10 +41,11 @@ export function getDb() {
 export type QuoteRequestRow = {
   id: string;
   service_type: "carrier" | "personal_driver";
-  vin: string;
+  vin: string | null;
   vehicle_year: number | null;
   vehicle_make: string | null;
   vehicle_model: string | null;
+  vehicle_type: string | null;
   is_running: boolean | null;
   enclosed: boolean | null;
   pickup_zip: string;

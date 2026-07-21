@@ -25,10 +25,11 @@ export async function POST(req: NextRequest) {
     .from("quote_requests")
     .insert({
       service_type: data.serviceType,
-      vin: data.vin.toUpperCase(),
+      vin: data.vin ? data.vin.toUpperCase() : null,
       vehicle_year: data.vehicleYear,
       vehicle_make: data.vehicleMake,
       vehicle_model: data.vehicleModel,
+      vehicle_type: data.vehicleType ?? null,
       is_running: data.isRunning === "running",
       enclosed: data.serviceType === "carrier" ? data.enclosed === "enclosed" : null,
       pickup_zip: data.pickupZip,

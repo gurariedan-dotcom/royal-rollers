@@ -1,8 +1,36 @@
 import { z } from "zod";
 
+export const VEHICLE_TYPES = [
+  "sedan",
+  "suv",
+  "truck",
+  "van",
+  "coupe",
+  "wagon",
+  "convertible",
+  "motorcycle",
+  "other",
+] as const;
+
+export const VEHICLE_TYPE_LABELS: Record<(typeof VEHICLE_TYPES)[number], string> = {
+  sedan: "Sedan",
+  suv: "SUV",
+  truck: "Truck",
+  van: "Van / Minivan",
+  coupe: "Coupe",
+  wagon: "Wagon",
+  convertible: "Convertible",
+  motorcycle: "Motorcycle",
+  other: "Other",
+};
+
 // Mirrors the fields Central Dispatch requires when the owner posts a load,
 // per the handoff doc (Section 4.2) -- the point is that this form should be
 // operationally complete, not just marketing-complete.
+//
+// VIN is optional: customers who don't have it handy can enter vehicle info
+// manually instead (year/make/model/type), and the owner confirms the VIN
+// later when following up on the quote.
 export const quoteRequestSchema = z
   .object({
     serviceType: z.enum(["carrier", "personal_driver"], {
@@ -11,8 +39,9 @@ export const quoteRequestSchema = z
     vin: z
       .string()
       .trim()
-      .length(17, "A VIN is 17 characters.")
-      .regex(/^[A-HJ-NPR-Z0-9]{17}$/i, "That doesn't look like a valid VIN (VINs skip the letters I, O, and Q)."),
+      .regex(/^[A-HJ-NPR-Z0-9]{17}$/i, "That doesn't look like a valid VIN (VINs skip the letters I, O, and Q).")
+      .optional()
+      .or(z.literal("")),
     vehicleYear: z.coerce
       .number()
       .int()
@@ -20,6 +49,7 @@ export const quoteRequestSchema = z
       .max(new Date().getFullYear() + 1, "Year looks too far in the future."),
     vehicleMake: z.string().trim().min(1, "Make is required."),
     vehicleModel: z.string().trim().min(1, "Model is required."),
+    vehicleType: z.enum(VEHICLE_TYPES).optional(),
     isRunning: z.enum(["running", "not_running"]),
     // Only meaningful for carrier transport -- enforced below via superRefine,
     // not just hidden in the UI, so a direct API call can't skip the rule.
