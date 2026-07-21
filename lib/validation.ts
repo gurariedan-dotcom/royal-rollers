@@ -56,6 +56,7 @@ export const quoteRequestSchema = z
     enclosed: z.enum(["open", "enclosed"]).optional(),
     pickupZip: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit ZIP code."),
     dropoffZip: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit ZIP code."),
+    roundTrip: z.boolean().optional(),
     preferredPickupDate: z.string().trim().min(1, "Pick a preferred date."),
     flexibilityWindow: z.enum(["exact", "plus_minus_2", "plus_minus_5", "flexible"]),
     contactName: z.string().trim().min(1, "Name is required."),

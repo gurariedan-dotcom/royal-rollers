@@ -70,7 +70,7 @@ export async function sendOwnerAlertEmail(quote: QuoteRequestRow) {
       }`,
       `Running: ${quote.is_running ? "Yes" : "No"}`,
       quote.service_type === "carrier" ? `Enclosed: ${quote.enclosed ? "Yes" : "No (open)"}` : null,
-      `Route: ${quote.pickup_zip} \u2192 ${quote.dropoff_zip}`,
+      `Route: ${quote.pickup_zip} \u2192 ${quote.dropoff_zip}${quote.round_trip ? " (round trip)" : ""}`,
       `Preferred date: ${quote.preferred_pickup_date ?? "\u2014"} (${quote.flexibility_window ?? "\u2014"})`,
       `Contact: ${quote.contact_name} \u2014 ${quote.contact_phone} \u2014 ${quote.contact_email}`,
       "",

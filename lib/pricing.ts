@@ -29,6 +29,10 @@ export type EstimateInput = {
   serviceType: "carrier" | "personal_driver";
   enclosed?: "open" | "enclosed";
   isRunning: "running" | "not_running";
+  // Round trip = the vehicle goes out and comes back later (common for
+  // Tri-State <-> Florida snowbirds, see app/about/page.tsx). Priced as two
+  // one-way jobs -- simplest model, no separate discount knob for now.
+  roundTrip?: boolean;
 };
 
 export type EstimateResult = {
@@ -49,6 +53,9 @@ export function computeEstimate(input: EstimateInput): EstimateResult {
   }
   if (input.isRunning === "not_running") {
     midpoint += NOT_RUNNING_FLAT_ADD_CENTS;
+  }
+  if (input.roundTrip) {
+    midpoint *= 2;
   }
 
   const spread = midpoint * (RANGE_SPREAD_PERCENT / 100);

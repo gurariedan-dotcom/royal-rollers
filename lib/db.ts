@@ -50,6 +50,7 @@ export type QuoteRequestRow = {
   enclosed: boolean | null;
   pickup_zip: string;
   dropoff_zip: string;
+  round_trip: boolean;
   preferred_pickup_date: string | null;
   flexibility_window: string | null;
   contact_name: string;

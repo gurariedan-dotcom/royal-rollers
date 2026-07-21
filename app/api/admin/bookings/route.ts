@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     .from("bookings")
     .select(
       "id, deposit_amount_cents, deposit_status, balance_amount_cents, balance_charge_status, created_at, " +
-        "quote_requests(contact_name, contact_email, vehicle_year, vehicle_make, vehicle_model, vehicle_type, pickup_zip, dropoff_zip)"
+        "quote_requests(contact_name, contact_email, vehicle_year, vehicle_make, vehicle_model, vehicle_type, pickup_zip, dropoff_zip, round_trip)"
     )
     .order("created_at", { ascending: false });
 
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       vehicle: [quote?.vehicle_year, quote?.vehicle_make, quote?.vehicle_model, quote?.vehicle_type ? `(${quote.vehicle_type})` : null]
         .filter(Boolean)
         .join(" "),
-      route: quote ? `${quote.pickup_zip} → ${quote.dropoff_zip}` : "",
+      route: quote ? `${quote.pickup_zip} → ${quote.dropoff_zip}${quote.round_trip ? " (round trip)" : ""}` : "",
       depositAmountCents: row.deposit_amount_cents,
       depositStatus: row.deposit_status,
       balanceAmountCents: row.balance_amount_cents,

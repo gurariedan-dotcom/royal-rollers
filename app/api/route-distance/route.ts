@@ -51,6 +51,7 @@ export async function GET(req: NextRequest) {
   const serviceType = req.nextUrl.searchParams.get("serviceType");
   const isRunning = req.nextUrl.searchParams.get("isRunning");
   const enclosed = req.nextUrl.searchParams.get("enclosed") ?? undefined;
+  const roundTrip = req.nextUrl.searchParams.get("roundTrip") === "true";
 
   if (!ZIP_REGEX.test(pickupZip) || !ZIP_REGEX.test(dropoffZip)) {
     return NextResponse.json({ error: "Enter two valid 5-digit ZIP codes." }, { status: 400 });
@@ -77,6 +78,7 @@ export async function GET(req: NextRequest) {
     serviceType,
     enclosed: enclosed as "open" | "enclosed" | undefined,
     isRunning,
+    roundTrip,
   });
 
   return NextResponse.json({

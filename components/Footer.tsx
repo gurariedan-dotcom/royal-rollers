@@ -18,6 +18,7 @@ export default function Footer() {
           <div>
             <p className="manifest-label text-paper/60">Company</p>
             <ul className="mt-3 space-y-2 text-sm">
+              <li><Link href="/reviews" className="hover:text-brass-light">Reviews</Link></li>
               <li><Link href="/services" className="hover:text-brass-light">Services</Link></li>
               <li><Link href="/how-it-works" className="hover:text-brass-light">How It Works</Link></li>
               <li><Link href="/about" className="hover:text-brass-light">About</Link></li>

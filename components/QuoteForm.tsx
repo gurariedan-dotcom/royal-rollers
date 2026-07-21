@@ -31,6 +31,7 @@ type FormState = {
   enclosed: "open" | "enclosed" | "";
   pickupZip: string;
   dropoffZip: string;
+  roundTrip: boolean;
   preferredPickupDate: string;
   flexibilityWindow: keyof typeof FLEXIBILITY_LABELS | "";
   contactName: string;
@@ -49,6 +50,7 @@ const EMPTY_FORM: FormState = {
   enclosed: "",
   pickupZip: "",
   dropoffZip: "",
+  roundTrip: false,
   preferredPickupDate: "",
   flexibilityWindow: "",
   contactName: "",
@@ -159,6 +161,7 @@ export default function QuoteForm() {
         dropoffZip: form.dropoffZip,
         serviceType: form.serviceType,
         isRunning: form.isRunning,
+        roundTrip: String(form.roundTrip),
       });
       if (form.enclosed) params.set("enclosed", form.enclosed);
 
@@ -182,7 +185,7 @@ export default function QuoteForm() {
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.pickupZip, form.dropoffZip, form.serviceType, form.enclosed, form.isRunning]);
+  }, [form.pickupZip, form.dropoffZip, form.serviceType, form.enclosed, form.isRunning, form.roundTrip]);
 
   function fieldsForStep(index: number): (keyof FormState)[] {
     switch (STEPS[index]) {
@@ -544,6 +547,17 @@ export default function QuoteForm() {
               </div>
             </div>
 
+            <button
+              type="button"
+              onClick={() => update("roundTrip", !form.roundTrip)}
+              className={[
+                "rounded-sm border-2 px-4 py-2 font-display text-sm uppercase tracking-wideish transition-colors",
+                form.roundTrip ? "border-highway bg-highway/10 text-highway" : "border-slate-light/50 text-ink/70",
+              ].join(" ")}
+            >
+              Round Trip
+            </button>
+
             {estimateStatus === "loading" && (
               <p className="text-sm text-slate">Estimating cost&hellip;</p>
             )}
@@ -554,7 +568,7 @@ export default function QuoteForm() {
                   {"–"}
                   ${(estimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                 </span>{" "}
-estimated cost. We&apos;ll email you your exact quote after you submit.
+                estimated cost{form.roundTrip ? " for the round trip" : ""}. We&apos;ll email you your exact quote after you submit.
               </div>
             )}
           </div>

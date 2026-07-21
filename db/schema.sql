@@ -22,6 +22,7 @@ create table quote_requests (
   enclosed boolean, -- null when service_type = 'personal_driver'
   pickup_zip text not null,
   dropoff_zip text not null,
+  round_trip boolean not null default false,
   preferred_pickup_date date,
   flexibility_window text,
   contact_name text not null,

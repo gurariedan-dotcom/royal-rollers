@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
       enclosed: data.serviceType === "carrier" ? data.enclosed === "enclosed" : null,
       pickup_zip: data.pickupZip,
       dropoff_zip: data.dropoffZip,
+      round_trip: data.roundTrip ?? false,
       preferred_pickup_date: data.preferredPickupDate,
       flexibility_window: data.flexibilityWindow,
       contact_name: data.contactName,
