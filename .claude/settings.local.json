@@ -6,7 +6,8 @@
       "Bash(npm audit *)",
       "Bash(openssl rand *)",
       "Bash(mkdir -p /Users/Work/Downloads/royal-rollers/.claude)",
-      "Bash(python3 -m json.tool)"
+      "Bash(python3 -m json.tool)",
+      "Bash(bash .claude/backup.sh)"
     ]
   }
 }

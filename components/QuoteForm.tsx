@@ -554,7 +554,7 @@ export default function QuoteForm() {
                   {"–"}
                   ${(estimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                 </span>{" "}
-                estimated &mdash; not a quote. Your real, priced quote will be emailed after you submit.
+estimated cost. We&apos;ll email you your exact quote after you submit.
               </div>
             )}
           </div>
