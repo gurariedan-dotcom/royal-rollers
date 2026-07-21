@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-body;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display uppercase tracking-signage text-ink;
+  }
+
+  /* Visible keyboard focus everywhere -- not just on inputs. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid theme("colors.brass.DEFAULT");
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* A dashed "route" rule used under section headers and in the manifest
+     hero -- stands in for the generic divider line, but reads as a road. */
+  .route-rule {
+    background-image: repeating-linear-gradient(
+      to right,
+      theme("colors.brass.DEFAULT") 0,
+      theme("colors.brass.DEFAULT") 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    height: 2px;
+  }
+
+  .manifest-label {
+    @apply font-mono text-xs uppercase tracking-wideish text-slate;
+  }
+}
