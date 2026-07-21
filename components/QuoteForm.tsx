@@ -550,11 +550,24 @@ export default function QuoteForm() {
             <button
               type="button"
               onClick={() => update("roundTrip", !form.roundTrip)}
+              aria-pressed={form.roundTrip}
               className={[
-                "rounded-sm border-2 px-4 py-2 font-display text-sm uppercase tracking-wideish transition-colors",
+                "flex items-center gap-3 rounded-sm border-2 px-4 py-2 font-display text-sm uppercase tracking-wideish transition-colors",
                 form.roundTrip ? "border-highway bg-highway/10 text-highway" : "border-slate-light/50 text-ink/70",
               ].join(" ")}
             >
+              <span
+                className={[
+                  "flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2",
+                  form.roundTrip ? "border-highway bg-highway" : "border-slate-light/60 bg-paper",
+                ].join(" ")}
+              >
+                {form.roundTrip && (
+                  <svg viewBox="0 0 16 16" className="h-3 w-3 fill-none stroke-paper stroke-[3]">
+                    <path d="M3 8l3.5 3.5L13 4.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </span>
               Round Trip
             </button>
 
