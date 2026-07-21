@@ -1,8 +1,8 @@
 # Royal Rollers
 
 Marketing site + quote request + booking flow for Royal Rollers, a vehicle
-transport brokerage running the Tri-State (NY/NJ/CT) &rarr; Florida corridor.
-Built from the project handoff doc, in full.
+transport brokerage based in the Tri-State (NY/NJ/CT) area, serving any
+destination nationwide. Built from the project handoff doc, in full.
 
 ## Important: this has not been run or built
 
@@ -22,7 +22,7 @@ any new project has before its first successful `npm run dev`.
    - Stripe secret key + publishable key
    - Resend API key, from address, and where owner alerts should go
    - `INTERNAL_OPS_SECRET` &mdash; any long random string (`openssl rand -hex 32`)
-   - `DEPOSIT_PERCENT` &mdash; see "Deposit amount" below, this is a placeholder
+   - `DEPOSIT_PERCENT` &mdash; decided at 25%
 3. Run `db/schema.sql` against your Supabase project (SQL editor, or `psql`).
 4. `npm run dev` and open `http://localhost:3000`.
 
@@ -56,6 +56,15 @@ any new project has before its first successful `npm run dev`.
 - **`POST /api/charge-balance`** &mdash; charges the saved card for the
   remaining balance. Protected by the same shared secret; see "Still open"
   below for why this doesn't run automatically yet.
+- **Instant estimate** &mdash; the Route step of the quote form shows a live,
+  non-binding `$X&ndash;$Y` range as soon as enough fields are filled in
+  (`app/api/route-distance/route.ts` geocodes both ZIPs via the free,
+  no-signup Zippopotam.us API and estimates driving distance from
+  straight-line distance with a standard road-distance correction factor;
+  `lib/pricing.ts` turns that into a range). This is purely informational:
+  it's never sent as part of the quote submission and never touches
+  `quoted_amount_cents` &mdash; the real price is still always set by hand via
+  `PATCH /api/quote/[id]/price`.
 
 ## Filled gaps (found during review, addressed here)
 
@@ -78,29 +87,27 @@ writing correct backend logic. These were fixed rather than left as TODOs:
    deposit." Added `/book/[quoteId]` so that promise has a real page behind
    it.
 
-## Still open (carried over from the handoff doc, Section 10 -- not resolved here)
+## Still open (carried over from the handoff doc, Section 10 — not resolved here)
 
 These need a decision from the business owner; they're not blockers for
 running the app, but they block a real launch:
 
-- **Business hours** &mdash; the "1 hour, during business hours" promise
-  has no enforcement logic yet, because the actual hours were never defined.
-  The email-sending code doesn't check the clock at all right now.
-- **Deposit structure** &mdash; `DEPOSIT_PERCENT` (default 20%) in
-  `.env.local` is a placeholder standing in for a real decision (flat fee
-  vs. percentage). Change the env var or replace the calculation in
-  `app/api/booking/route.ts` and `app/api/quote/[id]/route.ts` once decided.
+- **Business hours** &mdash; the original "1 hour, during business hours"
+  promise was dropped from customer-facing copy since it was never actually
+  enforced (no clock-checking logic exists). If a real turnaround-time
+  promise is wanted later, it needs real hours defined and logic to match.
 - **What triggers the balance charge.** `/api/charge-balance` exists and
-  works, but nothing calls it automatically. "On delivery" needs a real
-  source of truth (a manual "mark delivered" click somewhere, a webhook, a
-  date-based cron) before this can run unattended. Do not wire up a
-  time-based cron as a shortcut without deciding this is actually right --
+  works (with a `/admin/bookings` page to trigger it by hand), but nothing
+  calls it automatically. "On delivery" needs a real source of truth (a
+  webhook, a date-based cron) before this can run unattended. Do not wire up
+  a time-based cron as a shortcut without deciding this is actually right —
   an early charge is a real trust problem.
-- **Balance-charge failure handling.** If the saved card is declined or
-  needs 3D-Secure re-authentication the customer isn't present for,
-  `lib/stripe.ts` surfaces that distinctly, but there's no customer-facing
-  email template yet for "please update your card." Worth adding before
-  relying on the automation.
+- **Instant-estimate pricing figures** &mdash; `ESTIMATE_BASE_FEE_CENTS`,
+  `ESTIMATE_PER_MILE_CENTS`, and the other `ESTIMATE_*` vars in
+  `.env.local` are scaffolded placeholders (see `lib/pricing.ts`), the same
+  status `DEPOSIT_PERCENT` had before that got decided. The estimate is
+  non-binding either way, but the numbers should reflect real costs before
+  relying on them to set customer expectations.
 - **Branding** &mdash; no logo or existing marketing materials to match.
   The design direction below is an original one built for this brief, not a
   placeholder for real brand assets.
@@ -124,10 +131,13 @@ condensed and uppercase (interstate-signage feel), body text is Public Sans,
 and data fields (VIN, ZIPs, dollar amounts) use a monospace face so they
 read like data rather than prose.
 
-The signature visual is the route line (`components/RouteMap.tsx`) &mdash; a
-stylized line from the Tri-State area down to Florida, reused at a smaller
-scale as the quote form's step tracker (`components/RouteProgress.tsx`), so
-"stops on a route" is a consistent idea rather than a one-off illustration.
+The signature visual is the route map (`components/RouteMap.tsx`) &mdash; a
+stylized fan of lines from the Tri-State area to destinations across the
+country (Florida, Chicago, Texas, Los Angeles), with Florida kept visually
+prominent as the flagship route. The same line/dot language is reused at a
+smaller scale as the quote form's step tracker
+(`components/RouteProgress.tsx`), so "stops on a route" is a consistent idea
+rather than a one-off illustration.
 
 ## Project structure
 

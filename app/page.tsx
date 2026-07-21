@@ -6,16 +6,16 @@ export default function HomePage() {
     <>
       <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:items-center md:py-24">
         <div>
-          <p className="manifest-label">Tri-State &rarr; Florida</p>
+          <p className="manifest-label">Tri-State &rarr; Nationwide</p>
           <h1 className="mt-3 text-4xl font-semibold leading-[1.05] md:text-5xl">
-            Your car, moved south.
+            Your car, moved anywhere.
             <br />
             <span className="text-brass">Your call how.</span>
           </h1>
           <p className="mt-6 max-w-md text-ink/75">
-            Royal Rollers arranges vehicle transport between the Tri-State area and
-            Florida &mdash; on an insured multi-car hauler, or driven directly by a
-            personal driver. Two real options, quoted directly by us.
+            Royal Rollers arranges vehicle transport from the Tri-State area to
+            anywhere in the country &mdash; on an insured multi-car hauler, or driven
+            directly by a personal driver. Two real options, quoted directly by us.
           </p>
           <div className="mt-8 flex gap-4">
             <Link

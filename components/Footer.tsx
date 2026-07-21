@@ -10,8 +10,8 @@ export default function Footer() {
               Royal Rollers
             </p>
             <p className="mt-3 max-w-xs text-sm text-paper/70">
-              Vehicle transport between the Tri-State area and Florida &mdash;
-              by carrier or by a personal driver, your call.
+              Vehicle transport from the Tri-State area to anywhere in the
+              country &mdash; by carrier or by a personal driver, your call.
             </p>
           </div>
 

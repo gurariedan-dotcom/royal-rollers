@@ -30,9 +30,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Royal Rollers | Vehicle Transport, Tri-State to Florida",
+  title: "Royal Rollers | Vehicle Transport, Tri-State to Anywhere",
   description:
-    "Carrier or personal-driver vehicle transport between the Tri-State area and Florida. Get a priced quote by email, book with a deposit, and pay the balance automatically on delivery.",
+    "Carrier or personal-driver vehicle transport from the Tri-State area to anywhere in the country. Get a priced quote by email, book with a deposit, and pay the balance automatically on delivery.",
 };
 
 export default function RootLayout({

@@ -1,6 +1,9 @@
-// The signature visual for the site: a stylized manifest-style route line
-// running from the Tri-State cluster down the seaboard to Florida. This
-// isn't decoration -- it's the actual corridor the business runs, and the
+// The signature visual for the site: a stylized manifest-style illustration
+// fanning out from the Tri-State cluster to destinations across the
+// country. Florida stays the flagship route (full-opacity brass line, rust
+// endpoint) since that's still where the business built its reputation and
+// sees the heaviest seasonal demand -- the other routes are real, just
+// drawn a shade quieter so Florida keeps reading as "the main one." The
 // same line/dot language is reused (smaller) as the quote form's step
 // tracker in RouteProgress.tsx, so "stops on a route" means something
 // consistent across the site.
@@ -10,10 +13,11 @@ export default function RouteMap() {
       viewBox="0 0 420 520"
       className="h-full w-full"
       role="img"
-      aria-label="Illustrated transport route from the Tri-State area to Florida"
+      aria-label="Illustrated transport routes from the Tri-State area to destinations across the country, including Florida, Chicago, Texas, and Los Angeles"
     >
+      {/* Florida -- flagship route, full opacity */}
       <path
-        d="M 130 40 C 60 140, 260 180, 190 280 S 300 420, 250 480"
+        d="M 130 42 C 190 130, 280 190, 300 320 S 330 420, 320 480"
         fill="none"
         stroke="var(--color-route-line, #A6763B)"
         strokeWidth="3"
@@ -21,6 +25,38 @@ export default function RouteMap() {
         strokeLinecap="round"
         className="text-brass"
         style={{ stroke: "currentColor" }}
+      />
+
+      {/* Chicago, Texas, Los Angeles -- also-real, drawn a shade quieter */}
+      <path
+        d="M 130 42 C 90 110, 50 160, 52 220 S 55 245, 55 260"
+        fill="none"
+        strokeWidth="3"
+        strokeDasharray="2 14"
+        strokeLinecap="round"
+        className="text-highway"
+        style={{ stroke: "currentColor" }}
+        opacity="0.6"
+      />
+      <path
+        d="M 130 42 C 110 160, 70 260, 95 380 S 125 450, 130 480"
+        fill="none"
+        strokeWidth="3"
+        strokeDasharray="2 14"
+        strokeLinecap="round"
+        className="text-highway"
+        style={{ stroke: "currentColor" }}
+        opacity="0.6"
+      />
+      <path
+        d="M 130 42 C 60 150, 10 260, 20 360 S 35 400, 40 430"
+        fill="none"
+        strokeWidth="3"
+        strokeDasharray="2 14"
+        strokeLinecap="round"
+        className="text-highway"
+        style={{ stroke: "currentColor" }}
+        opacity="0.6"
       />
 
       {/* Tri-State cluster */}
@@ -33,17 +69,35 @@ export default function RouteMap() {
         </text>
       </g>
 
-      {/* Midpoint waypoint */}
-      <circle cx="190" cy="280" r="5" className="fill-highway" />
-      <text x="212" y="284" className="fill-slate font-mono text-[11px] uppercase">
-        en route
-      </text>
-
-      {/* Florida endpoint */}
+      {/* Florida endpoint -- flagship */}
       <g>
-        <circle cx="250" cy="480" r="8" className="fill-rust" />
-        <text x="250" y="504" textAnchor="middle" className="fill-ink font-display text-[13px] uppercase tracking-signage">
+        <circle cx="320" cy="480" r="8" className="fill-rust" />
+        <text x="320" y="504" textAnchor="middle" className="fill-ink font-display text-[13px] uppercase tracking-signage">
           Florida
+        </text>
+      </g>
+
+      {/* Chicago endpoint */}
+      <g opacity="0.85">
+        <circle cx="55" cy="260" r="6" className="fill-highway" />
+        <text x="55" y="242" textAnchor="middle" className="fill-ink font-display text-[13px] uppercase tracking-signage">
+          Chicago
+        </text>
+      </g>
+
+      {/* Texas endpoint */}
+      <g opacity="0.85">
+        <circle cx="130" cy="480" r="6" className="fill-highway" />
+        <text x="130" y="504" textAnchor="middle" className="fill-ink font-display text-[13px] uppercase tracking-signage">
+          Texas
+        </text>
+      </g>
+
+      {/* Los Angeles endpoint */}
+      <g opacity="0.85">
+        <circle cx="40" cy="430" r="6" className="fill-highway" />
+        <text x="40" y="412" textAnchor="middle" className="fill-ink font-display text-[13px] uppercase tracking-signage">
+          L.A.
         </text>
       </g>
     </svg>

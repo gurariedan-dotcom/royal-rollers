@@ -55,6 +55,8 @@ export default function QuoteForm() {
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
   const [vinDecodeStatus, setVinDecodeStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [estimate, setEstimate] = useState<{ lowCents: number; highCents: number } | null>(null);
+  const [estimateStatus, setEstimateStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -97,6 +99,58 @@ export default function QuoteForm() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.vin]);
+
+  // Live, non-binding cost estimate shown once enough of the form is filled
+  // in -- purely informational. It never touches toPayload() below, so it's
+  // never part of what POST /api/quote receives; the only real, binding
+  // price is still the one the owner sets by hand afterward.
+  useEffect(() => {
+    const zipsValid = /^\d{5}$/.test(form.pickupZip) && /^\d{5}$/.test(form.dropoffZip);
+    const needsEnclosed = form.serviceType === "carrier";
+    const ready =
+      zipsValid &&
+      (form.serviceType === "carrier" || form.serviceType === "personal_driver") &&
+      !!form.isRunning &&
+      (!needsEnclosed || !!form.enclosed);
+
+    if (!ready) {
+      setEstimate(null);
+      setEstimateStatus("idle");
+      return;
+    }
+
+    let cancelled = false;
+    setEstimateStatus("loading");
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams({
+        pickupZip: form.pickupZip,
+        dropoffZip: form.dropoffZip,
+        serviceType: form.serviceType,
+        isRunning: form.isRunning,
+      });
+      if (form.enclosed) params.set("enclosed", form.enclosed);
+
+      fetch(`/api/route-distance?${params.toString()}`)
+        .then((res) => (res.ok ? res.json() : Promise.reject()))
+        .then((data: { estimateLowCents: number; estimateHighCents: number }) => {
+          if (cancelled) return;
+          setEstimate({ lowCents: data.estimateLowCents, highCents: data.estimateHighCents });
+          setEstimateStatus("done");
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setEstimate(null);
+            setEstimateStatus("error");
+          }
+        });
+    }, 400);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.pickupZip, form.dropoffZip, form.serviceType, form.enclosed, form.isRunning]);
 
   function fieldsForStep(index: number): (keyof FormState)[] {
     switch (STEPS[index]) {
@@ -355,29 +409,45 @@ export default function QuoteForm() {
         )}
 
         {step === "Route" && (
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label htmlFor="pickupZip" className="manifest-label">Pickup ZIP</label>
-              <input
-                id="pickupZip"
-                inputMode="numeric"
-                value={form.pickupZip}
-                onChange={(e) => update("pickupZip", e.target.value)}
-                className={`${inputClass(!!fieldErrors.pickupZip)} font-mono`}
-              />
-              {fieldErrors.pickupZip && <p className="mt-1 text-sm text-rust">{fieldErrors.pickupZip}</p>}
+          <div className="space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="pickupZip" className="manifest-label">Pickup ZIP</label>
+                <input
+                  id="pickupZip"
+                  inputMode="numeric"
+                  value={form.pickupZip}
+                  onChange={(e) => update("pickupZip", e.target.value)}
+                  className={`${inputClass(!!fieldErrors.pickupZip)} font-mono`}
+                />
+                {fieldErrors.pickupZip && <p className="mt-1 text-sm text-rust">{fieldErrors.pickupZip}</p>}
+              </div>
+              <div>
+                <label htmlFor="dropoffZip" className="manifest-label">Dropoff ZIP</label>
+                <input
+                  id="dropoffZip"
+                  inputMode="numeric"
+                  value={form.dropoffZip}
+                  onChange={(e) => update("dropoffZip", e.target.value)}
+                  className={`${inputClass(!!fieldErrors.dropoffZip)} font-mono`}
+                />
+                {fieldErrors.dropoffZip && <p className="mt-1 text-sm text-rust">{fieldErrors.dropoffZip}</p>}
+              </div>
             </div>
-            <div>
-              <label htmlFor="dropoffZip" className="manifest-label">Dropoff ZIP</label>
-              <input
-                id="dropoffZip"
-                inputMode="numeric"
-                value={form.dropoffZip}
-                onChange={(e) => update("dropoffZip", e.target.value)}
-                className={`${inputClass(!!fieldErrors.dropoffZip)} font-mono`}
-              />
-              {fieldErrors.dropoffZip && <p className="mt-1 text-sm text-rust">{fieldErrors.dropoffZip}</p>}
-            </div>
+
+            {estimateStatus === "loading" && (
+              <p className="text-sm text-slate">Estimating cost&hellip;</p>
+            )}
+            {estimateStatus === "done" && estimate && (
+              <div className="rounded-sm border border-brass/40 bg-brass/5 p-3 text-sm text-ink/80">
+                <span className="font-mono text-ink">
+                  ${(estimate.lowCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                  {"–"}
+                  ${(estimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                </span>{" "}
+                estimated &mdash; not a quote. Your real, priced quote will be emailed after you submit.
+              </div>
+            )}
           </div>
         )}
 
