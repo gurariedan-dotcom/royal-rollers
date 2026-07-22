@@ -338,7 +338,7 @@ export default function QuoteForm() {
                 type="button"
                 onClick={() => update("serviceType", "carrier")}
                 className={[
-                  "rounded-sm border-2 p-5 text-left transition-colors",
+                  "rounded-sm border p-5 text-left transition-colors",
                   form.serviceType === "carrier" ? "border-highway bg-highway/10" : "border-slate-light/50",
                 ].join(" ")}
               >
@@ -351,7 +351,7 @@ export default function QuoteForm() {
                 type="button"
                 onClick={() => update("serviceType", "personal_driver")}
                 className={[
-                  "rounded-sm border-2 p-5 text-left transition-colors",
+                  "rounded-sm border p-5 text-left transition-colors",
                   form.serviceType === "personal_driver" ? "border-rust bg-rust/10" : "border-slate-light/50",
                 ].join(" ")}
               >
@@ -571,7 +571,7 @@ export default function QuoteForm() {
               onClick={() => update("roundTrip", !form.roundTrip)}
               aria-pressed={form.roundTrip}
               className={[
-                "flex items-center gap-3 rounded-sm border-2 px-4 py-2 font-display text-sm uppercase tracking-wideish transition-colors",
+                "flex items-center gap-3 rounded-sm border px-4 py-2 font-display text-sm uppercase tracking-wideish transition-colors",
                 form.roundTrip ? "border-highway bg-highway/10 text-highway" : "border-slate-light/50 text-ink/70",
               ].join(" ")}
             >
@@ -605,6 +605,13 @@ export default function QuoteForm() {
                 </span>{" "}
                 estimated cost{form.roundTrip ? " for the round trip" : ""}. We&apos;ll email you your exact quote after you submit.
               </div>
+            )}
+            {estimateStatus === "error" && (
+              <p className="rounded-sm border border-rust/40 bg-rust/5 p-3 text-sm text-rust">
+                Couldn&apos;t estimate a cost for those ZIP codes right now. Double-check
+                they&apos;re valid, five-digit ZIPs -- you can still submit and we&apos;ll
+                email you a priced quote either way.
+              </p>
             )}
           </div>
         )}

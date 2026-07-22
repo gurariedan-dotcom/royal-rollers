@@ -2,16 +2,29 @@ import Link from "next/link";
 import TransportScene from "@/components/TransportScene";
 import QuickAnswers from "@/components/QuickAnswers";
 import Reveal from "@/components/Reveal";
+import RoadTexture from "@/components/RoadTexture";
 import { ShieldCheck, SteeringWheel } from "@phosphor-icons/react/dist/ssr";
 
 const ghostCta =
   "rounded-sm border border-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-brass transition-all hover:bg-brass hover:text-paper hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
 
+const ghostCtaOnDark =
+  "rounded-sm border border-paper px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper transition-all hover:bg-paper hover:text-ink hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
+
 export default function HomePage() {
   return (
     <>
-      <section className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-2 md:items-center md:py-28">
-        <div>
+      <section className="relative mx-auto grid max-w-6xl items-center gap-12 overflow-hidden px-6 py-16 md:grid-cols-[1fr_1.15fr] md:py-24">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-brass/10 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-10 bottom-0 h-[280px] w-[280px] rounded-full bg-highway/10 blur-3xl"
+        />
+
+        <div className="relative z-10">
           <p className="manifest-label">Tri-State &rarr; Nationwide</p>
           <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl">
             Your car, moved anywhere.{" "}
@@ -35,7 +48,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <Reveal delay={0.15} className="mx-auto h-[240px] w-full max-w-[560px] md:h-[280px]">
+        <Reveal delay={0.15} className="relative z-10 mx-auto h-[280px] w-full max-w-[640px] -rotate-1 md:h-[340px]">
           <TransportScene />
         </Reveal>
       </section>
@@ -45,8 +58,8 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
         <h2 className="text-center text-3xl">Pick what fits your timeline</h2>
 
-        <div className="mt-10 grid overflow-hidden rounded-sm shadow-panel md:grid-cols-2">
-          <Reveal className="bg-highway p-8 text-paper md:p-10">
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <Reveal className="rounded-sm bg-highway p-8 text-paper shadow-panel md:p-10">
             <ShieldCheck size={32} weight="duotone" className="text-paper/90" />
             <p className="mt-4 font-display text-xl uppercase tracking-wideish">
               Carrier Transport
@@ -56,7 +69,7 @@ export default function HomePage() {
               No mileage added. No hidden fees. Typically 1-4 days.
             </p>
           </Reveal>
-          <Reveal delay={0.1} className="bg-rust p-8 text-paper md:p-10">
+          <Reveal delay={0.1} className="rounded-sm bg-rust p-8 text-paper shadow-panel md:p-10 md:mt-12">
             <SteeringWheel size={32} weight="duotone" className="text-paper/90" />
             <p className="mt-4 font-display text-xl uppercase tracking-wideish">
               Personal Driver
@@ -68,7 +81,7 @@ export default function HomePage() {
           </Reveal>
         </div>
 
-        <p className="mt-6 text-center text-sm text-ink/60">
+        <p className="mt-8 text-center text-sm text-ink/60">
           <Link href="/services" className="underline hover:text-brass">
             See the full side-by-side comparison
           </Link>
@@ -79,18 +92,25 @@ export default function HomePage() {
 
       <QuickAnswers />
 
-      <div className="route-rule mx-auto max-w-6xl opacity-30" />
+      {/* Full-bleed closing moment -- diagonal-cut gradient band with a
+          drifting road-line texture, instead of a stock photo. */}
+      <section
+        className="relative flex min-h-[420px] items-center justify-center overflow-hidden bg-gradient-to-br from-ink to-brass-dark py-24 text-center"
+        style={{ clipPath: "polygon(0 48px, 100% 0, 100% calc(100% - 48px), 0 100%)" }}
+      >
+        <RoadTexture />
 
-      <Reveal className="mx-auto max-w-3xl px-6 py-20 text-center">
-        <h2 className="text-3xl">A priced quote sent straight to your inbox</h2>
-        <p className="mx-auto mt-4 max-w-xl text-ink/70">
-          Submit your vehicle and route details once. You&apos;ll get a real number
-          back by email, not a callback promise.
-        </p>
-        <Link href="/quote" className={`mt-8 inline-block ${ghostCta}`}>
-          Start Your Quote
-        </Link>
-      </Reveal>
+        <Reveal className="relative z-10 mx-auto max-w-2xl px-6">
+          <h2 className="text-3xl text-paper">A priced quote sent straight to your inbox</h2>
+          <p className="mx-auto mt-4 max-w-xl text-paper/80">
+            Submit your vehicle and route details once. You&apos;ll get a real number
+            back by email, not a callback promise.
+          </p>
+          <Link href="/quote" className={`mt-8 inline-block ${ghostCtaOnDark}`}>
+            Start Your Quote
+          </Link>
+        </Reveal>
+      </section>
     </>
   );
 }

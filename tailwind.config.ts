@@ -3,10 +3,14 @@ import type { Config } from "tailwindcss";
 // Design tokens for Royal Rollers.
 // Concept: a shipping-manifest / interstate-corridor look, not a generic
 // SaaS gradient. "Charcoal + Chrome" palette: cool graphite ink, a steel-blue
-// chrome accent for CTAs, a deep teal-green for "insured / carrier" trust
-// signals, and burnt copper for the Personal Driver option. Token names
-// (brass/highway/rust) are kept from the original manifest concept so
-// component code doesn't need to change, only the hex values underneath.
+// chrome accent for CTAs, a cool blue-leaning teal for "insured / carrier"
+// trust signals, and a muted, cooled-down wine for the Personal Driver
+// option. The first recolor pass kept highway/rust close to the original
+// manifest palette's green/copper -- both read warm and earthy next to the
+// cool steel-blue accent, which is why they looked mismatched. These are
+// deliberately cooled so all three accents read as one coordinated family.
+// Token names (brass/highway/rust) are kept from the original manifest
+// concept so component code doesn't need to change, only the hex values.
 const config: Config = {
   content: [
     "./app/**/*.{ts,tsx}",
@@ -29,12 +33,12 @@ const config: Config = {
           light: "#7396B4",
         },
         highway: {
-          DEFAULT: "#2E5C4E", // deep teal-green — Carrier / insured
-          light: "#3F7C6A",
+          DEFAULT: "#1F5C56", // cool, blue-leaning teal — Carrier / insured
+          light: "#3B8478",
         },
         rust: {
-          DEFAULT: "#8A4A2E", // burnt copper — Personal Driver accent
-          light: "#B06B45",
+          DEFAULT: "#733C4A", // muted, cooled wine — Personal Driver accent
+          light: "#9C5D6C",
         },
         slate: {
           DEFAULT: "#5B6169",

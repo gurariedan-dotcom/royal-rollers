@@ -36,7 +36,7 @@ export default function ReviewsPage() {
         </Link>
         <Link
           href="/quote"
-          className="rounded-sm bg-brass px-8 py-3 font-display text-sm uppercase tracking-wideish text-paper transition-all hover:bg-brass-dark hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
+          className="rounded-sm border border-brass px-8 py-3 font-display text-sm uppercase tracking-wideish text-brass transition-all hover:bg-brass hover:text-paper hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
         >
           Get a Quote
         </Link>
