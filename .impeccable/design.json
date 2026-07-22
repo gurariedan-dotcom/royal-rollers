@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-21T00:00:00.000Z",
+  "title": "Design System: Royal Rollers",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#1E2A3A", "tonalRamp": ["#0f151e", "#151d28", "#1a2533", "#2d3847", "#5f6873", "#898f98", "#acb0b6", "#cacdd1"] },
+      "ink-soft": { "role": "neutral", "displayName": "Ink Soft", "canonical": "#3A4756", "tonalRamp": ["#1e242c", "#28313c", "#333e4b", "#475461", "#737c87", "#989fa6", "#b6bbc0", "#d1d4d7"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#F0F1EC", "tonalRamp": ["#7a7b78", "#a6a7a3", "#d2d3ce", "#f1f2ed", "#f4f5f1", "#f7f8f5", "#f9faf8", "#fbfcfb"] },
+      "paper-dim": { "role": "neutral", "displayName": "Paper Dim", "canonical": "#E4E6DE", "tonalRamp": ["#747571", "#9e9f9a", "#c7c9c2", "#e6e8e0", "#ecede8", "#f1f2ee", "#f5f6f3", "#f9f9f7"] },
+      "brass": { "role": "primary", "displayName": "Brass", "canonical": "#A6763B", "tonalRamp": ["#553c1e", "#735229", "#916734", "#ac7f48", "#c09e74", "#d0b798", "#deccb6", "#eadfd1"] },
+      "brass-dark": { "role": "primary", "displayName": "Brass Dark", "canonical": "#8A5F2C", "tonalRamp": ["#463016", "#5f421e", "#795326", "#926a3a", "#ac8d69", "#c2ab90", "#d4c4b1", "#e4d9cd"] },
+      "brass-light": { "role": "primary", "displayName": "Brass Light", "canonical": "#C99A5B", "tonalRamp": ["#674f2e", "#8b6b3f", "#b08750", "#cda166", "#d9b78a", "#e3caa9", "#ebdac2", "#f2e7d8"] },
+      "highway": { "role": "secondary", "displayName": "Highway Green", "canonical": "#1F4B3F", "tonalRamp": ["#102620", "#15342c", "#1b4237", "#2e574c", "#607f76", "#8aa19a", "#acbcb8", "#cad5d2"] },
+      "highway-light": { "role": "secondary", "displayName": "Highway Green Light", "canonical": "#2E6552", "tonalRamp": ["#17342a", "#204639", "#285848", "#3c6f5e", "#6a9284", "#91aea4", "#b1c6bf", "#cedbd6"] },
+      "rust": { "role": "secondary", "displayName": "Rust", "canonical": "#B5502F", "tonalRamp": ["#5c2918", "#7d3721", "#9e4629", "#ba5c3d", "#ca836b", "#d8a392", "#e4beb2", "#eed6ce"] },
+      "rust-light": { "role": "secondary", "displayName": "Rust Light", "canonical": "#CC6A44", "tonalRamp": ["#683623", "#8d492f", "#b25d3b", "#cf7451", "#db957a", "#e4b19d", "#ecc8ba", "#f3dcd3"] },
+      "slate": { "role": "neutral", "displayName": "Slate", "canonical": "#5C6570", "tonalRamp": ["#2f3439", "#40464e", "#505862", "#676f7a", "#8b9299", "#aaaeb4", "#c3c6ca", "#d9dbdd"] },
+      "slate-light": { "role": "neutral", "displayName": "Slate Light", "canonical": "#8B929B", "tonalRamp": ["#474a4f", "#60656b", "#798087", "#9399a2", "#adb2b8", "#c2c6cb", "#d4d7da", "#e4e5e8"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero and top-of-page h1s; condensed uppercase interstate-signage feel." },
+      "title": { "displayName": "Title", "purpose": "Component-level headings and button labels, e.g. option card titles." },
+      "body": { "displayName": "Body", "purpose": "All prose copy, generally at reduced ink opacity rather than a separate color token." },
+      "label": { "displayName": "Manifest Label", "purpose": "Micro-labels above form fields, nav sub-labels, section eyebrows." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "pop-in", "value": "scale(0.5)→scale(1.08)→scale(1), opacity 0→1, 0.3s ease-out", "purpose": "Confirmation/success state entrance." },
+      { "name": "reduced-motion-override", "value": "animation-duration/transition-duration: 0.01ms; animation-iteration-count: 1; scroll-behavior: auto", "purpose": "Global prefers-reduced-motion collapse, applied to all elements." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Filled brass CTA, used for the primary 'Get a Quote' action throughout the site.",
+      "html": "<button class=\"ds-btn-primary\">Get a Quote</button>",
+      "css": ".ds-btn-primary { background: #A6763B; color: #F0F1EC; font-family: Oswald, sans-serif; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 12px 24px; border-radius: 2px; border: none; transition: background-color 0.2s ease-out; } .ds-btn-primary:hover { background: #8A5F2C; } .ds-btn-primary:focus-visible { outline: 2px solid #A6763B; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Outlined ghost button for secondary actions like 'Compare Options'.",
+      "html": "<button class=\"ds-btn-secondary\">Compare Options</button>",
+      "css": ".ds-btn-secondary { background: transparent; color: #1E2A3A; font-family: Oswald, sans-serif; font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 12px 24px; border-radius: 2px; border: 1px solid rgba(30,42,58,0.2); transition: border-color 0.2s ease-out; } .ds-btn-secondary:hover { border-color: rgba(30,42,58,0.5); } .ds-btn-secondary:focus-visible { outline: 2px solid #A6763B; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Standard form field, e.g. quote form contact/vehicle fields.",
+      "html": "<label class=\"ds-label\">VIN</label><input class=\"ds-input\" placeholder=\"1HGCM82633A004352\" />",
+      "css": ".ds-label { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #5C6570; margin-bottom: 4px; } .ds-input { width: 100%; background: #F0F1EC; color: #1E2A3A; border: 1px solid rgba(139,146,155,0.6); border-radius: 2px; padding: 8px 12px; font-family: 'Public Sans', sans-serif; } .ds-input::placeholder { color: #8B929B; } .ds-input:focus-visible { outline: 2px solid #A6763B; outline-offset: 2px; } .ds-input-error { border-color: #B5502F; }"
+    },
+    {
+      "name": "Transport Option Card",
+      "kind": "card",
+      "refersTo": "transport-option-card",
+      "description": "Signature decision card for Carrier Transport vs Personal Driver, using semantic color tints.",
+      "html": "<div class=\"ds-option-card ds-option-card--highway\"><p class=\"ds-option-title\">Carrier Transport</p><p class=\"ds-option-copy\">Your vehicle rides on an insured, licensed carrier's hauler.</p></div>",
+      "css": ".ds-option-card { border-radius: 2px; padding: 32px; border: 2px solid; } .ds-option-card--highway { border-color: rgba(31,75,63,0.3); background: rgba(31,75,63,0.05); } .ds-option-card--rust { border-color: rgba(181,80,47,0.3); background: rgba(181,80,47,0.05); } .ds-option-title { font-family: Oswald, sans-serif; font-weight: 600; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.04em; color: #1F4B3F; } .ds-option-copy { margin-top: 12px; font-family: 'Public Sans', sans-serif; color: rgba(30,42,58,0.75); }"
+    },
+    {
+      "name": "Route Rule Divider",
+      "kind": "custom",
+      "refersTo": "route-rule",
+      "description": "Signature dashed-line divider standing in for section breaks; reads as a road, not a hairline.",
+      "html": "<div class=\"ds-route-rule\"></div>",
+      "css": ".ds-route-rule { height: 2px; background-image: repeating-linear-gradient(to right, #A6763B 0, #A6763B 10px, transparent 10px, transparent 20px); opacity: 0.3; }"
+    },
+    {
+      "name": "Manifest Label",
+      "kind": "custom",
+      "refersTo": "manifest-label",
+      "description": "Micro-label used above form fields, in nav sub-labels, and as section eyebrows.",
+      "html": "<p class=\"ds-manifest-label\">Tri-State &rarr; Nationwide</p>",
+      "css": ".ds-manifest-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #5C6570; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Shipping Manifest",
+    "overview": "Royal Rollers reads like a transport document, not a tech product: ink-navy type on a cool paper ground, a brass accent lifted from a VIN plate, and structured fields — VIN, ZIPs, dollar amounts — set in monospace so they read as data rather than marketing copy. Display type is condensed and uppercase, styled after interstate signage; a dashed \"route\" rule stands in for section dividers, always reading as a road rather than a generic hairline. The system is flat by design — no shadows, no gradients, no rounded-card softness — because a manifest doesn't need to look soft to be trusted, it needs to look correct. This explicitly rejects the generic SaaS look: no gradient-heavy hero, no floating soft-shadow cards, no glassmorphism, nothing that reads as a lead-gen funnel dressed up as a product. Two accent colors carry real semantic weight rather than decoration — highway green marks the insured/carrier option, rust marks the personal-driver option and doubles as the error state — so color differences always mean something on this site, never just variety.",
+    "keyCharacteristics": [
+      "Flat, bordered surfaces — depth comes from color blocks and opacity tints, never shadows",
+      "Condensed uppercase display type (Oswald) paired with a workmanlike body sans (Public Sans)",
+      "Monospace (IBM Plex Mono) reserved for structured data fields and micro-labels, never body prose",
+      "A single recurring motif — the dashed route rule — used everywhere a divider would otherwise go",
+      "Sharp corners throughout (2px radius) — this is a document, not an app card"
+    ],
+    "rules": [
+      { "name": "The Semantic Color Rule", "body": "Highway green and rust are never used as generic accents — they mean Carrier Transport and Personal Driver respectively (and, for rust, form errors) everywhere they appear. If a new component needs a third \"option\" color, it must earn a name and a fixed meaning the same way; don't reach for highway or rust as decoration.", "section": "colors" },
+      { "name": "The Data-Reads-As-Data Rule", "body": "Any field the user or system treats as structured data — VIN, ZIP, dollar amounts — renders in the mono Label/Data face, even inline. Never let a data value inherit body prose styling; it must look like it came off a manifest, not a sentence.", "section": "typography" },
+      { "name": "The No-Shadow Rule", "body": "Never add box-shadow to convey elevation. A raised or \"important\" surface gets a 2px border and/or a tinted background instead — the manifest concept has no room for drop shadows, which read as generic app chrome.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do render structured data (VIN, ZIP, dollar amounts) in IBM Plex Mono, uppercase where applicable, everywhere it appears — inline, in tables, in labels.",
+      "Do use the dashed route-rule motif for section dividers instead of a plain border line.",
+      "Do keep every interactive element's corner radius at 2px (rounded-sm) — buttons, inputs, and cards all share this value.",
+      "Do give Highway Green and Rust fixed, single meanings (Carrier/insured; Personal Driver, and rust doubles as form-error) rather than using them as general-purpose accent colors.",
+      "Do carry the global :focus-visible brass outline and prefers-reduced-motion collapse into any new component — both are base-layer rules already in globals.css."
+    ],
+    "donts": [
+      "Don't use a gradient-heavy hero, glassmorphism, or a generic-tech-startup visual language — explicitly rejected in tailwind.config.ts's own comments as the thing this project is not.",
+      "Don't add box-shadow anywhere for elevation. This system conveys depth with borders and opacity tints only.",
+      "Don't use a warm cream/beige background. Paper (#F0F1EC) is a cool, slightly gray off-white on purpose — warming it up drifts toward the generic SaaS look this project rejects.",
+      "Don't let a data value (VIN, ZIP, dollar figure) inherit body prose styling — it must render in the mono Label face, not Public Sans.",
+      "Don't soften corners on new components (no rounded-md/rounded-lg/rounded-full outside of genuinely circular elements) — 2px is the system-wide radius."
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import RouteMap from "@/components/RouteMap";
+import QuickAnswers from "@/components/QuickAnswers";
 
 export default function HomePage() {
   return (
@@ -71,6 +72,10 @@ export default function HomePage() {
           </Link>
         </p>
       </section>
+
+      <div className="route-rule mx-auto max-w-6xl opacity-30" />
+
+      <QuickAnswers />
 
       <div className="route-rule mx-auto max-w-6xl opacity-30" />
 
