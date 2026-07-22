@@ -11,7 +11,7 @@ export default function Footer() {
             </p>
             <p className="mt-3 max-w-xs text-sm text-paper/70">
               Vehicle transport from the Tri-State area to anywhere in the
-              country &mdash; by carrier or by a personal driver, your call.
+              country. By carrier or by a personal driver, your call.
             </p>
           </div>
 

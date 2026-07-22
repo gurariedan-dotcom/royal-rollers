@@ -1,7 +1,8 @@
 import BookingForm from "@/components/BookingForm";
 
 export const metadata = {
-  title: "Book Your Move | Royal Rollers",
+  title: "Book Your Move",
+  description: "Confirm your priced quote and pay your deposit securely to book your vehicle transport.",
 };
 
 export default function BookPage({ params }: { params: { quoteId: string } }) {
@@ -14,7 +15,7 @@ export default function BookPage({ params }: { params: { quoteId: string } }) {
         your vehicle is delivered.
       </p>
 
-      <div className="mt-10 rounded-sm border border-ink/10 bg-white/40 p-6 md:p-10">
+      <div className="mt-10 rounded-sm border border-ink/10 bg-paper p-6 shadow-panel md:p-10">
         <BookingForm quoteId={params.quoteId} />
       </div>
     </div>

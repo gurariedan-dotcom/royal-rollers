@@ -30,9 +30,17 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Royal Rollers | Vehicle Transport, Tri-State to Anywhere",
+  metadataBase: new URL("https://www.royalrollers.example"),
+  title: {
+    default: "Royal Rollers | Vehicle Transport, Tri-State to Anywhere",
+    template: "%s | Royal Rollers",
+  },
   description:
     "Carrier or personal-driver vehicle transport from the Tri-State area to anywhere in the country. Get a priced quote by email, book with a deposit, and pay the balance automatically on delivery.",
+  openGraph: {
+    siteName: "Royal Rollers",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -43,6 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${oswald.variable} ${publicSans.variable} ${plexMono.variable}`}>
       <body className="flex min-h-screen flex-col">
+        <div className="paper-grain" aria-hidden="true" />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

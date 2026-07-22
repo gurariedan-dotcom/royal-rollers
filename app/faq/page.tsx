@@ -1,11 +1,14 @@
+import FaqAccordion from "@/components/FaqAccordion";
+
 export const metadata = {
-  title: "FAQ | Royal Rollers",
+  title: "FAQ",
+  description: "Answers to common questions about carrier transport, personal driver service, VINs, payment, and enclosed transport.",
 };
 
 const FAQS = [
   {
     q: "What's the difference between Carrier Transport and Personal Driver?",
-    a: "Carrier Transport means your vehicle rides on an insured, licensed carrier's hauler \u2014 no mileage added, typically 1\u20134 days. Personal Driver means a driver takes your car directly, point to point \u2014 typically 24\u201330 hours, more precise timing, but mileage is added to the vehicle.",
+    a: "Carrier Transport means your vehicle rides on an insured, licensed carrier's hauler, no mileage added, typically 1-4 days. Personal Driver means a driver takes your car directly, point to point, typically 24-30 hours, more precise timing, but mileage is added to the vehicle.",
   },
   {
     q: "Why do you need my VIN just for a quote?",
@@ -13,11 +16,11 @@ const FAQS = [
   },
   {
     q: "How will I get my quote?",
-    a: "We'll email you a priced quote directly — no phone tag, no callback promise.",
+    a: "We'll email you a priced quote directly. No phone tag, no callback promise.",
   },
   {
     q: "How does payment work?",
-    a: "You pay a deposit and securely save a card on file when you book. The remaining balance is charged automatically to that card once your vehicle is delivered \u2014 you won't need to do anything at drop-off. You'll explicitly confirm you understand and agree to this at booking.",
+    a: "You pay a deposit and securely save a card on file when you book. The remaining balance is charged automatically to that card once your vehicle is delivered, you won't need to do anything at drop-off. You'll explicitly confirm you understand and agree to this at booking.",
   },
   {
     q: "Is enclosed transport available?",
@@ -25,7 +28,7 @@ const FAQS = [
   },
   {
     q: "Does Personal Driver really add mileage to my car?",
-    a: "Yes \u2014 since a person is driving your car to its destination rather than hauling it, mileage is added in transit. We'd rather you know that going in than be surprised by it.",
+    a: "Yes, since a person is driving your car to its destination rather than hauling it, mileage is added in transit. We'd rather you know that going in than be surprised by it.",
   },
 ];
 
@@ -35,14 +38,9 @@ export default function FaqPage() {
       <p className="manifest-label">FAQ</p>
       <h1 className="mt-2 text-3xl">Common questions</h1>
 
-      <dl className="mt-10 space-y-8">
-        {FAQS.map((item) => (
-          <div key={item.q} className="border-b border-ink/10 pb-8">
-            <dt className="text-lg font-semibold text-ink">{item.q}</dt>
-            <dd className="mt-2 text-sm text-ink/70">{item.a}</dd>
-          </div>
-        ))}
-      </dl>
+      <div className="mt-10">
+        <FaqAccordion items={FAQS} />
+      </div>
     </div>
   );
 }

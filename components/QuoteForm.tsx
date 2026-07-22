@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import RouteProgress from "./RouteProgress";
 import { quoteRequestSchema, FLEXIBILITY_LABELS, VEHICLE_TYPES, VEHICLE_TYPE_LABELS } from "@/lib/validation";
 
@@ -67,6 +68,7 @@ function inputClass(hasError: boolean) {
 }
 
 export default function QuoteForm() {
+  const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [stepIndex, setStepIndex] = useState(0);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -293,7 +295,12 @@ export default function QuoteForm() {
 
   if (submitState === "success") {
     return (
-      <div className="rounded-sm border border-highway bg-highway/10 p-8 text-center">
+      <motion.div
+        initial={reduce ? false : { opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="rounded-sm border border-highway bg-highway/10 p-8 text-center shadow-panel"
+      >
         <p className="font-display text-xl uppercase tracking-signage text-highway">
           Request received
         </p>
@@ -301,7 +308,7 @@ export default function QuoteForm() {
           Check your email for a confirmation. We&apos;ll follow up by email with a
           priced quote.
         </p>
-      </div>
+      </motion.div>
     );
   }
 
@@ -312,6 +319,15 @@ export default function QuoteForm() {
       <RouteProgress steps={STEPS} currentIndex={stepIndex} />
 
       <div className="mt-10 space-y-5">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            initial={reduce ? false : { opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={reduce ? {} : { opacity: 0, x: -16 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-5"
+          >
         {step === "Service" && (
           <fieldset>
             <legend className="font-display text-lg uppercase tracking-wideish text-ink">
@@ -328,7 +344,7 @@ export default function QuoteForm() {
               >
                 <p className="font-display uppercase tracking-wideish text-highway">Carrier Transport</p>
                 <p className="mt-2 text-sm text-ink/70">
-                  Hauled by an insured carrier. No mileage added. 1&ndash;4 days.
+                  Hauled by an insured carrier. No mileage added. 1-4 days.
                 </p>
               </button>
               <button
@@ -341,7 +357,7 @@ export default function QuoteForm() {
               >
                 <p className="font-display uppercase tracking-wideish text-rust">Personal Driver</p>
                 <p className="mt-2 text-sm text-ink/70">
-                  A driver takes it directly. Faster, 24&ndash;30 hours. Adds mileage to the vehicle.
+                  A driver takes it directly. Faster, 24-30 hours. Adds mileage to the vehicle.
                 </p>
               </button>
             </div>
@@ -366,10 +382,13 @@ export default function QuoteForm() {
                   On your registration, insurance card, or the dashboard on the driver&apos;s side.
                 </p>
                 {vinDecodeStatus === "loading" && (
-                  <p className="mt-1 text-xs text-slate">Looking up your vehicle&hellip;</p>
+                  <div className="mt-2 space-y-1.5" aria-live="polite">
+                    <p className="text-xs text-slate">Looking up your vehicle&hellip;</p>
+                    <div className="skeleton h-3 w-40" />
+                  </div>
                 )}
                 {vinDecodeStatus === "done" && (
-                  <p className="mt-1 text-xs text-highway">Got it &mdash; we&apos;ll confirm the details with you later.</p>
+                  <p className="mt-1 text-xs text-highway">Got it. We&apos;ll confirm the details with you later.</p>
                 )}
                 {vinDecodeStatus === "error" && (
                   <p className="mt-1 text-xs text-rust">
@@ -572,13 +591,16 @@ export default function QuoteForm() {
             </button>
 
             {estimateStatus === "loading" && (
-              <p className="text-sm text-slate">Estimating cost&hellip;</p>
+              <div className="rounded-sm border border-brass/40 bg-brass/5 p-3" aria-live="polite">
+                <p className="text-xs text-slate">Estimating cost&hellip;</p>
+                <div className="skeleton mt-2 h-4 w-32" />
+              </div>
             )}
             {estimateStatus === "done" && estimate && (
               <div className="rounded-sm border border-brass/40 bg-brass/5 p-3 text-sm text-ink/80">
                 <span className="font-mono text-ink">
                   ${(estimate.lowCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
-                  {"–"}
+                  {"-"}
                   ${(estimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                 </span>{" "}
                 estimated cost{form.roundTrip ? " for the round trip" : ""}. We&apos;ll email you your exact quote after you submit.
@@ -662,6 +684,8 @@ export default function QuoteForm() {
             </div>
           </div>
         )}
+          </motion.div>
+        </AnimatePresence>
 
         {submitState === "error" && (
           <p className="rounded-sm border border-rust bg-rust/10 p-3 text-sm text-rust">{submitMessage}</p>

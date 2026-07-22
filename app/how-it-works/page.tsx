@@ -1,7 +1,9 @@
 import Link from "next/link";
+import Reveal from "@/components/Reveal";
 
 export const metadata = {
-  title: "How It Works | Royal Rollers",
+  title: "How It Works",
+  description: "The five steps from requesting a quote to your vehicle arriving, including how and when payment happens.",
 };
 
 const STEPS = [
@@ -11,7 +13,7 @@ const STEPS = [
   },
   {
     title: "Get a priced quote by email",
-    body: "We email you a real number \u2014 not a callback promise \u2014 based on your route and vehicle.",
+    body: "We email you a real number, not a callback promise, based on your route and vehicle.",
   },
   {
     title: "Book with a deposit",
@@ -23,7 +25,7 @@ const STEPS = [
   },
   {
     title: "Balance charged on delivery",
-    body: "Once your vehicle arrives, the remaining balance is charged automatically to the card on file \u2014 no extra step for you.",
+    body: "Once your vehicle arrives, the remaining balance is charged automatically to the card on file. No extra step for you.",
   },
 ];
 
@@ -33,34 +35,46 @@ export default function HowItWorksPage() {
       <p className="manifest-label">How it works</p>
       <h1 className="mt-2 text-3xl">From quote to delivery</h1>
 
-      <ol className="mt-10 space-y-8">
+      <ol className="mt-10">
         {STEPS.map((step, i) => (
-          <li key={step.title} className="flex gap-5">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-brass font-mono text-sm text-brass">
-              {i + 1}
+          <Reveal key={step.title} as="li" delay={i * 0.06} className="flex gap-5 pb-8 last:pb-0">
+            <span className="relative flex shrink-0 flex-col items-center">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-brass bg-paper font-mono text-sm text-brass">
+                {i + 1}
+              </span>
+              {i < STEPS.length - 1 && (
+                <span
+                  aria-hidden="true"
+                  className="mt-1 w-px flex-1"
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(to bottom, #4C6B8A 0, #4C6B8A 4px, transparent 4px, transparent 9px)",
+                  }}
+                />
+              )}
             </span>
-            <div>
+            <div className="pt-1">
               <h2 className="text-lg font-semibold normal-case tracking-normal text-ink">
                 {step.title}
               </h2>
               <p className="mt-1 text-sm text-ink/70">{step.body}</p>
             </div>
-          </li>
+          </Reveal>
         ))}
       </ol>
 
-      <div className="route-rule mt-12 opacity-30" />
+      <div className="route-rule mt-4 opacity-30" />
 
       <p className="mt-8 text-sm text-ink/60">
         The automatic balance charge is only made after you&apos;ve explicitly
-        agreed to it at booking &mdash; we&apos;ll never charge a saved card
+        agreed to it at booking. We&apos;ll never charge a saved card
         without that acknowledgment on file.
       </p>
 
       <div className="mt-10">
         <Link
           href="/quote"
-          className="rounded-sm bg-brass px-8 py-3 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
+          className="rounded-sm border border-brass px-8 py-3 font-display text-sm uppercase tracking-wideish text-brass transition-all hover:bg-brass hover:text-paper hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
         >
           Start Your Quote
         </Link>

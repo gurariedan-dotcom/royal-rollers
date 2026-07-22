@@ -18,7 +18,7 @@ export default function RouteProgress({ steps, currentIndex }: RouteProgressProp
               <span
                 aria-current={isCurrent ? "step" : undefined}
                 className={[
-                  "flex h-8 w-8 items-center justify-center rounded-full border-2 font-mono text-xs",
+                  "flex h-8 w-8 items-center justify-center rounded-full border-2 font-mono text-xs transition-colors duration-300",
                   isComplete
                     ? "border-highway bg-highway text-paper"
                     : isCurrent
@@ -41,7 +41,7 @@ export default function RouteProgress({ steps, currentIndex }: RouteProgressProp
               <div
                 aria-hidden="true"
                 className={[
-                  "mx-2 mb-5 h-[2px] flex-1",
+                  "mx-2 mb-5 h-[2px] flex-1 transition-colors duration-300",
                   isComplete ? "bg-highway" : "bg-slate-light/40",
                 ].join(" ")}
                 style={

@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { EnvelopeSimple, Phone } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata = {
-  title: "Contact | Royal Rollers",
+  title: "Contact",
+  description: "Reach Royal Rollers directly by email or phone before requesting a quote.",
 };
 
 // Note: no contact-form backend was scoped in planning (only the quote,
@@ -21,17 +23,23 @@ export default function ContactPage() {
       <div className="mt-8 space-y-4">
         <a
           href="mailto:quotes@royalrollers.example"
-          className="block rounded-sm border border-ink/10 p-5 hover:border-brass"
+          className="flex items-center gap-4 rounded-sm border border-ink/10 p-5 transition-all hover:border-brass hover:shadow-panel"
         >
-          <p className="manifest-label">Email</p>
-          <p className="mt-1 text-lg text-ink">quotes@royalrollers.example</p>
+          <EnvelopeSimple size={22} className="shrink-0 text-brass" />
+          <span>
+            <span className="manifest-label block">Email</span>
+            <span className="mt-1 block text-lg text-ink">quotes@royalrollers.example</span>
+          </span>
         </a>
         <a
           href="tel:+15555555555"
-          className="block rounded-sm border border-ink/10 p-5 hover:border-brass"
+          className="flex items-center gap-4 rounded-sm border border-ink/10 p-5 transition-all hover:border-brass hover:shadow-panel"
         >
-          <p className="manifest-label">Phone</p>
-          <p className="mt-1 text-lg text-ink">(555) 555-5555</p>
+          <Phone size={22} className="shrink-0 text-brass" />
+          <span>
+            <span className="manifest-label block">Phone</span>
+            <span className="mt-1 block text-lg text-ink">(555) 555-5555</span>
+          </span>
         </a>
       </div>
 

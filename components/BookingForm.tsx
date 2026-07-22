@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { loadStripe, type Stripe as StripeJs } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
@@ -40,6 +41,7 @@ function getStripePromise() {
 function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
   const stripe = useStripe();
   const elements = useElements();
+  const reduce = useReducedMotion();
   const [consent, setConsent] = useState(false);
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -132,13 +134,18 @@ function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
 
   if (submitState === "success") {
     return (
-      <div className="rounded-sm border border-highway bg-highway/10 p-8 text-center">
+      <motion.div
+        initial={reduce ? false : { opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="rounded-sm border border-highway bg-highway/10 p-8 text-center shadow-panel"
+      >
         <p className="font-display text-xl uppercase tracking-signage text-highway">Booked</p>
         <p className="mt-3 text-ink/80">
           Your deposit of {quote.depositAmountCents ? formatDollars(quote.depositAmountCents) : ""} has
           been charged, and your card is on file for the remaining balance on delivery.
         </p>
-      </div>
+      </motion.div>
     );
   }
 
@@ -147,7 +154,7 @@ function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
       <div className="rounded-sm border border-ink/10 p-4">
         <label className="manifest-label">Card details</label>
         <div className="mt-2 rounded-sm border border-slate-light/60 p-3">
-          <CardElement options={{ style: { base: { fontSize: "16px", color: "#1E2A3A" } } }} />
+          <CardElement options={{ style: { base: { fontSize: "16px", color: "#1C1E22" } } }} />
         </div>
       </div>
 
@@ -175,7 +182,7 @@ function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
         {submitState === "submitting"
           ? "Processing\u2026"
           : quote.depositAmountCents
-          ? `Pay Deposit \u2014 ${formatDollars(quote.depositAmountCents)}`
+          ? `Pay Deposit, ${formatDollars(quote.depositAmountCents)}`
           : "Pay Deposit"}
       </button>
     </form>
@@ -197,16 +204,24 @@ export default function BookingForm({ quoteId }: { quoteId: string }) {
   }, [quoteId]);
 
   if (loadError) {
-    return <p className="text-rust">{loadError}</p>;
+    return (
+      <p className="rounded-sm border border-rust bg-rust/10 p-4 text-sm text-rust">{loadError}</p>
+    );
   }
   if (!quote) {
-    return <p className="text-ink/60">Loading your quote\u2026</p>;
+    return (
+      <div className="space-y-3" aria-live="polite" aria-busy="true">
+        <p className="manifest-label">Quote summary</p>
+        <div className="skeleton h-24 w-full" />
+        <div className="skeleton h-12 w-2/3" />
+      </div>
+    );
   }
   if (!quote.priced) {
     return (
       <p className="text-ink/70">
-        This quote hasn&apos;t been priced yet. You&apos;ll get an email as soon as it is &mdash;
-        this page will be ready to go from that link.
+        This quote hasn&apos;t been priced yet. You&apos;ll get an email as soon as it is,
+        and this page will be ready to go from that link.
       </p>
     );
   }
