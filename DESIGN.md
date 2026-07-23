@@ -1,29 +1,25 @@
 ---
 name: Royal Rollers
-description: A vehicle transport brokerage site styled as a stamped steel ID plate, not a printed manifest or a SaaS product.
+description: A vehicle transport brokerage site styled as a flat, stamped transport manifest, not a printed document or a SaaS product.
 colors:
-  ink: "#16181C"
-  ink-soft: "#383C44"
-  paper: "#F1F2F4"
-  paper-dim: "#E3E5E9"
-  brass: "#2955D1"
-  brass-dark: "#1E3F9E"
-  brass-light: "#7FA0F5"
-  highway: "#146B63"
-  highway-light: "#3F9187"
-  rust: "#7A3B4E"
-  rust-light: "#A65E73"
-  slate: "#565C66"
-  slate-light: "#8990A0"
+  ink: "#201E1D"
+  ink-soft: "#403C3A"
+  paper: "#F3F2F2"
+  paper-dim: "#E7E5E4"
+  brass: "#EC3013"
+  brass-dark: "#AE1800"
+  brass-light: "#FF8266"
+  slate: "#605D5D"
+  slate-light: "#8A8785"
 typography:
   display:
-    fontFamily: "Big Shoulders Display, sans-serif"
+    fontFamily: "Archivo, sans-serif"
     fontSize: "clamp(1.875rem, 4vw, 3rem)"
-    fontWeight: 700
+    fontWeight: 800
     lineHeight: 1.05
     letterSpacing: "0.02em"
   title:
-    fontFamily: "Big Shoulders Display, sans-serif"
+    fontFamily: "Archivo, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 700
     lineHeight: 1.2
@@ -35,13 +31,13 @@ typography:
     lineHeight: 1.6
     letterSpacing: "normal"
   label:
-    fontFamily: "Fragment Mono, monospace"
+    fontFamily: "JetBrains Mono, monospace"
     fontSize: "0.75rem"
     fontWeight: 400
     lineHeight: 1.4
     letterSpacing: "0.04em"
 rounded:
-  sm: "2px"
+  flat: "0px"
 spacing:
   sm: "8px"
   md: "16px"
@@ -51,21 +47,33 @@ components:
     backgroundColor: "{colors.brass}"
     textColor: "{colors.paper}"
     typography: "{typography.title}"
-    rounded: "{rounded.sm}"
+    rounded: "{rounded.flat}"
     padding: "12px 24px"
   button-primary-hover:
     backgroundColor: "{colors.brass-dark}"
+  button-ghost:
+    backgroundColor: "transparent"
+    textColor: "{colors.brass}"
+    typography: "{typography.title}"
+    rounded: "{rounded.flat}"
+    padding: "12px 24px"
   button-secondary:
     backgroundColor: "transparent"
     textColor: "{colors.ink}"
     typography: "{typography.title}"
-    rounded: "{rounded.sm}"
+    rounded: "{rounded.flat}"
     padding: "12px 24px"
   input-field:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
     typography: "{typography.body}"
-    rounded: "{rounded.sm}"
+    rounded: "{rounded.flat}"
+    padding: "8px 12px"
+  input-field-error:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.brass-dark}"
+    typography: "{typography.body}"
+    rounded: "{rounded.flat}"
     padding: "8px 12px"
 ---
 
@@ -73,118 +81,116 @@ components:
 
 ## 1. Overview
 
-**Creative North Star: "The Rig Plate"**
+**Creative North Star: "The Modernist Manifest"**
 
-Royal Rollers now reads like a stamped steel ID plate bolted to a rig, not a printed document. The manifest idea survives — VINs, ZIPs, and dollar amounts still render as data, not prose — but the surface underneath it changed: near-black graphite instead of warm paper, a bold cobalt "signal blue" instead of dusty steel-blue, and a tall, high-contrast condensed display face instead of interstate-signage caps. The effect should feel sleek (clean surfaces, confident weight, no clutter) and rugged (a real freight-yard color language, structural type) at once — the two are meant to sit together, not compromise into something in-between.
+Royal Rollers now reads like a printed transport manifest run through a Modernist type foundry, not a stamped steel plate and not a SaaS product page. Every surface is flat: off-white paper, near-black ink, one red accent, nothing else. There is no gradient, no shadow, no rounded corner anywhere on the site. Structure comes entirely from solid 2px rules dividing sections the way a manifest divides line items, condensed uppercase Archivo doing the work a heavier display face used to do, and monospace reserved for anything that is literally data.
 
-This still explicitly rejects the generic SaaS look — no gradient-heavy hero, no glassmorphism, nothing that reads as a lead-gen funnel dressed up as a product — and adds a new rejection: no printed-paper texture or warm brass anywhere. The former "paper grain" overlay is gone; the page is flat, precise digital surface now, not simulated stock. Two accent colors still carry real semantic weight — a cool teal for the insured/carrier option, a deep oxblood for the personal-driver option and its doubled error state — coordinated as one cool, saturated family with the new primary blue rather than the old family's dusty desaturation.
+This still explicitly rejects the generic SaaS look — no gradient-heavy hero, no glassmorphism, no soft-shadow cards, nothing that reads as a lead-gen funnel dressed up as a product — and adds the Modernist system's own constraint on top: no second hue. The former two-accent system (a teal for Carrier Transport, an oxblood for Personal Driver) is gone. The two service types are now told apart by the only two tones the system has: red fill for Carrier Transport, black fill for Personal Driver. A third, functional-only color (`brass-dark`) exists solely to make error and danger states visible; it is never used as decoration.
 
 **Key Characteristics:**
-- Near-black graphite surfaces (no more soft warm-gray paper) with a bold, saturated cobalt accent — sleeker and more confident than the old muted steel-blue
-- Tall, high-contrast condensed display type (Big Shoulders Display) at tighter tracking than before — reads as stamped lettering, not shouted signage
-- Fragment Mono reserved for structured data fields and micro-labels, distinct from the old code-editor mono
-- The dashed route-rule motif carries over unchanged — still the one recurring divider motif, now rendered in signal blue
-- Sharp corners throughout (2px radius) — unchanged, still a plate, not an app card
-- Marketing CTAs stay ghost/outline by default; the header's persistent "Get a Quote" stays the one always-solid CTA
+- Flat off-white paper background, near-black ink text, one saturated red accent — no second brand hue anywhere
+- Archivo carries both display and body type; JetBrains Mono is reserved for VINs, ZIPs, dollar amounts, and other structured data
+- Zero border radius on every interactive surface — buttons, inputs, cards, badges, step indicators
+- Zero drop shadows — separation comes from solid 2px rules and flat color blocks, never elevation
+- Carrier Transport = solid red; Personal Driver = solid black — the one semantic color pairing the whole site relies on
+- `brass-dark`, a deeper shade of the same accent, is reserved exclusively for error/danger states so they stay visually distinct from both normal text (ink) and the Carrier Transport brand color (brass)
 
 ## 2. Colors
 
-The neutrals are cooler and darker than before; the primary accent is now a bold, saturated blue rather than a muted steel-blue — this is the single biggest lever for the "semi-bold, sleek" shift the client asked for.
+The palette is deliberately narrow: one accent, one neutral family, and a single darker shade of the accent reserved for functional alerts. Nothing in this system reads as decoration.
 
 ### Primary
-- **Signal Blue** (#2955D1, token name `brass`): the primary accent. Used for the header's persistent CTA, focus-visible outlines, in-form progress buttons, the hero's one line of colored text, and the route-rule divider. Darkens to #1E3F9E on hover/fill, lightens to #7FA0F5 for accent text on dark (footer) backgrounds. Bolder and more saturated than the previous steel-blue — this is what carries the "semi-bold" instruction into the palette.
-
-### Secondary
-- **Deep Teal** (#146B63, token name `highway`): reserved exclusively for the Carrier Transport / insured-and-licensed trust signal. Sits a clear hue-step away from Signal Blue so the two never get confused at a glance, while staying in the same cool, saturated family.
-- **Oxblood** (#7A3B4E, token name `rust`): the Personal Driver option's accent, and doubles as the form error-state color (invalid field borders). Deeper and more deliberate than the old muted wine — reads as a considered color choice, not a leftover neutral.
+- **Signal Red** (#EC3013, token name `brass`): the one accent. Used for every primary CTA, focus-visible outlines, the Carrier Transport / insured trust signal, and the hero's one line of colored text. Darkens to #AE1800 on hover/fill.
 
 ### Neutral
-- **Ink** (#16181C): primary text and headers — near-black graphite, noticeably darker than the old ink for a sleeker, higher-contrast page. Also the Footer's background.
-- **Ink Soft** (#383C44): secondary ink tone for de-emphasized dark-on-light text.
-- **Paper** (#F1F2F4): the page background — a cool, crisp off-white, cooler than the old paper tone. Also the text color on dark (Footer) surfaces.
-- **Paper Dim** (#E3E5E9): subtle surface variation against Paper.
-- **Slate** (#565C66) / **Slate Light** (#8990A0): manifest-label text and muted field borders. Slate Light at 60% opacity is the default (non-error) input border.
+- **Ink** (#201E1D): primary text, headers, borders, and the Personal Driver brand color (`rust` is a semantic alias for this same value — see Named Rules below). Also the Footer's background.
+- **Ink Soft** (#403C3A): secondary, de-emphasized dark-on-light text.
+- **Paper** (#F3F2F2): the page background — a flat, cool off-white. Also the text color on dark (Footer) surfaces.
+- **Paper Dim** (#E7E5E4): subtle surface variation against Paper.
+- **Slate** (#605D5D) / **Slate Light** (#8A8785): manifest-label text and muted, non-error field borders.
 
 ### Named Rules
-**The Semantic Color Rule.** Deep Teal and Oxblood are never used as generic accents — they mean Carrier Transport and Personal Driver respectively (and, for Oxblood, form errors) everywhere they appear. If a new component needs a third "option" color, it must earn a name and a fixed meaning the same way; don't reach for either as decoration.
+**The One Accent Rule.** Signal Red is the only saturated color on the site. There is no secondary brand hue. Where the previous system used two option colors (teal for Carrier, oxblood for Personal Driver), this system uses the two tones it actually has: Carrier Transport is solid Signal Red, Personal Driver is solid Ink. `highway` and `rust` are kept as token names in code purely so components don't need renaming — `highway` resolves to Signal Red, `rust` resolves to Ink. Neither is a color in its own right; both are aliases with a single fixed meaning (Carrier / Personal Driver respectively).
 
-**The No-Paper-Texture Rule.** The site no longer simulates a physical printed surface (no grain, no paper-fiber texture). Depth and material come from color, type weight, and structure — not a decorative overlay pretending to be paper.
+**The Functional-Red Rule.** `brass-dark` (#AE1800) exists only to make error, danger, and failure states visible — invalid form fields, error banners, the crash page, destructive-confirmation copy. It is never used decoratively. It is deliberately the same hue family as Signal Red (so it still reads as "red = pay attention") but dark enough to stay distinct from both the bright Carrier Transport red and plain ink text.
+
+**The No-Warmth Rule.** No cream, beige, or brass-toned neutral anywhere. Paper is a true cool off-white, not a warm parchment tone — warming it up drifts back toward a generic, forgettable look.
 
 ## 3. Typography
 
-**Display Font:** Big Shoulders Display (condensed, high-contrast, with sans-serif fallback)
-**Body Font:** Archivo (with sans-serif fallback)
-**Label/Mono Font:** Fragment Mono (with monospace fallback)
+**Display Font:** Archivo, weight 800 (with sans-serif fallback)
+**Body Font:** Archivo, weights 400–700 (with sans-serif fallback)
+**Label/Mono Font:** JetBrains Mono (with monospace fallback)
 
-**Character:** Big Shoulders Display's tall, structural verticality reads like lettering stamped into a steel plate rather than printed interstate signage — it's the single change that does the most work toward "sleek but rugged." Archivo stays plain and workmanlike underneath it so the page never fights itself for attention. Fragment Mono marks anything that is literally data (VIN, ZIP, dollar figures, micro-labels) with more personality than a generic code-editor mono, while staying legible at small sizes.
+**Character:** One grotesk carries the entire page — Archivo at 800 for anything shouting a heading, at 400–700 for everything else — so the system never has to reconcile two competing sans-serifs. JetBrains Mono is the one deliberate contrast: it marks anything that is literally data (VIN, ZIP, dollar figures, micro-labels) so structured fields read as data, not prose.
 
 ### Hierarchy
-- **Display** (700, `clamp(1.875rem, 4vw, 3rem)`, line-height 1.05): hero and top-of-page h1s. Uppercase, 0.02em tracking (`tracking-signage`) — tighter than the old 0.08em; the taller letterforms don't need the extra spacing to read as confident.
-- **Headline** (700, 1.875rem / text-3xl, line-height ~1.2): section h2s ("Pick what fits your timeline"). Uppercase, same tracking as Display, one step down in size.
-- **Title** (700, 1.25rem / text-xl, line-height 1.2): component-level headings, e.g. the Carrier Transport / Personal Driver card titles. Uppercase, 0.02em tracking (`tracking-wideish`).
+- **Display** (800, `clamp(1.875rem, 4vw, 3rem)`, line-height 1.05): hero and top-of-page h1s. Uppercase, 0.02em tracking.
+- **Headline** (800, 1.875rem / text-3xl, line-height ~1.2): section h2s ("Pick what fits your timeline"). Uppercase, same tracking as Display, one step down in size.
+- **Title** (700, 1.25rem / text-xl, line-height 1.2): component-level headings, e.g. the Carrier Transport / Personal Driver card titles. Uppercase, 0.03em tracking.
 - **Body** (400, 1rem, line-height 1.6): all prose copy, generally at `ink/75` or `ink/70` opacity rather than a separate lighter color token. Cap at ~65–75ch per paragraph.
-- **Label** (400, 0.75rem / text-xs, 0.04em tracking, uppercase): the `manifest-label` class — used above form fields, in nav sub-labels ("Tri-State → Nationwide"), and section eyebrows. Always Slate on light backgrounds.
+- **Label** (400, 0.75rem / text-xs, 0.04em tracking, uppercase): the `manifest-label` class — used above form fields, in nav sub-labels ("Tri-State → Nationwide"), and the hero eyebrow. Always Slate on light backgrounds.
 
 ### Named Rules
-**The Data-Reads-As-Data Rule.** Any field the user or system treats as structured data — VIN, ZIP, dollar amounts — renders in the mono Label/Data face, even inline. Never let a data value inherit body prose styling; it must look like it came off a plate, not a sentence.
+**The Data-Reads-As-Data Rule.** Any field the user or system treats as structured data — VIN, ZIP, dollar amounts — renders in JetBrains Mono, even inline. Never let a data value inherit body prose styling.
 
-**The Tight-Tracking Rule.** Display and Title tracking dropped from 0.08em/0.04em to 0.02em across the board. Big Shoulders Display is already tall and condensed; extra letter-spacing on top of that reads as loose, not confident. Don't reintroduce wide tracking on new display type.
+**The One-Family Rule.** Archivo is the only sans-serif on the page, in both display and body roles. Don't introduce a second display face; weight and size carry the hierarchy that a second font family used to.
 
 ## 4. Elevation
 
-Mostly flat, with restrained ink-tinted shadows (`shadow-panel` / `shadow-panel-lg`) reserved for a handful of genuinely elevated, interactive surfaces: the comparison table, the quote and booking form panels, hovered contact cards. Everywhere else, depth and separation still come from borders, background color blocks, and opacity tints (`bg-highway/5`, `border-ink/10`, etc.), plus the dark-inverted Footer as a hard color break. Unchanged from the previous system — the recolor and refont didn't touch how depth is conveyed.
+Flat by rule, not by default-and-forgot: `shadow-panel` and `shadow-panel-lg` both resolve to `none` at the token level, so no surface on the site casts a drop shadow. Separation between sections and components comes entirely from solid 2px rules (`rgba(32,30,29,0.4)`), flat color blocks (the Carrier/Personal Driver cards, the Footer's full ink inversion), and opacity tints (`bg-brass/5`, `border-ink/10`) — never from lift.
 
 ### Named Rules
-**The Restrained-Shadow Rule.** Shadows are the exception, not the default — reach for a tinted background or a border first. When a surface needs to feel genuinely lifted (a form panel, a hovering card), use `shadow-panel`/`shadow-panel-lg`, never a generic gray drop shadow.
+**The Flat-By-Rule Rule.** Elevation tokens exist in code (`shadow-panel`) purely so components don't need editing, but they are permanently set to `none`. Never reintroduce a real `box-shadow` value under either token, and never add a new ad hoc shadow to a component — depth is a solved problem here, and the answer is always "no shadow."
 
 ## 5. Components
 
 ### Buttons
-- **Shape:** sharp corners (`rounded-sm`, 2px radius) — every interactive surface in the system uses this same near-flat radius.
-- **Primary (persistent):** signal-blue background (#2955D1), paper text, uppercase Title-scale label, `tracking-wideish`, 12px/24px padding. Reserved for the header's always-visible "Get a Quote" button and in-task progress actions (quote form Next/Submit, booking Pay Deposit) — not for marketing CTAs. Hover darkens to #1E3F9E.
-- **Ghost (marketing CTAs):** transparent background, signal-blue text and 1px signal-blue border, same shape and label treatment as Primary. Hover fills solid signal-blue with paper text. Default for every in-page "Get a Quote"/"Start Your Quote" link — only one solid CTA (the header's) should ever be visible on screen at once.
-- **Secondary / Neutral Ghost:** transparent background, ink text, 1px `ink/20` border — used for non-primary actions like "Compare Options" or "Ask for References". Hover strengthens the border to `ink/50` — no fill change.
-- **Focus:** every interactive element (not just inputs) gets a 2px solid signal-blue outline with 2px offset via `:focus-visible` — this is a global base-layer rule, not per-component.
+- **Shape:** zero radius everywhere — every interactive surface in the system shares this same flat corner.
+- **Primary:** Signal Red background, Paper text, uppercase Title-scale label, 0.03em tracking, ~12px/24px padding. Used for the header's persistent "Get a Quote," in-form progress actions (quote form Next/Submit), and the admin "Mark Delivered & Charge" action. Hover darkens to `brass-dark` (#AE1800).
+- **Ghost (marketing CTAs):** transparent background, Signal Red text and 1px Signal Red border, same shape and label treatment as Primary. Hover fills solid Signal Red with Paper text. Default for every in-page "Get a Quote" link outside the header.
+- **Secondary / Neutral Ghost:** transparent background, Ink text, 1px `ink/20` border — used for non-primary actions like "Compare Options." Hover strengthens the border to `ink/50`, no fill change.
+- **Danger:** same shape as Primary, Signal Red background darkening to `brass-dark` on hover — used for destructive confirmations (e.g. admin "Yes, Delete"). Deliberately the same red family as Primary rather than a separate hue, since Signal Red is the system's only saturated color.
+- **Focus:** every interactive element (not just inputs) gets a 2px solid Signal Red outline with 2px offset via `:focus-visible` — a global base-layer rule, not per-component.
 
 ### Cards / Containers
-- **Corner Style:** `rounded-sm` (2px), matching buttons and inputs — nothing in this system uses a softer radius.
-- **Background:** semantic color at 5% opacity tint (`bg-highway/5`, `bg-rust/5`) for the two transport-option cards; plain Paper for neutral containers.
-- **Shadow:** reserved for a few genuinely elevated panels (see Elevation) — most cards still use border + tint for separation.
-- **Border:** 1px, colored (matching the card's own semantic color); small state indicators (checkboxes, step badges) keep a 2px border since it reads better at that size.
+- **Corner Style:** zero radius, matching buttons and inputs — nothing in this system uses a softer edge.
+- **Background:** Carrier Transport and Personal Driver option cards are solid fills (Signal Red and Ink respectively) with Paper text, not tinted washes. Neutral containers use plain Paper.
+- **Shadow:** none, ever (see Elevation).
+- **Border:** 2px solid `rgba(32,30,29,0.4)` where a card needs a boundary against Paper; small state indicators (step badges, checkboxes) also keep a 2px border since it reads better at that size.
 - **Internal Padding:** generous — 32px (`p-8`) is standard for option/decision cards.
 
 ### Inputs / Fields
-- **Style:** Paper background, 1px border at `slate-light/60` opacity, `rounded-sm`, 8px/12px padding, placeholder text in Slate Light.
-- **Focus:** the same global 2px signal-blue `:focus-visible` outline as every other interactive element — no separate glow or border-color focus treatment.
-- **Error:** border swaps to solid Oxblood (#7A3B4E); no background change, no icon — the border color alone carries the error state, paired with adjacent error copy.
+- **Style:** Paper background, 1px border at `slate-light/60` opacity, zero radius, 8px/12px padding, placeholder text in Slate Light.
+- **Focus:** the same global 2px Signal Red `:focus-visible` outline as every other interactive element — no separate glow or border-color focus treatment.
+- **Error:** border and adjacent message copy both switch to `brass-dark` (#AE1800) — never plain Ink, which would make the error invisible against normal body text. No background change, no icon; the color shift alone carries the error state.
 - **Labels:** every field label uses the `manifest-label` treatment (mono, uppercase, Slate) directly above the input, not inline or floating.
 
 ### Navigation
-- **Header:** Paper background (with backdrop blur, sticky), 1px `ink/10` bottom border, no shadow. Nav links are Body-weight at `ink/80`, hovering to Signal Blue. The primary CTA ("Get a Quote") is a filled Signal Blue button, always present, right-aligned — the one CTA on the whole site that stays solid-filled everywhere.
-- **Footer:** full color inversion — Ink background, Paper text — with link columns at reduced opacity (`paper/60`, `paper/70`) hovering to Signal Blue Light. A `route-rule` divider separates the link grid from the copyright line instead of a plain hairline.
+- **Header:** Paper background (with backdrop blur, sticky), 1px `ink/10` bottom border, no shadow. Nav links are Body-weight at `ink/80`, hovering to Signal Red. The primary CTA ("Get a Quote") is a filled Signal Red button, always present, right-aligned — the one CTA label used identically everywhere on the site (header, hero, closing banner, footer).
+- **Footer:** full color inversion — Ink background, Paper text — with link columns at reduced opacity (`paper/60`, `paper/70`) hovering to Signal Red Light (#FF8266). A solid 2px rule separates the link grid from the copyright line instead of a plain hairline.
 
 ### Route Rule (signature element)
-A 2px-tall repeating dashed line in Signal Blue (10px on, 10px off) used everywhere a section divider or hairline would normally go — between homepage sections, above the Footer's copyright line. It's the one recurring motif that ties every page back to the "road" concept, carried forward unchanged from the previous system, just recolored.
+A solid 2px rule at `rgba(32,30,29,0.4)` used everywhere a section divider or hairline would normally go — between homepage sections, above the Footer's copyright line. Replaces the previous system's dashed "route" motif with the flat, unbroken line the Modernist reference calls for.
 
 ### Transport Scene (signature component)
-The homepage's centerpiece illustration (`components/TransportScene.tsx`): an animated flatbed carrier hauling two cars, with a solo Personal Driver car out ahead on the same road. Carrier elements use Deep Teal, the solo car uses Oxblood, matching the color-coding used everywhere else on the site. Wheels spin and the road markings scroll continuously ("treadmill" motion); everything collapses to a static frame under `prefers-reduced-motion`. The same dashed-line visual language from the Route Rule is reused at smaller scale as the quote form's step tracker (`components/RouteProgress.tsx`).
+The homepage's centerpiece illustration (`components/TransportScene.tsx`): an animated flatbed carrier hauling two cars, with a solo Personal Driver car out ahead on the same road. Carrier elements render in Signal Red, the solo car in Ink, matching the Carrier/Personal Driver color-coding used everywhere else on the site. Wheels spin and the road markings scroll continuously ("treadmill" motion); everything collapses to a static frame under `prefers-reduced-motion`. The same dashed line reused here (inside the illustration itself, not as a page rule) also appears at smaller scale as the quote form's step tracker (`components/RouteProgress.tsx`).
 
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** render structured data (VIN, ZIP, dollar amounts) in Fragment Mono, uppercase where applicable, everywhere it appears — inline, in tables, in labels.
-- **Do** use the dashed `route-rule` motif for section dividers instead of a plain border line.
-- **Do** keep every interactive element's corner radius at 2px (`rounded-sm`) — buttons, inputs, and cards all share this value.
-- **Do** give Deep Teal and Oxblood fixed, single meanings (Carrier/insured; Personal Driver, and Oxblood doubles as form-error) rather than using them as general-purpose accent colors.
-- **Do** keep marketing CTAs as ghost/outline (fill-on-hover) and reserve the solid signal-blue fill for the header's persistent CTA and in-task progress buttons.
-- **Do** carry the global `:focus-visible` signal-blue outline and `prefers-reduced-motion` collapse into any new component — both are base-layer rules already in `globals.css`.
+- **Do** render structured data (VIN, ZIP, dollar amounts) in JetBrains Mono, uppercase where applicable, everywhere it appears — inline, in tables, in labels.
+- **Do** use the solid 2px rule (`rgba(32,30,29,0.4)`) for every section divider — never a dashed line, never a soft gray hairline.
+- **Do** keep every interactive element's corner radius at zero — buttons, inputs, cards, and badges all share this value, no exceptions.
+- **Do** keep Carrier Transport = Signal Red and Personal Driver = Ink as a fixed, exclusive pairing — don't introduce a third "option" hue if a new service type is ever added; extend the pairing logic instead (e.g. a bordered/outline treatment) rather than adding a new saturated color.
+- **Do** use `brass-dark` for every error, danger, or failure state (invalid fields, error banners, destructive confirmations, the crash page) so they stay visually distinct from both plain Ink text and the Signal Red brand color.
+- **Do** carry the global `:focus-visible` Signal Red outline and `prefers-reduced-motion` collapse into any new component — both are base-layer rules already in `globals.css`.
 
 ### Don't:
 - **Don't** use a gradient-heavy hero, glassmorphism, or a generic-tech-startup visual language — explicitly rejected in `tailwind.config.ts`'s own comments as the thing this project is not.
-- **Don't** reintroduce the paper-grain texture or any simulated-physical-material overlay — the surface is flat digital now, not simulated paper.
-- **Don't** reach for a generic gray drop shadow anywhere — if a surface needs elevation, use the ink-tinted `shadow-panel`/`shadow-panel-lg` tokens, and only on genuinely elevated surfaces.
-- **Don't** use a warm cream/beige background, or a warm brass/gold accent. This palette is deliberately cool and dark — warming it up drifts back toward the project's earlier, more generic look.
+- **Don't** add a drop shadow anywhere. `shadow-panel`/`shadow-panel-lg` resolve to `none` at the token level; don't override them or add an ad hoc `box-shadow` to a new component.
+- **Don't** use a warm cream/beige background or a warm brass/gold accent — Paper is a true cool off-white, not a parchment tone.
 - **Don't** let a data value (VIN, ZIP, dollar figure) inherit body prose styling — it must render in the mono Label face, not Archivo.
-- **Don't** widen display/title tracking back toward 0.08em/0.04em — 0.02em is the system-wide tracking for Big Shoulders Display.
-- **Don't** soften corners on new components (no `rounded-md`/`rounded-lg`/`rounded-full` outside of genuinely circular elements) — 2px is the system-wide radius.
-- **Don't** put a solid-filled marketing CTA anywhere except the header — every in-page CTA should be the ghost/outline treatment.
+- **Don't** soften corners on new components (no rounded corners anywhere outside of genuinely circular elements, and this system has none) — zero radius is the system-wide rule.
+- **Don't** use plain Ink for an error or danger state — it's indistinguishable from normal text and borders. Use `brass-dark`.
+- **Don't** introduce a second saturated hue for a new "option" or category. Signal Red is the only accent; if two things need telling apart, use the Signal-Red/Ink pairing the way Carrier/Personal Driver already does.

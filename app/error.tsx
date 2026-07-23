@@ -17,7 +17,7 @@ export default function GlobalError({
 
   return (
     <div className="mx-auto max-w-lg px-6 py-24 text-center">
-      <WarningCircle size={40} weight="duotone" className="mx-auto text-rust" />
+      <WarningCircle size={40} weight="duotone" className="mx-auto text-brass-dark" />
       <h1 className="mt-4 font-display text-2xl uppercase tracking-signage text-ink">
         Something went off route
       </h1>

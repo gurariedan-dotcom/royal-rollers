@@ -13,7 +13,7 @@ export default function ServicesPage() {
         <p className="manifest-label">Services</p>
         <h1 className="mt-2 text-3xl">Carrier Transport vs. Personal Driver</h1>
         <p className="mt-4 max-w-2xl text-ink/70">
-          Both options get your car from the Tri-State area to wherever it&apos;s headed.
+          Both options get your car wherever it&apos;s headed, anywhere in the country.
           The difference is how it gets there, and that difference matters
           for cost, timing, and what happens to your odometer along the way.
         </p>

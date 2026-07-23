@@ -23,7 +23,7 @@ export default function Header() {
           <span className="font-display text-xl font-semibold uppercase tracking-signage text-ink">
             Royal Rollers
           </span>
-          <span className="manifest-label hidden sm:inline">Tri-State &rarr; Nationwide</span>
+          <span className="manifest-label hidden sm:inline">Nationwide Transport</span>
         </Link>
 
         <nav aria-label="Main" className="hidden gap-7 lg:flex">

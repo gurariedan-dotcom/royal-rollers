@@ -125,7 +125,7 @@ export default function AdminQuotesPage() {
             className="mt-2 w-full rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
           />
         </label>
-        {loadError && <p className="text-sm text-rust">{loadError}</p>}
+        {loadError && <p className="text-sm text-brass-dark">{loadError}</p>}
         <button
           type="submit"
           className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
@@ -186,14 +186,14 @@ export default function AdminQuotesPage() {
                   <td className="py-3 pr-4">
                     {q.vehicle || "—"}
                     {q.vehicleType && <div className="text-xs text-ink/50">{q.vehicleType}</div>}
-                    {q.isRunning === false && <div className="text-xs text-rust">Not running</div>}
+                    {q.isRunning === false && <div className="text-xs text-brass-dark">Not running</div>}
                   </td>
                   <td className="py-3 pr-4 font-mono text-xs">{q.route}</td>
                   <td className="py-3 pr-4">
                     <span
                       className={
                         q.status === "pending"
-                          ? "text-rust"
+                          ? "text-brass-dark"
                           : q.status === "quoted"
                             ? "text-brass-dark"
                             : "text-highway"
@@ -230,7 +230,7 @@ export default function AdminQuotesPage() {
                     {rowMessages[q.id] && (
                       <p
                         className={`mt-1 max-w-[180px] text-xs ${
-                          rowMessages[q.id] === "Quote sent!" ? "text-highway" : "text-rust"
+                          rowMessages[q.id] === "Quote sent!" ? "text-highway" : "text-brass-dark"
                         }`}
                       >
                         {rowMessages[q.id]}

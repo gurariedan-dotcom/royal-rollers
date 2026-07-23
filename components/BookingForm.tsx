@@ -175,7 +175,7 @@ function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
         </span>
       </label>
 
-      {message && <p className="rounded-sm border border-rust bg-rust/10 p-3 text-sm text-rust">{message}</p>}
+      {message && <p className="rounded-sm border border-brass-dark bg-brass-dark/10 p-3 text-sm text-brass-dark">{message}</p>}
 
       <button
         type="submit"
@@ -208,7 +208,7 @@ export default function BookingForm({ quoteId }: { quoteId: string }) {
 
   if (loadError) {
     return (
-      <p className="rounded-sm border border-rust bg-rust/10 p-4 text-sm text-rust">{loadError}</p>
+      <p className="rounded-sm border border-brass-dark bg-brass-dark/10 p-4 text-sm text-brass-dark">{loadError}</p>
     );
   }
   if (!quote) {

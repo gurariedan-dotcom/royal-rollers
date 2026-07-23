@@ -19,7 +19,7 @@
   }
 
   h1, h2, h3, h4 {
-    @apply font-display uppercase tracking-signage text-ink;
+    @apply font-display font-extrabold uppercase tracking-signage text-ink;
   }
 
   /* Visible keyboard focus everywhere -- not just on inputs. */
@@ -45,16 +45,10 @@
 }
 
 @layer components {
-  /* A dashed "route" rule used under section headers and in the manifest
-     hero -- stands in for the generic divider line, but reads as a road. */
+  /* Solid 2px rule -- the Modernist system dividing line, used under
+     section headers and in the hero. */
   .route-rule {
-    background-image: repeating-linear-gradient(
-      to right,
-      theme("colors.brass.DEFAULT") 0,
-      theme("colors.brass.DEFAULT") 10px,
-      transparent 10px,
-      transparent 20px
-    );
+    background-color: rgba(32, 30, 29, 0.4);
     height: 2px;
   }
 

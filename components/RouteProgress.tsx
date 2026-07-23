@@ -1,6 +1,6 @@
 // Step tracker for the quote form. Deliberately not a generic "1 2 3 4"
 // circle row -- each step is a literal stop on the request, reusing the
-// same dashed route-rule line language as the homepage's TransportScene.
+// same dashed route-rule line language used elsewhere on the site.
 type RouteProgressProps = {
   steps: string[];
   currentIndex: number;

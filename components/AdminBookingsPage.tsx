@@ -147,7 +147,7 @@ export default function AdminBookingsPage() {
             className="mt-2 w-full rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
           />
         </label>
-        {loadError && <p className="text-sm text-rust">{loadError}</p>}
+        {loadError && <p className="text-sm text-brass-dark">{loadError}</p>}
         <button
           type="submit"
           className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
@@ -247,7 +247,7 @@ export default function AdminBookingsPage() {
                         <div className="mt-2 flex gap-2">
                           <button
                             onClick={() => handleDeleteCustomer(b.id)}
-                            className="rounded-sm bg-rust px-3 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-rust-light"
+                            className="rounded-sm bg-brass px-3 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark"
                           >
                             Yes, Delete
                           </button>
@@ -275,13 +275,13 @@ export default function AdminBookingsPage() {
                         )}
                         <button
                           onClick={() => setPendingAction({ id: b.id, type: "delete" })}
-                          className="block text-xs text-rust/70 underline hover:text-rust"
+                          className="block text-xs text-brass-dark/70 underline hover:text-brass-dark"
                         >
                           Delete customer
                         </button>
                       </div>
                     )}
-                    {rowMessages[b.id] && <p className="mt-1 text-xs text-rust">{rowMessages[b.id]}</p>}
+                    {rowMessages[b.id] && <p className="mt-1 text-xs text-brass-dark">{rowMessages[b.id]}</p>}
                   </td>
                 </tr>
               );

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import TransportScene from "@/components/TransportScene";
 import QuickAnswers from "@/components/QuickAnswers";
 import Reveal from "@/components/Reveal";
 import RoadTexture from "@/components/RoadTexture";
@@ -14,26 +13,22 @@ const ghostCtaOnDark =
 export default function HomePage() {
   return (
     <>
-      <section className="relative mx-auto grid max-w-6xl items-center gap-12 overflow-hidden px-6 py-16 md:grid-cols-[1fr_1.15fr] md:py-24">
+      <section className="relative mx-auto max-w-6xl overflow-hidden px-6 py-16 md:py-24">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-brass/10 blur-3xl"
         />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-10 bottom-0 h-[280px] w-[280px] rounded-full bg-highway/10 blur-3xl"
-        />
 
-        <div className="relative z-10">
-          <p className="manifest-label">Tri-State &rarr; Nationwide</p>
+        <div className="relative z-10 max-w-2xl">
+          <p className="manifest-label">Nationwide Transport</p>
           <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl">
             Your car, moved anywhere.{" "}
             <span className="text-brass">Your call how.</span>
           </h1>
           <p className="mt-6 max-w-md text-ink/75">
-            Royal Rollers arranges vehicle transport from the Tri-State area to
-            anywhere in the country, on an insured multi-car hauler, or driven
-            directly by a personal driver. Two real options, quoted directly by us.
+            Royal Rollers arranges vehicle transport anywhere in the country,
+            on an insured multi-car hauler, or driven directly by a personal
+            driver. Two real options, quoted directly by us.
           </p>
           <div className="mt-8 flex gap-4">
             <Link href="/quote" className={ghostCta}>
@@ -47,10 +42,6 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-
-        <Reveal delay={0.15} className="relative z-10 mx-auto h-[280px] w-full max-w-[640px] -rotate-1 md:h-[340px]">
-          <TransportScene />
-        </Reveal>
       </section>
 
       <div className="route-rule mx-auto max-w-6xl opacity-30" />
@@ -107,7 +98,7 @@ export default function HomePage() {
             back by email, not a callback promise.
           </p>
           <Link href="/quote" className={`mt-8 inline-block ${ghostCtaOnDark}`}>
-            Start Your Quote
+            Get a Quote
           </Link>
         </Reveal>
       </section>

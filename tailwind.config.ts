@@ -1,60 +1,71 @@
 import type { Config } from "tailwindcss";
 
 // Design tokens for Royal Rollers.
-// Concept: "The Rig Plate" -- a stamped steel ID plate / stenciled shipping
-// crate, not a printed paper manifest. Near-black graphite surfaces, a bold
-// cobalt "signal blue" for CTAs and focus, a cool teal for "insured /
-// carrier" trust signals, and a deep oxblood for the Personal Driver option.
-// Token names (brass/highway/rust) are kept from the original manifest
-// concept so component code doesn't need to change, only the hex values.
+// Concept: "Modernist manifest" -- flat, architectural, black on off-white
+// with one red accent. No shadows, no corner radius, 2px rules dividing
+// every section. Token names (brass/highway/rust) are kept from the
+// original palette so component code doesn't need to change, only the hex
+// values: brass is now the single red accent; highway/rust (used to tell
+// Carrier vs Personal Driver apart at a glance) are the accent and ink,
+// respectively, since the system has no room for a second hue.
 const config: Config = {
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
   ],
   theme: {
+    borderRadius: {
+      none: "0px",
+      sm: "0px",
+      DEFAULT: "0px",
+      md: "0px",
+      lg: "0px",
+      xl: "0px",
+      "2xl": "0px",
+      "3xl": "0px",
+      full: "0px",
+    },
     extend: {
       colors: {
         ink: {
-          DEFAULT: "#16181C", // primary text, headers — near-black graphite
-          soft: "#383C44",
+          DEFAULT: "#201E1D", // primary text, headers
+          soft: "#403C3A",
         },
         paper: {
-          DEFAULT: "#F1F2F4", // cool off-white background
-          dim: "#E3E5E9",
+          DEFAULT: "#F3F2F2", // off-white background
+          dim: "#E7E5E4",
         },
         brass: {
-          DEFAULT: "#2955D1", // signal blue — primary CTAs, focus rings
-          dark: "#1E3F9E",
-          light: "#7FA0F5",
+          DEFAULT: "#EC3013", // the one red accent — primary CTAs, focus rings
+          dark: "#AE1800",
+          light: "#FF8266",
         },
         highway: {
-          DEFAULT: "#146B63", // cool teal — Carrier / insured
-          light: "#3F9187",
+          DEFAULT: "#EC3013", // Carrier / insured — accent red
+          light: "#FF8266",
         },
         rust: {
-          DEFAULT: "#7A3B4E", // deep oxblood — Personal Driver accent
-          light: "#A65E73",
+          DEFAULT: "#201E1D", // Personal Driver — ink black
+          light: "#403C3A",
         },
         slate: {
-          DEFAULT: "#565C66",
-          light: "#8990A0",
+          DEFAULT: "#605D5D",
+          light: "#8A8785",
         },
       },
       fontFamily: {
-        display: ["var(--font-big-shoulders)", "sans-serif"],
+        display: ["var(--font-archivo)", "sans-serif"],
         body: ["var(--font-archivo)", "sans-serif"],
-        mono: ["var(--font-fragment-mono)", "monospace"],
+        mono: ["var(--font-jetbrains-mono)", "monospace"],
       },
       letterSpacing: {
-        wideish: "0.02em",
+        wideish: "0.03em",
         signage: "0.02em",
       },
       boxShadow: {
-        // Ink-tinted, not pure-black -- gives depth without looking like a
-        // default Tailwind/Bootstrap card shadow.
-        panel: "0 1px 2px rgba(28,30,34,0.06), 0 12px 32px -12px rgba(28,30,34,0.18)",
-        "panel-lg": "0 4px 8px rgba(28,30,34,0.08), 0 24px 60px -20px rgba(28,30,34,0.28)",
+        // Flat design system -- no drop shadows anywhere.
+        panel: "none",
+        "panel-lg": "none",
       },
       keyframes: {
         "pop-in": {

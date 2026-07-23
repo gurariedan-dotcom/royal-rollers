@@ -1,32 +1,28 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-23T11:09:57.000Z",
+  "generatedAt": "2026-07-23T00:00:00.000Z",
   "title": "Design System: Royal Rollers",
   "extensions": {
     "colorMeta": {
-      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#16181C", "tonalRamp": ["#22252b", "#383d47", "#4f5664", "#656e81", "#8d95a5", "#b8bdc7", "#d4d7dd", "#f1f2f4"] },
-      "ink-soft": { "role": "neutral", "displayName": "Ink Soft", "canonical": "#383C44", "tonalRamp": ["#23252a", "#3a3e46", "#515662", "#686f7e", "#8f96a3", "#b9bdc5", "#d5d8dc", "#f1f2f3"] },
-      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#F1F2F4", "tonalRamp": ["#22252b", "#383d47", "#4f5664", "#656e81", "#8d95a5", "#b8bdc7", "#d4d7dd", "#f1f2f4"] },
-      "paper-dim": { "role": "neutral", "displayName": "Paper Dim", "canonical": "#E3E5E9", "tonalRamp": ["#22252b", "#383d47", "#4f5664", "#656e81", "#8d95a5", "#b8bdc7", "#d4d7dd", "#f1f2f4"] },
-      "brass": { "role": "primary", "displayName": "Signal Blue", "canonical": "#2955D1", "tonalRamp": ["#0d1a40", "#152b6b", "#1d3d95", "#264ec0", "#5478de", "#94abea", "#bfcdf2", "#eaeefb"] },
-      "brass-dark": { "role": "primary", "displayName": "Signal Blue Dark", "canonical": "#1E3F9E", "tonalRamp": ["#0c1a40", "#142b6b", "#1c3c96", "#254dc1", "#5477de", "#94aaeb", "#bfccf3", "#eaeefb"] },
-      "brass-light": { "role": "primary", "displayName": "Signal Blue Light", "canonical": "#7FA0F5", "tonalRamp": ["#061847", "#092876", "#0d38a6", "#1148d5", "#4273f0", "#89a7f6", "#b8caf9", "#e7edfd"] },
-      "highway": { "role": "secondary", "displayName": "Deep Teal", "canonical": "#146B63", "tonalRamp": ["#0c403c", "#146b63", "#1c968b", "#24c1b3", "#53dfd2", "#94ebe3", "#bff3ee", "#eafbf9"] },
-      "highway-light": { "role": "secondary", "displayName": "Deep Teal Light", "canonical": "#3F9187", "tonalRamp": ["#173532", "#275953", "#367c74", "#46a095", "#71c1b7", "#a6d8d2", "#cae8e4", "#edf7f6"] },
-      "rust": { "role": "secondary", "displayName": "Oxblood", "canonical": "#7A3B4E", "tonalRamp": ["#341921", "#562a37", "#783a4d", "#9b4b63", "#bd758b", "#d5a9b6", "#e6cbd3", "#f7eef0"] },
-      "rust-light": { "role": "secondary", "displayName": "Oxblood Light", "canonical": "#A65E73", "tonalRamp": ["#311b22", "#522d38", "#73404f", "#945265", "#b67c8d", "#d2adb8", "#e4ced4", "#f6eff1"] },
-      "slate": { "role": "neutral", "displayName": "Slate", "canonical": "#565C66", "tonalRamp": ["#23252a", "#3a3e45", "#525761", "#69707d", "#9097a2", "#babec5", "#d5d8dc", "#f1f2f3"] },
-      "slate-light": { "role": "neutral", "displayName": "Slate Light", "canonical": "#8990A0", "tonalRamp": ["#22252a", "#393d47", "#505563", "#666e7f", "#8e95a4", "#b8bdc6", "#d5d7dd", "#f1f2f4"] }
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#201E1D", "tonalRamp": ["#141312", "#241f1e", "#3a3433", "#524c4a", "#726a68", "#9a908d", "#c2b9b6", "#ece8e6"] },
+      "ink-soft": { "role": "neutral", "displayName": "Ink Soft", "canonical": "#403C3A", "tonalRamp": ["#24211f", "#3a3532", "#524b48", "#69625e", "#8f8682", "#b8afaa", "#d5cdc9", "#f1eeec"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#F3F2F2", "tonalRamp": ["#242322", "#3a3838", "#524f4e", "#696665", "#8f8c8b", "#b9b6b5", "#d5d3d2", "#f3f2f2"] },
+      "paper-dim": { "role": "neutral", "displayName": "Paper Dim", "canonical": "#E7E5E4", "tonalRamp": ["#232221", "#393736", "#514e4d", "#696564", "#8f8b8a", "#b8b5b4", "#d4d1d0", "#e7e5e4"] },
+      "brass": { "role": "primary", "displayName": "Signal Red", "canonical": "#EC3013", "tonalRamp": ["#3d0d04", "#6b1707", "#98230b", "#c22c0f", "#ec3013", "#f5715a", "#fab0a1", "#fde3dd"] },
+      "brass-dark": { "role": "primary", "displayName": "Signal Red Dark", "canonical": "#AE1800", "tonalRamp": ["#2e0c00", "#521600", "#762100", "#932c02", "#ae1800", "#d84f2f", "#ee9781", "#fbdad2"] },
+      "brass-light": { "role": "primary", "displayName": "Signal Red Light", "canonical": "#FF8266", "tonalRamp": ["#4a1608", "#7a260f", "#a9391a", "#d1512e", "#ff8266", "#ffab97", "#ffcdc0", "#ffeee8"] },
+      "slate": { "role": "neutral", "displayName": "Slate", "canonical": "#605D5D", "tonalRamp": ["#232222", "#3a3838", "#524f4f", "#696665", "#8f8c8b", "#b8b5b4", "#d4d2d1", "#f1f0f0"] },
+      "slate-light": { "role": "neutral", "displayName": "Slate Light", "canonical": "#8A8785", "tonalRamp": ["#242322", "#3a3837", "#524f4e", "#696665", "#8a8785", "#b6b3b1", "#d4d1d0", "#f1efee"] }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Hero and top-of-page h1s; tall, high-contrast condensed lettering, stamped-plate feel." },
+      "display": { "displayName": "Display", "purpose": "Hero and top-of-page h1s; flat, condensed uppercase Archivo at weight 800." },
       "title": { "displayName": "Title", "purpose": "Component-level headings and button labels, e.g. option card titles." },
       "body": { "displayName": "Body", "purpose": "All prose copy, generally at reduced ink opacity rather than a separate color token." },
       "label": { "displayName": "Manifest Label", "purpose": "Micro-labels above form fields, nav sub-labels, section eyebrows." }
     },
     "shadows": [
-      { "name": "panel", "value": "0 1px 2px rgba(22,24,28,0.06), 0 12px 32px -12px rgba(22,24,28,0.18)", "purpose": "Restrained ink-tinted elevation for the comparison table and form panels." },
-      { "name": "panel-lg", "value": "0 4px 8px rgba(22,24,28,0.08), 0 24px 60px -20px rgba(22,24,28,0.28)", "purpose": "Larger elevation variant for prominent lifted surfaces." }
+      { "name": "panel", "value": "none", "purpose": "Flat by rule -- no elevation anywhere on the site." },
+      { "name": "panel-lg", "value": "none", "purpose": "Flat by rule -- no elevation anywhere on the site." }
     ],
     "motion": [
       { "name": "pop-in", "value": "scale(0.5)→scale(1.08)→scale(1), opacity 0→1, 0.3s ease-out", "purpose": "Confirmation/success state entrance." },
@@ -43,85 +39,94 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Filled signal-blue CTA, used for the primary 'Get a Quote' action throughout the site.",
+      "description": "Filled Signal Red CTA, used for the header's persistent 'Get a Quote' and in-task progress actions.",
       "html": "<button class=\"ds-btn-primary\">Get a Quote</button>",
-      "css": ".ds-btn-primary { background: #2955D1; color: #F1F2F4; font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.02em; padding: 12px 24px; border-radius: 2px; border: none; transition: background-color 0.2s ease-out; } .ds-btn-primary:hover { background: #1E3F9E; } .ds-btn-primary:focus-visible { outline: 2px solid #2955D1; outline-offset: 2px; }"
+      "css": ".ds-btn-primary { background: #EC3013; color: #F3F2F2; font-family: Archivo, sans-serif; font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.03em; padding: 12px 24px; border-radius: 0; border: none; transition: background-color 0.2s ease-out, transform 0.2s ease-out; } .ds-btn-primary:hover { background: #AE1800; } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid #EC3013; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Outlined marketing CTA, fills solid on hover. Default for every in-page 'Get a Quote' outside the header.",
+      "html": "<button class=\"ds-btn-ghost\">Get a Quote</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #EC3013; font-family: Archivo, sans-serif; font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.03em; padding: 12px 24px; border-radius: 0; border: 1px solid #EC3013; transition: background-color 0.2s ease-out, color 0.2s ease-out; } .ds-btn-ghost:hover { background: #EC3013; color: #F3F2F2; } .ds-btn-ghost:focus-visible { outline: 2px solid #EC3013; outline-offset: 2px; }"
     },
     {
       "name": "Secondary Button",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "Outlined ghost button for secondary actions like 'Compare Options'.",
+      "description": "Neutral outlined button for non-primary actions like 'Compare Options'.",
       "html": "<button class=\"ds-btn-secondary\">Compare Options</button>",
-      "css": ".ds-btn-secondary { background: transparent; color: #16181C; font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.02em; padding: 12px 24px; border-radius: 2px; border: 1px solid rgba(22,24,28,0.2); transition: border-color 0.2s ease-out; } .ds-btn-secondary:hover { border-color: rgba(22,24,28,0.5); } .ds-btn-secondary:focus-visible { outline: 2px solid #2955D1; outline-offset: 2px; }"
+      "css": ".ds-btn-secondary { background: transparent; color: #201E1D; font-family: Archivo, sans-serif; font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.03em; padding: 12px 24px; border-radius: 0; border: 1px solid rgba(32,30,29,0.2); transition: border-color 0.2s ease-out; } .ds-btn-secondary:hover { border-color: rgba(32,30,29,0.5); } .ds-btn-secondary:focus-visible { outline: 2px solid #EC3013; outline-offset: 2px; }"
     },
     {
       "name": "Text Input",
       "kind": "input",
       "refersTo": "input-field",
-      "description": "Standard form field, e.g. quote form contact/vehicle fields.",
-      "html": "<label class=\"ds-label\">VIN</label><input class=\"ds-input\" placeholder=\"1HGCM82633A004352\" />",
-      "css": ".ds-label { display: block; font-family: 'Fragment Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #565C66; margin-bottom: 4px; } .ds-input { width: 100%; background: #F1F2F4; color: #16181C; border: 1px solid rgba(137,144,160,0.6); border-radius: 2px; padding: 8px 12px; font-family: Archivo, sans-serif; } .ds-input::placeholder { color: #8990A0; } .ds-input:focus-visible { outline: 2px solid #2955D1; outline-offset: 2px; } .ds-input-error { border-color: #7A3B4E; }"
+      "description": "Standard form field, e.g. quote form contact/vehicle fields, with error state.",
+      "html": "<label class=\"ds-label\">VIN</label><input class=\"ds-input\" placeholder=\"1HGCM82633A004352\" /><p class=\"ds-error-text\">We need a valid VIN.</p>",
+      "css": ".ds-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #605D5D; margin-bottom: 4px; } .ds-input { width: 100%; background: #F3F2F2; color: #201E1D; border: 1px solid rgba(138,135,133,0.6); border-radius: 0; padding: 8px 12px; font-family: Archivo, sans-serif; } .ds-input::placeholder { color: #8A8785; } .ds-input:focus-visible { outline: 2px solid #EC3013; outline-offset: 2px; } .ds-input-error { border-color: #AE1800; } .ds-error-text { margin-top: 4px; font-size: 0.875rem; color: #AE1800; }"
     },
     {
       "name": "Transport Option Card",
       "kind": "card",
       "refersTo": "transport-option-card",
-      "description": "Signature decision card for Carrier Transport vs Personal Driver, using semantic color tints.",
-      "html": "<div class=\"ds-option-card ds-option-card--highway\"><p class=\"ds-option-title\">Carrier Transport</p><p class=\"ds-option-copy\">Your vehicle rides on an insured, licensed carrier's hauler.</p></div>",
-      "css": ".ds-option-card { border-radius: 2px; padding: 32px; border: 2px solid; } .ds-option-card--highway { border-color: rgba(20,107,99,0.3); background: rgba(20,107,99,0.05); } .ds-option-card--rust { border-color: rgba(122,59,78,0.3); background: rgba(122,59,78,0.05); } .ds-option-title { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.02em; color: #146B63; } .ds-option-copy { margin-top: 12px; font-family: Archivo, sans-serif; color: rgba(22,24,28,0.75); }"
+      "description": "Signature decision card for Carrier Transport vs Personal Driver -- solid fills, not tints, per the One Accent Rule.",
+      "html": "<div class=\"ds-option-card ds-option-card--carrier\"><p class=\"ds-option-title\">Carrier Transport</p><p class=\"ds-option-copy\">Your vehicle rides on an insured, licensed carrier's hauler.</p></div>",
+      "css": ".ds-option-card { border-radius: 0; padding: 32px; color: #F3F2F2; } .ds-option-card--carrier { background: #EC3013; } .ds-option-card--personal-driver { background: #201E1D; } .ds-option-title { font-family: Archivo, sans-serif; font-weight: 700; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.03em; } .ds-option-copy { margin-top: 12px; font-family: Archivo, sans-serif; color: rgba(243,242,242,0.8); }"
     },
     {
       "name": "Route Rule Divider",
       "kind": "custom",
       "refersTo": "route-rule",
-      "description": "Signature dashed-line divider standing in for section breaks; reads as a road, not a hairline.",
+      "description": "Solid 2px section divider -- flat, unbroken line, not a dashed motif.",
       "html": "<div class=\"ds-route-rule\"></div>",
-      "css": ".ds-route-rule { height: 2px; background-image: repeating-linear-gradient(to right, #2955D1 0, #2955D1 10px, transparent 10px, transparent 20px); }"
+      "css": ".ds-route-rule { height: 2px; background-color: rgba(32,30,29,0.4); }"
     },
     {
       "name": "Manifest Label",
       "kind": "custom",
       "refersTo": "manifest-label",
-      "description": "Micro-label used above form fields, in nav sub-labels, and as section eyebrows.",
+      "description": "Micro-label used above form fields, in nav sub-labels, and as the hero eyebrow.",
       "html": "<p class=\"ds-manifest-label\">Tri-State &rarr; Nationwide</p>",
-      "css": ".ds-manifest-label { font-family: 'Fragment Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #565C66; }"
+      "css": ".ds-manifest-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: #605D5D; }"
     }
   ],
   "narrative": {
-    "northStar": "The Rig Plate",
-    "overview": "Royal Rollers now reads like a stamped steel ID plate bolted to a rig, not a printed document. The manifest idea survives — VINs, ZIPs, and dollar amounts still render as data, not prose — but the surface underneath it changed: near-black graphite instead of warm paper, a bold cobalt \"signal blue\" instead of dusty steel-blue, and a tall, high-contrast condensed display face instead of interstate-signage caps. The effect should feel sleek (clean surfaces, confident weight, no clutter) and rugged (a real freight-yard color language, structural type) at once — the two are meant to sit together, not compromise into something in-between. This still explicitly rejects the generic SaaS look — no gradient-heavy hero, no glassmorphism, nothing that reads as a lead-gen funnel dressed up as a product — and adds a new rejection: no printed-paper texture or warm brass anywhere. The former \"paper grain\" overlay is gone; the page is flat, precise digital surface now, not simulated stock. Two accent colors still carry real semantic weight — a cool teal for the insured/carrier option, a deep oxblood for the personal-driver option and its doubled error state — coordinated as one cool, saturated family with the new primary blue rather than the old family's dusty desaturation.",
+    "northStar": "The Modernist Manifest",
+    "overview": "Royal Rollers now reads like a printed transport manifest run through a Modernist type foundry, not a stamped steel plate and not a SaaS product page. Every surface is flat: off-white paper, near-black ink, one red accent, nothing else. There is no gradient, no shadow, no rounded corner anywhere on the site. Structure comes entirely from solid 2px rules dividing sections the way a manifest divides line items, condensed uppercase Archivo doing the work a heavier display face used to do, and monospace reserved for anything that is literally data. This still explicitly rejects the generic SaaS look -- no gradient-heavy hero, no glassmorphism, no soft-shadow cards, nothing that reads as a lead-gen funnel dressed up as a product -- and adds the Modernist system's own constraint on top: no second hue. The former two-accent system (a teal for Carrier Transport, an oxblood for Personal Driver) is gone. The two service types are now told apart by the only two tones the system has: red fill for Carrier Transport, black fill for Personal Driver. A third, functional-only color (brass-dark) exists solely to make error and danger states visible; it is never used as decoration.",
     "keyCharacteristics": [
-      "Near-black graphite surfaces (no more soft warm-gray paper) with a bold, saturated cobalt accent — sleeker and more confident than the old muted steel-blue",
-      "Tall, high-contrast condensed display type (Big Shoulders Display) at tighter tracking than before — reads as stamped lettering, not shouted signage",
-      "Fragment Mono reserved for structured data fields and micro-labels, distinct from the old code-editor mono",
-      "The dashed route-rule motif carries over unchanged — still the one recurring divider motif, now rendered in signal blue",
-      "Sharp corners throughout (2px radius) — unchanged, still a plate, not an app card"
+      "Flat off-white paper background, near-black ink text, one saturated red accent -- no second brand hue anywhere",
+      "Archivo carries both display and body type; JetBrains Mono is reserved for VINs, ZIPs, dollar amounts, and other structured data",
+      "Zero border radius on every interactive surface -- buttons, inputs, cards, badges, step indicators",
+      "Zero drop shadows -- separation comes from solid 2px rules and flat color blocks, never elevation",
+      "Carrier Transport = solid red; Personal Driver = solid black -- the one semantic color pairing the whole site relies on",
+      "brass-dark, a deeper shade of the same accent, is reserved exclusively for error/danger states so they stay visually distinct from both normal text and the Carrier Transport brand color"
     ],
     "rules": [
-      { "name": "The Semantic Color Rule", "body": "Deep Teal and Oxblood are never used as generic accents — they mean Carrier Transport and Personal Driver respectively (and, for Oxblood, form errors) everywhere they appear. If a new component needs a third \"option\" color, it must earn a name and a fixed meaning the same way; don't reach for either as decoration.", "section": "colors" },
-      { "name": "The No-Paper-Texture Rule", "body": "The site no longer simulates a physical printed surface (no grain, no paper-fiber texture). Depth and material come from color, type weight, and structure — not a decorative overlay pretending to be paper.", "section": "colors" },
-      { "name": "The Data-Reads-As-Data Rule", "body": "Any field the user or system treats as structured data — VIN, ZIP, dollar amounts — renders in the mono Label/Data face, even inline. Never let a data value inherit body prose styling; it must look like it came off a plate, not a sentence.", "section": "typography" },
-      { "name": "The Tight-Tracking Rule", "body": "Display and Title tracking dropped from 0.08em/0.04em to 0.02em across the board. Big Shoulders Display is already tall and condensed; extra letter-spacing on top of that reads as loose, not confident. Don't reintroduce wide tracking on new display type.", "section": "typography" },
-      { "name": "The Restrained-Shadow Rule", "body": "Shadows are the exception, not the default — reach for a tinted background or a border first. When a surface needs to feel genuinely lifted (a form panel, a hovering card), use shadow-panel/shadow-panel-lg, never a generic gray drop shadow.", "section": "elevation" }
+      { "name": "The One Accent Rule", "body": "Signal Red is the only saturated color on the site. There is no secondary brand hue. Carrier Transport is solid Signal Red, Personal Driver is solid Ink. highway and rust are kept as token names in code purely so components don't need renaming -- highway resolves to Signal Red, rust resolves to Ink.", "section": "colors" },
+      { "name": "The Functional-Red Rule", "body": "brass-dark (#AE1800) exists only to make error, danger, and failure states visible. It is never used decoratively. It is deliberately the same hue family as Signal Red but dark enough to stay distinct from both the bright Carrier Transport red and plain ink text.", "section": "colors" },
+      { "name": "The No-Warmth Rule", "body": "No cream, beige, or brass-toned neutral anywhere. Paper is a true cool off-white, not a warm parchment tone.", "section": "colors" },
+      { "name": "The Data-Reads-As-Data Rule", "body": "Any field the user or system treats as structured data -- VIN, ZIP, dollar amounts -- renders in JetBrains Mono, even inline. Never let a data value inherit body prose styling.", "section": "typography" },
+      { "name": "The One-Family Rule", "body": "Archivo is the only sans-serif on the page, in both display and body roles. Don't introduce a second display face; weight and size carry the hierarchy.", "section": "typography" },
+      { "name": "The Flat-By-Rule Rule", "body": "Elevation tokens exist in code purely so components don't need editing, but they are permanently set to none. Never reintroduce a real box-shadow value, and never add an ad hoc shadow to a component.", "section": "elevation" }
     ],
     "dos": [
-      "Do render structured data (VIN, ZIP, dollar amounts) in Fragment Mono, uppercase where applicable, everywhere it appears — inline, in tables, in labels.",
-      "Do use the dashed route-rule motif for section dividers instead of a plain border line.",
-      "Do keep every interactive element's corner radius at 2px (rounded-sm) — buttons, inputs, and cards all share this value.",
-      "Do give Deep Teal and Oxblood fixed, single meanings (Carrier/insured; Personal Driver, and Oxblood doubles as form-error) rather than using them as general-purpose accent colors.",
-      "Do keep marketing CTAs as ghost/outline (fill-on-hover) and reserve the solid signal-blue fill for the header's persistent CTA and in-task progress buttons.",
-      "Do carry the global :focus-visible signal-blue outline and prefers-reduced-motion collapse into any new component — both are base-layer rules already in globals.css."
+      "Do render structured data (VIN, ZIP, dollar amounts) in JetBrains Mono, uppercase where applicable, everywhere it appears.",
+      "Do use the solid 2px rule (rgba(32,30,29,0.4)) for every section divider -- never a dashed line, never a soft gray hairline.",
+      "Do keep every interactive element's corner radius at zero -- buttons, inputs, cards, and badges all share this value.",
+      "Do keep Carrier Transport = Signal Red and Personal Driver = Ink as a fixed, exclusive pairing.",
+      "Do use brass-dark for every error, danger, or failure state so they stay visually distinct from plain Ink text and the Signal Red brand color.",
+      "Do carry the global :focus-visible Signal Red outline and prefers-reduced-motion collapse into any new component."
     ],
     "donts": [
-      "Don't use a gradient-heavy hero, glassmorphism, or a generic-tech-startup visual language — explicitly rejected in tailwind.config.ts's own comments as the thing this project is not.",
-      "Don't reintroduce the paper-grain texture or any simulated-physical-material overlay — the surface is flat digital now, not simulated paper.",
-      "Don't reach for a generic gray drop shadow anywhere — if a surface needs elevation, use the ink-tinted shadow-panel/shadow-panel-lg tokens, and only on genuinely elevated surfaces.",
-      "Don't use a warm cream/beige background, or a warm brass/gold accent. This palette is deliberately cool and dark — warming it up drifts back toward the project's earlier, more generic look.",
-      "Don't let a data value (VIN, ZIP, dollar figure) inherit body prose styling — it must render in the mono Label face, not Archivo.",
-      "Don't widen display/title tracking back toward 0.08em/0.04em — 0.02em is the system-wide tracking for Big Shoulders Display.",
-      "Don't soften corners on new components (no rounded-md/rounded-lg/rounded-full outside of genuinely circular elements) — 2px is the system-wide radius.",
-      "Don't put a solid-filled marketing CTA anywhere except the header — every in-page CTA should be the ghost/outline treatment."
+      "Don't use a gradient-heavy hero, glassmorphism, or a generic-tech-startup visual language.",
+      "Don't add a drop shadow anywhere -- shadow-panel/shadow-panel-lg resolve to none at the token level.",
+      "Don't use a warm cream/beige background or a warm brass/gold accent.",
+      "Don't let a data value inherit body prose styling -- it must render in the mono Label face.",
+      "Don't soften corners on new components -- zero radius is the system-wide rule.",
+      "Don't use plain Ink for an error or danger state -- it's indistinguishable from normal text. Use brass-dark.",
+      "Don't introduce a second saturated hue for a new 'option' or category -- use the Signal-Red/Ink pairing instead."
     ]
   }
 }
