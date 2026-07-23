@@ -56,6 +56,26 @@
     @apply font-mono text-xs uppercase tracking-wideish text-slate;
   }
 
+  /* Smooth continuous-motion spinner for inline async status (VIN decode,
+     cost estimate) -- a conic-gradient ring rather than a shimmer bar, since
+     these are brief, single-purpose lookups rather than content taking
+     shape. Kept circular (unlike the rest of the flat, square system)
+     because a spinner reads instantly only in its conventional form. */
+  .apple-spinner {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: conic-gradient(from 90deg, transparent 0%, currentColor 100%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 0);
+    mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 0);
+    animation: apple-spin 0.85s linear infinite;
+  }
+  @keyframes apple-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   /* Skeleton loading surfaces -- shape-matched to whatever they stand in
      for, not a generic circular spinner. */
   .skeleton {

@@ -498,15 +498,35 @@ export default function QuoteForm() {
                 <p className="mt-1 text-xs text-slate">
                   On your registration, insurance card, or the dashboard on the driver&apos;s side.
                 </p>
-                {vinDecodeStatus === "loading" && (
-                  <div className="mt-2 space-y-1.5" aria-live="polite">
-                    <p className="text-xs text-slate">Looking up your vehicle&hellip;</p>
-                    <div className="skeleton h-3 w-40" />
-                  </div>
-                )}
-                {vinDecodeStatus === "done" && (
-                  <p className="mt-1 text-xs text-green-700">Got it. We&apos;ll confirm the details with you later.</p>
-                )}
+                <AnimatePresence mode="wait">
+                  {vinDecodeStatus === "loading" && (
+                    <motion.div
+                      key="loading"
+                      initial={reduce ? false : { opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="mt-2 flex items-center gap-2"
+                      aria-live="polite"
+                    >
+                      <span className="apple-spinner text-brass" aria-hidden="true" />
+                      <p className="text-xs text-slate">Looking up your vehicle&hellip;</p>
+                    </motion.div>
+                  )}
+                  {vinDecodeStatus === "done" && (
+                    <motion.p
+                      key="done"
+                      initial={reduce ? false : { opacity: 0, y: -2 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+                      className="mt-1 font-mono text-xs text-slate-light"
+                      aria-live="polite"
+                    >
+                      {[form.vehicleYear, form.vehicleMake, form.vehicleModel].filter(Boolean).join(" ")}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
                 {vinDecodeStatus === "error" && (
                   <p className="mt-1 text-xs text-brass-dark">
                     Couldn&apos;t look that VIN up. You can try again, or enter the details manually below.
@@ -708,10 +728,16 @@ export default function QuoteForm() {
             </button>
 
             {estimateStatus === "loading" && (
-              <div className="rounded-sm border border-brass/40 bg-brass/5 p-3" aria-live="polite">
+              <motion.div
+                initial={reduce ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="flex items-center gap-2 rounded-sm border border-brass/40 bg-brass/5 p-3"
+                aria-live="polite"
+              >
+                <span className="apple-spinner text-brass" aria-hidden="true" />
                 <p className="text-xs text-slate">Estimating cost&hellip;</p>
-                <div className="skeleton mt-2 h-4 w-32" />
-              </div>
+              </motion.div>
             )}
             {estimateStatus === "done" && estimate && (
               <div className="rounded-sm border border-brass/40 bg-brass/5 p-3 text-sm text-ink/80">
