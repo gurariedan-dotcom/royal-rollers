@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
+    },
+    {
+      "name": "royal-rollers-preview-881e414",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "/tmp/rr-preview-881e414", "--", "-p", "3001"],
+      "port": 3001
     }
   ]
 }
