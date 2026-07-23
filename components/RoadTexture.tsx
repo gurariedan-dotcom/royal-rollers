@@ -13,7 +13,7 @@ export default function RoadTexture() {
       className="absolute inset-0 opacity-[0.08]"
       style={{
         backgroundImage:
-          "repeating-linear-gradient(-35deg, #F2F2F0 0, #F2F2F0 3px, transparent 3px, transparent 46px)",
+          "repeating-linear-gradient(-35deg, var(--color-paper) 0, var(--color-paper) 3px, transparent 3px, transparent 46px)",
         backgroundSize: "260px 260px",
       }}
       animate={reduce ? {} : { backgroundPositionX: [0, 260] }}

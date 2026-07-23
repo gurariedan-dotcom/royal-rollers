@@ -5,6 +5,13 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Exposed for the handful of inline-style gradients (SVG/motion
+       backgroundImage) that Tailwind's theme() can't reach from a .tsx
+       file -- keeps them bound to the same source of truth as everything
+       else instead of drifting into their own hex literals. */
+    --color-ink: theme("colors.ink.DEFAULT");
+    --color-paper: theme("colors.paper.DEFAULT");
+    --color-brass: theme("colors.brass.DEFAULT");
   }
 
   body {

@@ -48,7 +48,7 @@ export default function HowItWorksPage() {
                   className="mt-1 w-px flex-1"
                   style={{
                     backgroundImage:
-                      "repeating-linear-gradient(to bottom, #2955D1 0, #2955D1 4px, transparent 4px, transparent 9px)",
+                      "repeating-linear-gradient(to bottom, var(--color-brass) 0, var(--color-brass) 4px, transparent 4px, transparent 9px)",
                   }}
                 />
               )}
