@@ -1,31 +1,32 @@
 import type { Metadata } from "next";
-import { Oswald, Public_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Big_Shoulders_Display, Archivo, Fragment_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-// Display face: condensed, all-caps-friendly -- reads like interstate
-// signage. Body face: Public Sans, the U.S. web design system's face,
-// chosen deliberately for a business built on forms, VINs, and paperwork.
-// Mono face: for VINs, zips, and dollar amounts, so data reads like data.
-const oswald = Oswald({
+// Display face: tall, condensed, stamped-plate weight -- reads like a
+// stenciled ID plate bolted to a rig, not a printed page. Body face:
+// Archivo, a clean workmanlike grotesk that stays out of the way. Mono
+// face: Fragment Mono, for VINs, zips, and dollar amounts, so data reads
+// like data without the generic code-editor look.
+const bigShoulders = Big_Shoulders_Display({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-oswald",
+  weight: ["600", "700", "800"],
+  variable: "--font-big-shoulders",
   display: "swap",
 });
 
-const publicSans = Public_Sans({
+const archivo = Archivo({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-public-sans",
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
+const fragmentMono = Fragment_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-plex-mono",
+  weight: ["400"],
+  variable: "--font-fragment-mono",
   display: "swap",
 });
 
@@ -49,9 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${oswald.variable} ${publicSans.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${bigShoulders.variable} ${archivo.variable} ${fragmentMono.variable}`}>
       <body className="flex min-h-screen flex-col">
-        <div className="paper-grain" aria-hidden="true" />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

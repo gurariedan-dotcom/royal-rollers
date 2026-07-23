@@ -8,7 +8,8 @@
       "Bash(mkdir -p /Users/Work/Downloads/royal-rollers/.claude)",
       "Bash(python3 -m json.tool)",
       "Bash(bash .claude/backup.sh)",
-      "Bash(/Users/Work/Downloads/royal-rollers/.claude/backup.sh)"
+      "Bash(/Users/Work/Downloads/royal-rollers/.claude/backup.sh)",
+      "Bash(./.claude/backup.sh)"
     ]
   }
 }
