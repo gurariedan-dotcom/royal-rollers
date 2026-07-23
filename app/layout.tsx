@@ -3,6 +3,7 @@ import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ContactButton from "@/components/ContactButton";
 
 // Modernist design system: one grotesk (Archivo) for both display and body
 // text, JetBrains Mono for VINs, ZIPs, and dollar amounts so data reads as
@@ -46,6 +47,7 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <ContactButton />
       </body>
     </html>
   );

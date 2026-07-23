@@ -5,10 +5,10 @@ import RoadTexture from "@/components/RoadTexture";
 import { ShieldCheck, SteeringWheel } from "@phosphor-icons/react/dist/ssr";
 
 const ghostCta =
-  "rounded-sm border border-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-brass transition-all hover:bg-brass hover:text-paper hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
+  "rounded-lg border border-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-brass transition-all hover:bg-brass hover:text-paper hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
 
 const ghostCtaOnDark =
-  "rounded-sm border border-paper px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper transition-all hover:bg-paper hover:text-ink hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
+  "rounded-lg border border-paper px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper transition-all hover:bg-paper hover:text-ink hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
 
 export default function HomePage() {
   return (
@@ -36,7 +36,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/services"
-              className="rounded-sm border border-ink/20 px-6 py-3 font-display text-sm uppercase tracking-wideish text-ink transition-all hover:border-ink/50 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
+              className="rounded-lg border border-ink/20 px-6 py-3 font-display text-sm uppercase tracking-wideish text-ink transition-all hover:border-ink/50 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
             >
               Compare Options
             </Link>
@@ -50,26 +50,37 @@ export default function HomePage() {
         <h2 className="text-center text-3xl">Pick what fits your timeline</h2>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Reveal className="rounded-sm bg-highway p-8 text-paper shadow-panel md:p-10">
-            <ShieldCheck size={32} weight="duotone" className="text-paper/90" />
-            <p className="mt-4 font-display text-xl uppercase tracking-wideish">
-              Carrier Transport
-            </p>
-            <p className="mt-3 text-paper/80">
-              Your vehicle rides on an insured, licensed carrier&apos;s hauler.
-              No mileage added. No hidden fees. Typically 1-4 days.
-            </p>
-          </Reveal>
-          <Reveal delay={0.1} className="rounded-sm bg-rust p-8 text-paper shadow-panel md:p-10 md:mt-12">
-            <SteeringWheel size={32} weight="duotone" className="text-paper/90" />
-            <p className="mt-4 font-display text-xl uppercase tracking-wideish">
-              Personal Driver
-            </p>
-            <p className="mt-3 text-paper/80">
-              A driver takes your car directly, point to point. Faster and more
-              precise timing, typically 24-30 hours. Adds mileage to the vehicle.
-            </p>
-          </Reveal>
+          <Link href="/quote?service=carrier" className="block">
+            <Reveal
+              hover
+              className="rounded-2xl bg-highway p-8 text-paper shadow-panel transition-shadow duration-200 hover:shadow-2xl md:p-10"
+            >
+              <ShieldCheck size={32} weight="duotone" className="text-paper/90" />
+              <p className="mt-4 font-display text-xl uppercase tracking-wideish">
+                Carrier Transport
+              </p>
+              <p className="mt-3 text-paper/80">
+                Your vehicle rides on an insured, licensed carrier&apos;s hauler.
+                No mileage added. No hidden fees. Typically 1-4 days.
+              </p>
+            </Reveal>
+          </Link>
+          <Link href="/quote?service=personal_driver" className="block md:mt-12">
+            <Reveal
+              delay={0.1}
+              hover
+              className="rounded-2xl bg-rust p-8 text-paper shadow-panel transition-shadow duration-200 hover:shadow-2xl md:p-10"
+            >
+              <SteeringWheel size={32} weight="duotone" className="text-paper/90" />
+              <p className="mt-4 font-display text-xl uppercase tracking-wideish">
+                Personal Driver
+              </p>
+              <p className="mt-3 text-paper/80">
+                A driver takes your car directly, point to point. Faster and more
+                precise timing, typically 24-30 hours. Adds mileage to the vehicle.
+              </p>
+            </Reveal>
+          </Link>
         </div>
 
         <p className="mt-8 text-center text-sm text-ink/60">

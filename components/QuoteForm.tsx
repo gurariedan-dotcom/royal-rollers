@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import RouteProgress from "./RouteProgress";
+import DatePicker from "./DatePicker";
 import { quoteRequestSchema, FLEXIBILITY_LABELS, VEHICLE_TYPES, VEHICLE_TYPE_LABELS } from "@/lib/validation";
 
 const STEPS = ["Service", "Vehicle", "Route", "Timing", "Contact"];
@@ -67,6 +68,79 @@ function inputClass(hasError: boolean) {
   ].join(" ");
 }
 
+function selectClass(hasError: boolean) {
+  return [
+    inputClass(hasError),
+    "cursor-pointer appearance-none pr-9 transition-colors duration-150",
+    hasError ? "" : "hover:border-slate-light",
+  ].join(" ");
+}
+
+// Chevron overlay for native <select> -- appearance-none strips the default
+// arrow cross-browser, so this replaces it without giving up the native
+// dropdown (keyboard nav, mobile wheel picker, screen readers all still work).
+function SelectChevron() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 fill-none stroke-slate stroke-[1.75]"
+    >
+      <path d="M4 6l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// The pill/checkbox look the Round Trip control used to have alone, now
+// shared by every exclusive-choice control (Running, Transport type,
+// Flexibility) so they all read as the same kind of control.
+function OptionButton({
+  selected,
+  onClick,
+  children,
+  accent = "highway",
+}: {
+  selected: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  accent?: "highway" | "rust";
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={[
+        "flex items-center gap-2.5 rounded-sm border px-4 py-2.5 font-display text-sm uppercase tracking-wideish",
+        "transition-colors duration-150 ease-out active:scale-[0.97]",
+        selected
+          ? accent === "rust"
+            ? "border-rust bg-rust/10 text-rust"
+            : "border-highway bg-highway/10 text-highway"
+          : "border-slate-light/50 text-ink/70 hover:border-slate-light",
+      ].join(" ")}
+    >
+      <span
+        className={[
+          "flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 transition-colors duration-150",
+          selected
+            ? accent === "rust"
+              ? "border-rust bg-rust"
+              : "border-highway bg-highway"
+            : "border-slate-light/60 bg-paper",
+        ].join(" ")}
+      >
+        {selected && (
+          <svg viewBox="0 0 16 16" className="h-3 w-3 fill-none stroke-paper stroke-[3]">
+            <path d="M3 8l3.5 3.5L13 4.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </span>
+      {children}
+    </button>
+  );
+}
+
 export default function QuoteForm() {
   const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
@@ -79,10 +153,23 @@ export default function QuoteForm() {
   const [makeIsOther, setMakeIsOther] = useState(false);
   const [estimate, setEstimate] = useState<{ lowCents: number; highCents: number } | null>(null);
   const [estimateStatus, setEstimateStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [roundTripPromptOpen, setRoundTripPromptOpen] = useState(false);
+  const roundTripAsked = useRef(false);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
+
+  // Landing here from a homepage service card (?service=carrier|personal_driver)
+  // pre-answers step 1 and drops the customer straight into step 2, as if
+  // they'd already picked it.
+  useEffect(() => {
+    const service = new URLSearchParams(window.location.search).get("service");
+    if (service === "carrier" || service === "personal_driver") {
+      setForm((prev) => ({ ...prev, serviceType: service }));
+      setStepIndex(1);
+    }
+  }, []);
 
   // Switching modes clears the fields the other mode owns, so stale data
   // from one path never silently rides along hidden in the other.
@@ -271,6 +358,27 @@ export default function QuoteForm() {
 
   function goNext() {
     if (!validateStep(stepIndex)) return;
+
+    // Ask, once, if a one-way trip was really the intent -- easy to miss
+    // since it defaults off. Never re-asks once answered either way.
+    if (STEPS[stepIndex] === "Route" && !form.roundTrip && !roundTripAsked.current) {
+      setRoundTripPromptOpen(true);
+      return;
+    }
+
+    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
+  }
+
+  function confirmOneWay() {
+    roundTripAsked.current = true;
+    setRoundTripPromptOpen(false);
+    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
+  }
+
+  function switchToRoundTrip() {
+    roundTripAsked.current = true;
+    setRoundTripPromptOpen(false);
+    update("roundTrip", true);
     setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   }
 
@@ -422,32 +530,38 @@ export default function QuoteForm() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="vehicleYear" className="manifest-label">Year</label>
-                    <select
-                      id="vehicleYear"
-                      value={form.vehicleYear}
-                      onChange={(e) => update("vehicleYear", e.target.value)}
-                      className={inputClass(!!fieldErrors.vehicleYear)}
-                    >
-                      <option value="">Select year&hellip;</option>
-                      {VEHICLE_YEARS.map((year) => (
-                        <option key={year} value={year}>{year}</option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        id="vehicleYear"
+                        value={form.vehicleYear}
+                        onChange={(e) => update("vehicleYear", e.target.value)}
+                        className={selectClass(!!fieldErrors.vehicleYear)}
+                      >
+                        <option value="">Select year&hellip;</option>
+                        {VEHICLE_YEARS.map((year) => (
+                          <option key={year} value={year}>{year}</option>
+                        ))}
+                      </select>
+                      <SelectChevron />
+                    </div>
                     {fieldErrors.vehicleYear && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleYear}</p>}
                   </div>
                   <div>
                     <label htmlFor="vehicleType" className="manifest-label">Type</label>
-                    <select
-                      id="vehicleType"
-                      value={form.vehicleType}
-                      onChange={(e) => update("vehicleType", e.target.value as FormState["vehicleType"])}
-                      className={inputClass(!!fieldErrors.vehicleType)}
-                    >
-                      <option value="">Select type&hellip;</option>
-                      {VEHICLE_TYPES.map((type) => (
-                        <option key={type} value={type}>{VEHICLE_TYPE_LABELS[type]}</option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        id="vehicleType"
+                        value={form.vehicleType}
+                        onChange={(e) => update("vehicleType", e.target.value as FormState["vehicleType"])}
+                        className={selectClass(!!fieldErrors.vehicleType)}
+                      >
+                        <option value="">Select type&hellip;</option>
+                        {VEHICLE_TYPES.map((type) => (
+                          <option key={type} value={type}>{VEHICLE_TYPE_LABELS[type]}</option>
+                        ))}
+                      </select>
+                      <SelectChevron />
+                    </div>
                     {fieldErrors.vehicleType && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleType}</p>}
                   </div>
                 </div>
@@ -464,25 +578,28 @@ export default function QuoteForm() {
                         className={inputClass(!!fieldErrors.vehicleMake)}
                       />
                     ) : (
-                      <select
-                        id="vehicleMake"
-                        value={form.vehicleMake}
-                        onChange={(e) => {
-                          if (e.target.value === OTHER_MAKE) {
-                            setMakeIsOther(true);
-                            update("vehicleMake", "");
-                          } else {
-                            update("vehicleMake", e.target.value);
-                          }
-                        }}
-                        className={inputClass(!!fieldErrors.vehicleMake)}
-                      >
-                        <option value="">Select make&hellip;</option>
-                        {COMMON_MAKES.map((make) => (
-                          <option key={make} value={make}>{make}</option>
-                        ))}
-                        <option value={OTHER_MAKE}>Other&hellip;</option>
-                      </select>
+                      <div className="relative">
+                        <select
+                          id="vehicleMake"
+                          value={form.vehicleMake}
+                          onChange={(e) => {
+                            if (e.target.value === OTHER_MAKE) {
+                              setMakeIsOther(true);
+                              update("vehicleMake", "");
+                            } else {
+                              update("vehicleMake", e.target.value);
+                            }
+                          }}
+                          className={selectClass(!!fieldErrors.vehicleMake)}
+                        >
+                          <option value="">Select make&hellip;</option>
+                          {COMMON_MAKES.map((make) => (
+                            <option key={make} value={make}>{make}</option>
+                          ))}
+                          <option value={OTHER_MAKE}>Other&hellip;</option>
+                        </select>
+                        <SelectChevron />
+                      </div>
                     )}
                     {fieldErrors.vehicleMake && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleMake}</p>}
                   </div>
@@ -510,17 +627,11 @@ export default function QuoteForm() {
 
             <div>
               <span className="manifest-label">Condition</span>
-              <div className="mt-2 flex gap-4">
+              <div className="mt-2 flex flex-wrap gap-3">
                 {(["running", "not_running"] as const).map((val) => (
-                  <label key={val} className="flex items-center gap-2 text-sm text-ink">
-                    <input
-                      type="radio"
-                      name="isRunning"
-                      checked={form.isRunning === val}
-                      onChange={() => update("isRunning", val)}
-                    />
+                  <OptionButton key={val} selected={form.isRunning === val} onClick={() => update("isRunning", val)}>
                     {val === "running" ? "Running" : "Not running"}
-                  </label>
+                  </OptionButton>
                 ))}
               </div>
               {fieldErrors.isRunning && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.isRunning}</p>}
@@ -529,17 +640,11 @@ export default function QuoteForm() {
             {form.serviceType === "carrier" && (
               <div>
                 <span className="manifest-label">Transport type</span>
-                <div className="mt-2 flex gap-4">
+                <div className="mt-2 flex flex-wrap gap-3">
                   {(["open", "enclosed"] as const).map((val) => (
-                    <label key={val} className="flex items-center gap-2 text-sm text-ink capitalize">
-                      <input
-                        type="radio"
-                        name="enclosed"
-                        checked={form.enclosed === val}
-                        onChange={() => update("enclosed", val)}
-                      />
-                      {val}
-                    </label>
+                    <OptionButton key={val} selected={form.enclosed === val} onClick={() => update("enclosed", val)}>
+                      <span className="capitalize">{val}</span>
+                    </OptionButton>
                   ))}
                 </div>
                 {fieldErrors.enclosed && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.enclosed}</p>}
@@ -580,8 +685,11 @@ export default function QuoteForm() {
               onClick={() => update("roundTrip", !form.roundTrip)}
               aria-pressed={form.roundTrip}
               className={[
-                "flex items-center gap-3 rounded-sm border px-4 py-2 font-display text-sm uppercase tracking-wideish transition-colors",
-                form.roundTrip ? "border-highway bg-highway/10 text-highway" : "border-slate-light/50 text-ink/70",
+                "flex items-center gap-3 rounded-sm border px-4 py-2 font-display text-sm uppercase tracking-wideish",
+                "transition-colors duration-150 ease-out active:scale-[0.97]",
+                form.roundTrip
+                  ? "border-highway bg-highway/10 text-highway"
+                  : "border-slate-light/50 text-ink/70 hover:border-slate-light",
               ].join(" ")}
             >
               <span
@@ -629,12 +737,11 @@ export default function QuoteForm() {
           <div className="space-y-5">
             <div>
               <label htmlFor="preferredPickupDate" className="manifest-label">Preferred pickup date</label>
-              <input
+              <DatePicker
                 id="preferredPickupDate"
-                type="date"
                 value={form.preferredPickupDate}
-                onChange={(e) => update("preferredPickupDate", e.target.value)}
-                className={inputClass(!!fieldErrors.preferredPickupDate)}
+                onChange={(v) => update("preferredPickupDate", v)}
+                hasError={!!fieldErrors.preferredPickupDate}
               />
               {fieldErrors.preferredPickupDate && (
                 <p className="mt-1 text-sm text-brass-dark">{fieldErrors.preferredPickupDate}</p>
@@ -642,17 +749,15 @@ export default function QuoteForm() {
             </div>
             <div>
               <span className="manifest-label">Flexibility</span>
-              <div className="mt-2 grid gap-2 sm:grid-cols-2">
+              <div className="mt-2 grid gap-3 sm:grid-cols-2">
                 {(Object.keys(FLEXIBILITY_LABELS) as (keyof typeof FLEXIBILITY_LABELS)[]).map((key) => (
-                  <label key={key} className="flex items-center gap-2 text-sm text-ink">
-                    <input
-                      type="radio"
-                      name="flexibilityWindow"
-                      checked={form.flexibilityWindow === key}
-                      onChange={() => update("flexibilityWindow", key)}
-                    />
+                  <OptionButton
+                    key={key}
+                    selected={form.flexibilityWindow === key}
+                    onClick={() => update("flexibilityWindow", key)}
+                  >
                     {FLEXIBILITY_LABELS[key]}
-                  </label>
+                  </OptionButton>
                 ))}
               </div>
               {fieldErrors.flexibilityWindow && (
@@ -738,6 +843,52 @@ export default function QuoteForm() {
           )}
         </div>
       </div>
+
+      <AnimatePresence>
+        {roundTripPromptOpen && (
+          <motion.div
+            className="fixed inset-0 z-30 flex items-center justify-center bg-ink/40 p-4"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="round-trip-prompt-heading"
+              initial={reduce ? false : { opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+              className="w-full max-w-sm border border-slate-light/60 bg-paper p-6 shadow-panel"
+            >
+              <p id="round-trip-prompt-heading" className="font-display text-base uppercase tracking-wideish text-ink">
+                Just the one-way trip?
+              </p>
+              <p className="mt-2 text-sm text-ink/70">
+                We&apos;ll quote pickup to dropoff only. Say the word if you also need it brought back.
+              </p>
+              <div className="mt-5 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={confirmOneWay}
+                  className="font-display text-sm uppercase tracking-wideish text-ink/60 transition-colors duration-150 hover:text-highway active:scale-[0.97]"
+                >
+                  One-way is right
+                </button>
+                <button
+                  type="button"
+                  onClick={switchToRoundTrip}
+                  className="rounded-sm bg-brass px-5 py-2 font-display text-sm uppercase tracking-wideish text-paper transition-colors duration-150 hover:bg-brass-dark active:scale-[0.97]"
+                >
+                  Add round trip
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
