@@ -260,6 +260,15 @@ export default function QuoteForm() {
     return Object.keys(errors).length === 0;
   }
 
+  // Non-mutating check (unlike validateStep) so it's safe to call on every
+  // render for disabling the Next/Submit button.
+  function isStepValid(index: number): boolean {
+    const result = quoteRequestSchema.safeParse(toPayload(form));
+    if (result.success) return true;
+    const relevant = fieldsForStep(index);
+    return !result.error.issues.some((issue) => relevant.includes(issue.path[0] as keyof FormState));
+  }
+
   function goNext() {
     if (!validateStep(stepIndex)) return;
     setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
@@ -388,7 +397,7 @@ export default function QuoteForm() {
                   </div>
                 )}
                 {vinDecodeStatus === "done" && (
-                  <p className="mt-1 text-xs text-highway">Got it. We&apos;ll confirm the details with you later.</p>
+                  <p className="mt-1 text-xs text-green-700">Got it. We&apos;ll confirm the details with you later.</p>
                 )}
                 {vinDecodeStatus === "error" && (
                   <p className="mt-1 text-xs text-brass-dark">
@@ -712,7 +721,8 @@ export default function QuoteForm() {
             <button
               type="button"
               onClick={goNext}
-              className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
+              disabled={!isStepValid(stepIndex)}
+              className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-60"
             >
               Next
             </button>
@@ -720,7 +730,7 @@ export default function QuoteForm() {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={submitState === "submitting"}
+              disabled={submitState === "submitting" || !isStepValid(stepIndex)}
               className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-60"
             >
               {submitState === "submitting" ? "Submitting\u2026" : "Submit Request"}
