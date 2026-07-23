@@ -154,7 +154,10 @@ function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
       <div className="rounded-sm border border-ink/10 p-4">
         <label className="manifest-label">Card details</label>
         <div className="mt-2 rounded-sm border border-slate-light/60 p-3">
-          <CardElement options={{ style: { base: { fontSize: "16px", color: "#1C1E22" } } }} />
+          {/* Stripe Elements renders in a sandboxed iframe -- no CSS custom
+              properties reach it, so this hex has to be a literal kept in
+              sync with the ink token by hand. */}
+          <CardElement options={{ style: { base: { fontSize: "16px", color: "#16181C" } } }} />
         </div>
       </div>
 
