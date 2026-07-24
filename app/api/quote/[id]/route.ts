@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_noStore as noStore } from "next/cache";
 import { getDb, type QuoteRequestRow } from "@/lib/db";
+
+// This handler never touches a Next.js "dynamic" API (no headers(), no
+// request access), which makes it eligible for Next's default Route Handler
+// caching -- it would otherwise freeze on the first response ever generated
+// for a given quote id and never reflect a later price/status change. This
+// route serves live, frequently-mutated data (the owner re-pricing a quote,
+// a booking flipping status), so it must always hit the DB. `dynamic =
+// "force-dynamic"` alone did not reliably bust this in testing (Next 14.2
+// still served a stale cached response after it was added) -- noStore() is
+// the documented, unambiguous per-request opt-out, so both are set.
+export const dynamic = "force-dynamic";
 
 // Deposit split lives here, server-side, so it's never something a client
 // request can override (see app/api/booking/route.ts, which reads the same
@@ -10,6 +22,7 @@ import { getDb, type QuoteRequestRow } from "@/lib/db";
 const DEPOSIT_PERCENT = Number(process.env.DEPOSIT_PERCENT ?? "20") / 100;
 
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+  noStore();
   const db = getDb();
   const { data, error } = await db
     .from("quote_requests")

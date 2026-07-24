@@ -19,16 +19,27 @@ function envNumber(name: string, fallback: number): number {
 
 const BASE_FEE_CENTS = envNumber("ESTIMATE_BASE_FEE_CENTS", 15000);
 const PER_MILE_CENTS = envNumber("ESTIMATE_PER_MILE_CENTS", 85);
-const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 30);
-const PERSONAL_DRIVER_SURCHARGE_PERCENT = envNumber("ESTIMATE_PERSONAL_DRIVER_SURCHARGE_PERCENT", 20);
+const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 40);
+const PERSONAL_DRIVER_SURCHARGE_PERCENT = envNumber("ESTIMATE_PERSONAL_DRIVER_SURCHARGE_PERCENT", 0);
 const NOT_RUNNING_FLAT_ADD_CENTS = envNumber("ESTIMATE_NOT_RUNNING_FLAT_ADD_CENTS", 20000);
 const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 15);
+
+// Vehicle-size surcharge -- bigger vehicles cost more to haul. Sedan is the
+// baseline (0%, no env var needed). Applied to the base+mileage midpoint
+// before the carrier/enclosed/driver-type surcharge stacks on top of it.
+const VEHICLE_SURCHARGE_PERCENT: Record<Exclude<EstimateInput["vehicleType"], "sedan">, number> = {
+  suv: envNumber("ESTIMATE_SUV_SURCHARGE_PERCENT", 10),
+  minivan: envNumber("ESTIMATE_MINIVAN_SURCHARGE_PERCENT", 15),
+  pickup: envNumber("ESTIMATE_PICKUP_SURCHARGE_PERCENT", 20),
+  full_size_suv: envNumber("ESTIMATE_FULLSIZE_SUV_SURCHARGE_PERCENT", 30),
+};
 
 export type EstimateInput = {
   miles: number;
   serviceType: "carrier" | "personal_driver";
   enclosed?: "open" | "enclosed";
   isRunning: "running" | "not_running";
+  vehicleType: "sedan" | "suv" | "minivan" | "pickup" | "full_size_suv";
   // Round trip = the vehicle goes out and comes back later (common for
   // Tri-State <-> Florida snowbirds, see app/about/page.tsx). Priced as two
   // one-way jobs -- simplest model, no separate discount knob for now.
@@ -44,6 +55,10 @@ export type EstimateResult = {
 // or unit-test directly.
 export function computeEstimate(input: EstimateInput): EstimateResult {
   let midpoint = BASE_FEE_CENTS + input.miles * PER_MILE_CENTS;
+
+  if (input.vehicleType !== "sedan") {
+    midpoint *= 1 + VEHICLE_SURCHARGE_PERCENT[input.vehicleType] / 100;
+  }
 
   if (input.serviceType === "carrier" && input.enclosed === "enclosed") {
     midpoint *= 1 + ENCLOSED_SURCHARGE_PERCENT / 100;

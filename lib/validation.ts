@@ -3,7 +3,9 @@ import { z } from "zod";
 export const VEHICLE_TYPES = [
   "sedan",
   "suv",
-  "truck",
+  "full_size_suv",
+  "minivan",
+  "pickup",
   "van",
   "coupe",
   "wagon",
@@ -15,14 +17,27 @@ export const VEHICLE_TYPES = [
 export const VEHICLE_TYPE_LABELS: Record<(typeof VEHICLE_TYPES)[number], string> = {
   sedan: "Sedan",
   suv: "SUV",
-  truck: "Truck",
-  van: "Van / Minivan",
+  full_size_suv: "Full-size SUV",
+  minivan: "Minivan",
+  pickup: "Pickup",
+  van: "Cargo Van",
   coupe: "Coupe",
   wagon: "Wagon",
   convertible: "Convertible",
   motorcycle: "Motorcycle",
   other: "Other",
 };
+
+// Vehicles outside the size-based surcharge table (see lib/pricing.ts) price
+// like the baseline sedan -- no separate knob for every body style.
+export const PRICED_VEHICLE_TYPES = ["sedan", "suv", "minivan", "pickup", "full_size_suv"] as const;
+export function toPricingVehicleType(
+  type: (typeof VEHICLE_TYPES)[number]
+): (typeof PRICED_VEHICLE_TYPES)[number] {
+  return (PRICED_VEHICLE_TYPES as readonly string[]).includes(type)
+    ? (type as (typeof PRICED_VEHICLE_TYPES)[number])
+    : "sedan";
+}
 
 // Mirrors the fields Central Dispatch requires when the owner posts a load,
 // per the handoff doc (Section 4.2) -- the point is that this form should be
@@ -49,7 +64,7 @@ export const quoteRequestSchema = z
       .max(new Date().getFullYear() + 1, "Year looks too far in the future."),
     vehicleMake: z.string().trim().min(1, "Make is required."),
     vehicleModel: z.string().trim().min(1, "Model is required."),
-    vehicleType: z.enum(VEHICLE_TYPES).optional(),
+    vehicleType: z.enum(VEHICLE_TYPES, { required_error: "Choose a vehicle type." }),
     isRunning: z.enum(["running", "not_running"]),
     // Only meaningful for carrier transport -- enforced below via superRefine,
     // not just hidden in the UI, so a direct API call can't skip the rule.

@@ -76,6 +76,113 @@ function selectClass(hasError: boolean) {
   ].join(" ");
 }
 
+// Solid-silhouette side-profile icons for the vehicle-type picker, styled
+// after flat-fill vehicle iconography: filled body, cut-out window panes,
+// wheels with a cut-out rim. Not vehicle-specific art, one shared style.
+// viewBox is 0 0 40 20.
+const VEHICLE_ICONS: Record<
+  (typeof VEHICLE_TYPES)[number],
+  { body: string; windows: string[]; wheels: [number, number] }
+> = {
+  // low hood, early windshield rake, flat roof, short trunk -- 2 panes
+  sedan: {
+    body: "M2 16 L2 13 L5 13 L8.5 9 L14 6 L23 6 L27 9 L30.5 9.3 Q34 9.6 34 13 L37 13 L37 16 Z",
+    windows: ["M9.5 12 L9.5 9.2 L14 6.8 L17.5 6.8 L17.5 12 Z", "M19 12 L19 6.8 L23 6.8 L26.5 9.5 L26.5 12 Z"],
+    wheels: [9, 29],
+  },
+  // compact rounded crossover -- shorter & lower than full_size_suv, one continuous DLO
+  suv: {
+    body: "M2 16 L2 12 L4.5 12 L7 8 L12.5 5.7 L23 5.7 L27 8 L30 8.3 Q33.5 8.6 33.5 12 L36 12 L36 16 Z",
+    windows: ["M8 11.5 L8 8.3 L12.5 6.2 L16.5 6.2 L16.5 11.5 Z", "M18 11.5 L18 6.2 L23 6.2 L26.5 8.6 L26.5 11.5 Z"],
+    wheels: [9, 29],
+  },
+  // tall boxy body-on-frame SUV -- flat roof, near-vertical tailgate, 3 panes
+  full_size_suv: {
+    body: "M1 16 L1 11 L3.5 11 L6 7 L12 4.5 L24 4.5 L28 7 L32 7.3 Q35.5 7.6 35.5 11 L37.5 11 L37.5 16 Z",
+    windows: [
+      "M7 10.5 L7 7.6 L11.5 5.3 L15.5 5.3 L15.5 10.5 Z",
+      "M17 10.5 L17 5.3 L23.5 5.3 L27.5 7.5 L27.5 10.5 Z",
+      "M29 10.5 L29 7.8 L32.5 7.8 L34 9.2 L34 10.5 Z",
+    ],
+    wheels: [8, 33],
+  },
+  // steep near-vertical nose, tall greenhouse, long flat roof -- 3 panes
+  minivan: {
+    body: "M2 16 L2 8.5 L4.5 6 L9 5 L11 4 L29 4 L32.5 6.5 L35 7 L35 16 Z",
+    windows: [
+      "M6 11.5 L6 6.3 L9.5 5.3 L13 5.3 L13 11.5 Z",
+      "M14.5 11.5 L14.5 5.3 L25.5 5.3 L25.5 11.5 Z",
+      "M27 11.5 L27 6.8 L31 7.3 L31 11.5 Z",
+    ],
+    wheels: [8, 31],
+  },
+  // short cab up front with its own window, long flat open bed behind -- 1 pane
+  pickup: {
+    body: "M2 16 L2 11 L4.5 11 L7 6.5 L13 6 L15.5 9 L17 9 L34 9 L34 16 Z",
+    windows: ["M6.5 10.3 L6.5 7.3 L10 7 L13 7.4 L14.7 10.3 Z"],
+    wheels: [8, 30],
+  },
+  // boxy cargo body, rounded nose, only the windshield/front-door pane is glazed
+  van: {
+    body: "M2 16 L2 8 L3.5 6.7 L8 6.5 L11 4.3 L34 4.3 L37 7.5 L37 16 Z",
+    windows: ["M8.5 7.6 L8.5 5 L11.5 4.6 L14.5 4.6 L14.5 7.6 Z"],
+    wheels: [8, 32],
+  },
+  // long low hood, cabin pushed rearward, steeply raked single DLO, short deck
+  coupe: {
+    body: "M4 16 L4 13 L7 13 L12 8.5 L17 7 L20.5 7 L24 10 L28 12 L31 12.3 L31 16 Z",
+    windows: ["M11.5 12.4 L11.5 9.2 L15.5 7.5 L18 7.5 L18 12.4 Z", "M19 12.4 L19 7.5 L22.5 7.5 L26 10.3 L26 12.4 Z"],
+    wheels: [9, 27],
+  },
+  // sedan-like nose, roofline runs flat to a near-vertical tailgate -- 3 panes
+  wagon: {
+    body: "M2 16 L2 13 L5 13 L8.5 9 L14 6 L27 6 L30 9 L34 9 L34 12 L36 12 L36 16 Z",
+    windows: [
+      "M9.5 12 L9.5 9.2 L14 6.8 L17.5 6.8 L17.5 12 Z",
+      "M19 12 L19 6.8 L28 6.8 L31 9.5 L31 12 Z",
+      "M32.5 12 L32.5 9.7 L34 9.7 L35 10.6 L35 12 Z",
+    ],
+    wheels: [9, 32],
+  },
+  // low open body, thin windshield-frame mast, flat cockpit deck, headrest hump
+  convertible: {
+    body: "M3 16 L3 13.3 L5.5 13.3 L8 11.7 L9.5 11.9 L9.7 13 L18 13 L18.3 11.9 L19.5 11.6 L21 12.6 L21.3 13.3 L25 13.3 L25 16 Z",
+    windows: ["M9.3 13 L9.9 10.2 L10.6 10.3 L10.1 13 Z"],
+    wheels: [8, 21],
+  },
+  motorcycle: {
+    body: "M9 15.5 L11 10.5 L15 10.5 L16.5 8 L20 8 L20.5 9.5 L18.5 9.5 L17.5 12 L20.5 15.5 Z",
+    windows: [],
+    wheels: [9, 19],
+  },
+  // compact rounded micro-car -- distinct short/round silhouette for the catch-all
+  other: {
+    body: "M4 16 L4 11.5 L5.5 9 L9 7 L16 7 L18.5 9.5 L21 9.7 Q23.5 10 23.5 12 L23.5 16 Z",
+    windows: ["M7 11.8 L7.3 9.3 L10.5 8.2 L13 8.2 L13 11.8 Z", "M14.5 11.8 L14.5 8.2 L17 8.2 L19.5 10 L19.5 11.8 Z"],
+    wheels: [8.5, 19],
+  },
+};
+
+function VehicleIcon({ type, active }: { type: (typeof VEHICLE_TYPES)[number]; active: boolean }) {
+  const tone = active ? "fill-highway" : "fill-slate";
+  const { body, windows, wheels } = VEHICLE_ICONS[type];
+  return (
+    <svg viewBox="0 0 40 20" aria-hidden="true" className="h-6 w-10">
+      <path d={body} className={tone} />
+      {windows.map((w, i) => (
+        <path key={i} d={w} className="fill-paper" />
+      ))}
+      {wheels.map((cx, i) => (
+        <g key={i}>
+          <circle cx={cx} cy="16.5" r="3.1" className={tone} />
+          <circle cx={cx} cy="16.5" r="1.55" className="fill-paper" />
+          <circle cx={cx} cy="16.5" r="0.5" className={tone} />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 // Chevron overlay for native <select> -- appearance-none strips the default
 // arrow cross-browser, so this replaces it without giving up the native
 // dropdown (keyboard nav, mobile wheel picker, screen readers all still work).
@@ -182,7 +289,7 @@ export default function QuoteForm() {
   function switchToVin() {
     setEntryMode("vin");
     setMakeIsOther(false);
-    setForm((prev) => ({ ...prev, vehicleYear: "", vehicleMake: "", vehicleModel: "", vehicleType: "" }));
+    setForm((prev) => ({ ...prev, vehicleYear: "", vehicleMake: "", vehicleModel: "" }));
   }
 
   // Auto-fills Year/Make/Model from the VIN once it's 17 valid characters,
@@ -233,6 +340,7 @@ export default function QuoteForm() {
     const ready =
       zipsValid &&
       (form.serviceType === "carrier" || form.serviceType === "personal_driver") &&
+      !!form.vehicleType &&
       !!form.isRunning &&
       (!needsEnclosed || !!form.enclosed);
 
@@ -250,6 +358,7 @@ export default function QuoteForm() {
         dropoffZip: form.dropoffZip,
         serviceType: form.serviceType,
         isRunning: form.isRunning,
+        vehicleType: form.vehicleType,
         roundTrip: String(form.roundTrip),
       });
       if (form.enclosed) params.set("enclosed", form.enclosed);
@@ -274,7 +383,7 @@ export default function QuoteForm() {
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.pickupZip, form.dropoffZip, form.serviceType, form.enclosed, form.isRunning, form.roundTrip]);
+  }, [form.pickupZip, form.dropoffZip, form.serviceType, form.enclosed, form.isRunning, form.vehicleType, form.roundTrip]);
 
   function fieldsForStep(index: number): (keyof FormState)[] {
     switch (STEPS[index]) {
@@ -283,7 +392,7 @@ export default function QuoteForm() {
       case "Vehicle": {
         const vehicleFields: (keyof FormState)[] =
           entryMode === "vin"
-            ? ["vin", "vehicleYear", "vehicleMake", "vehicleModel"]
+            ? ["vin", "vehicleYear", "vehicleMake", "vehicleModel", "vehicleType"]
             : ["vehicleYear", "vehicleMake", "vehicleModel", "vehicleType"];
         return form.serviceType === "carrier"
           ? [...vehicleFields, "isRunning", "enclosed"]
@@ -566,24 +675,6 @@ export default function QuoteForm() {
                     </div>
                     {fieldErrors.vehicleYear && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleYear}</p>}
                   </div>
-                  <div>
-                    <label htmlFor="vehicleType" className="manifest-label">Type</label>
-                    <div className="relative">
-                      <select
-                        id="vehicleType"
-                        value={form.vehicleType}
-                        onChange={(e) => update("vehicleType", e.target.value as FormState["vehicleType"])}
-                        className={selectClass(!!fieldErrors.vehicleType)}
-                      >
-                        <option value="">Select type&hellip;</option>
-                        {VEHICLE_TYPES.map((type) => (
-                          <option key={type} value={type}>{VEHICLE_TYPE_LABELS[type]}</option>
-                        ))}
-                      </select>
-                      <SelectChevron />
-                    </div>
-                    {fieldErrors.vehicleType && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleType}</p>}
-                  </div>
                 </div>
 
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -644,6 +735,38 @@ export default function QuoteForm() {
                 </button>
               </div>
             )}
+
+            <div>
+              <span className="manifest-label">Vehicle type</span>
+              <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {VEHICLE_TYPES.map((type) => {
+                  const selected = form.vehicleType === type;
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => update("vehicleType", type)}
+                      aria-pressed={selected}
+                      className={[
+                        "flex flex-col items-center gap-1 rounded-sm border px-3 py-2.5 transition-colors duration-150 ease-out active:scale-[0.97]",
+                        selected ? "border-highway bg-highway/10" : "border-slate-light/50 hover:border-slate-light",
+                      ].join(" ")}
+                    >
+                      <VehicleIcon type={type} active={selected} />
+                      <span
+                        className={[
+                          "font-display text-xs uppercase tracking-wideish",
+                          selected ? "text-highway" : "text-ink/70",
+                        ].join(" ")}
+                      >
+                        {VEHICLE_TYPE_LABELS[type]}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              {fieldErrors.vehicleType && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleType}</p>}
+            </div>
 
             <div>
               <span className="manifest-label">Condition</span>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { computeEstimate } from "@/lib/pricing";
+import { VEHICLE_TYPES, toPricingVehicleType } from "@/lib/validation";
 
 const ZIP_REGEX = /^\d{5}$/;
 
@@ -52,6 +53,7 @@ export async function GET(req: NextRequest) {
   const isRunning = req.nextUrl.searchParams.get("isRunning");
   const enclosed = req.nextUrl.searchParams.get("enclosed") ?? undefined;
   const roundTrip = req.nextUrl.searchParams.get("roundTrip") === "true";
+  const vehicleType = req.nextUrl.searchParams.get("vehicleType");
 
   if (!ZIP_REGEX.test(pickupZip) || !ZIP_REGEX.test(dropoffZip)) {
     return NextResponse.json({ error: "Enter two valid 5-digit ZIP codes." }, { status: 400 });
@@ -64,6 +66,9 @@ export async function GET(req: NextRequest) {
   }
   if (enclosed !== undefined && enclosed !== "open" && enclosed !== "enclosed") {
     return NextResponse.json({ error: "Invalid enclosed value." }, { status: 400 });
+  }
+  if (!vehicleType || !(VEHICLE_TYPES as readonly string[]).includes(vehicleType)) {
+    return NextResponse.json({ error: "Missing or invalid vehicleType." }, { status: 400 });
   }
 
   const [pickup, dropoff] = await Promise.all([geocodeZip(pickupZip), geocodeZip(dropoffZip)]);
@@ -78,6 +83,7 @@ export async function GET(req: NextRequest) {
     serviceType,
     enclosed: enclosed as "open" | "enclosed" | undefined,
     isRunning,
+    vehicleType: toPricingVehicleType(vehicleType as (typeof VEHICLE_TYPES)[number]),
     roundTrip,
   });
 
