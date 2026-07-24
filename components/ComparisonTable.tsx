@@ -45,27 +45,31 @@ export default function ComparisonTable() {
     <>
       {/* Stacked cards below md: a 3-column table forced sideways-scrollable
           is unreadable at phone widths, so each row becomes its own card.
-          Deliberately rounded/soft on mobile only, at the user's request —
-          the desktop table keeps the site's flat, zero-radius system. */}
-      <div className="space-y-5 md:hidden">
+          Deliberately rounded/soft/centered on mobile only, at the user's
+          request, in Manrope rather than the site's Archivo — the desktop
+          table keeps the site's flat, zero-radius, one-grotesk system. */}
+      <div
+        className="space-y-5 text-center md:hidden"
+        style={{ fontFamily: "var(--font-manrope)" }}
+      >
         {ROWS.map((row) => (
           <div
             key={row.label}
-            className="rounded-btn border-2 border-ink/10 bg-paper p-6"
+            className="rounded-btn border-2 border-ink/10 bg-paper p-7"
           >
-            <p className="text-base font-bold tracking-tight text-ink">{row.label}</p>
-            <div className="mt-4 space-y-4">
+            <p className="text-lg font-bold tracking-tight text-ink">{row.label}</p>
+            <div className="mt-5 space-y-5">
               <div>
-                <span className="inline-block rounded-pill bg-highway px-4 py-1.5 text-sm font-semibold tracking-tight text-paper">
+                <span className="inline-block rounded-pill bg-highway px-5 py-2 text-base font-semibold tracking-tight text-paper">
                   Carrier Transport
                 </span>
-                <p className="mt-2.5 text-base leading-relaxed text-ink/80">{row.carrier}</p>
+                <p className="mt-3 text-lg leading-relaxed text-ink/80">{row.carrier}</p>
               </div>
-              <div className="border-t border-ink/10 pt-4">
-                <span className="inline-block rounded-pill bg-rust px-4 py-1.5 text-sm font-semibold tracking-tight text-paper">
+              <div className="border-t border-ink/10 pt-5">
+                <span className="inline-block rounded-pill bg-rust px-5 py-2 text-base font-semibold tracking-tight text-paper">
                   Personal Driver
                 </span>
-                <p className="mt-2.5 text-base leading-relaxed text-ink/80">{row.personalDriver}</p>
+                <p className="mt-3 text-lg leading-relaxed text-ink/80">{row.personalDriver}</p>
               </div>
             </div>
           </div>
