@@ -18,6 +18,18 @@
     @apply bg-paper text-ink font-body;
   }
 
+  /* Mobile only (<640px) -- removes the 300ms tap delay and the gray flash
+     iOS gives buttons/links by default. Scoped so desktop stays untouched,
+     though neither property does anything for a mouse pointer anyway. */
+  @media (max-width: 639px) {
+    body {
+      -webkit-tap-highlight-color: transparent;
+    }
+    a, button {
+      touch-action: manipulation;
+    }
+  }
+
   h1, h2, h3, h4 {
     @apply font-display font-extrabold uppercase tracking-signage text-ink;
   }

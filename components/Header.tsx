@@ -52,7 +52,7 @@ export default function Header() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-ink/15 text-ink lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-btn sm:rounded-lg border border-transparent bg-paper text-ink shadow-button-sm transition-shadow duration-150 active:scale-[0.95] sm:border-ink/15 sm:bg-transparent sm:shadow-none sm:active:scale-100 lg:hidden"
           >
             {open ? <X size={20} weight="bold" /> : <List size={20} weight="bold" />}
           </button>
@@ -85,7 +85,7 @@ export default function Header() {
                 <Link
                   href="/quote"
                   onClick={() => setOpen(false)}
-                  className="block rounded-lg bg-brass px-5 py-2.5 text-center font-display text-sm font-semibold uppercase tracking-wideish text-paper transition-colors hover:bg-brass-dark"
+                  className="block rounded-pill bg-brass px-5 py-2.5 text-center font-display text-sm font-semibold uppercase tracking-wideish text-paper shadow-button transition-[box-shadow,background-color] hover:bg-brass-dark hover:shadow-button-hover active:scale-[0.98]"
                 >
                   Get a Quote
                 </Link>

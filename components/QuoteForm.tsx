@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import RouteProgress from "./RouteProgress";
 import DatePicker from "./DatePicker";
+import VehicleTypePicker from "./VehicleTypePicker";
 import { quoteRequestSchema, FLEXIBILITY_LABELS, VEHICLE_TYPES, VEHICLE_TYPE_LABELS } from "@/lib/validation";
 
 const STEPS = ["Service", "Vehicle", "Route", "Timing", "Contact"];
@@ -111,22 +112,24 @@ function OptionButton({
       onClick={onClick}
       aria-pressed={selected}
       className={[
-        "flex items-center gap-2.5 rounded-sm border px-4 py-2.5 font-display text-sm uppercase tracking-wideish",
-        "transition-colors duration-150 ease-out active:scale-[0.97]",
+        // Mobile (<640px): filled pill, elevated. sm+ reverts every changed
+        // property back to the original flat/bordered desktop look untouched.
+        "flex items-center gap-2.5 rounded-pill sm:rounded-sm border px-4 py-2.5 font-display text-sm uppercase tracking-wideish",
+        "transition-[transform,box-shadow,background-color,color,border-color] duration-150 ease-out active:scale-[0.97] sm:active:scale-100",
         selected
           ? accent === "rust"
-            ? "border-rust bg-rust/10 text-rust"
-            : "border-highway bg-highway/10 text-highway"
-          : "border-slate-light/50 text-ink/70 hover:border-slate-light",
+            ? "border-rust bg-rust text-paper shadow-button hover:shadow-button-hover hover:-translate-y-px sm:bg-rust/10 sm:text-rust sm:shadow-none sm:hover:shadow-none sm:hover:translate-y-0"
+            : "border-highway bg-highway text-paper shadow-button hover:shadow-button-hover hover:-translate-y-px sm:bg-highway/10 sm:text-highway sm:shadow-none sm:hover:shadow-none sm:hover:translate-y-0"
+          : "border-transparent bg-paper text-ink/70 shadow-button-sm hover:shadow-button hover:-translate-y-px sm:border-slate-light/50 sm:bg-transparent sm:shadow-none sm:hover:border-slate-light sm:hover:shadow-none sm:hover:translate-y-0",
       ].join(" ")}
     >
       <span
         className={[
-          "flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 transition-colors duration-150",
+          "flex h-5 w-5 shrink-0 items-center justify-center rounded-full sm:rounded-sm border-2 transition-colors duration-150",
           selected
             ? accent === "rust"
-              ? "border-rust bg-rust"
-              : "border-highway bg-highway"
+              ? "border-paper/70 bg-transparent sm:border-rust sm:bg-rust"
+              : "border-paper/70 bg-transparent sm:border-highway sm:bg-highway"
             : "border-slate-light/60 bg-paper",
         ].join(" ")}
       >
@@ -455,8 +458,10 @@ export default function QuoteForm() {
                 type="button"
                 onClick={() => update("serviceType", "carrier")}
                 className={[
-                  "rounded-sm border p-5 text-left transition-colors",
-                  form.serviceType === "carrier" ? "border-highway bg-highway/10" : "border-slate-light/50",
+                  "rounded-btn sm:rounded-sm border p-5 text-left transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out active:scale-[0.98] sm:active:scale-100",
+                  form.serviceType === "carrier"
+                    ? "border-highway bg-highway/10 shadow-button hover:-translate-y-0.5 sm:shadow-none sm:hover:translate-y-0"
+                    : "border-slate-light/50 shadow-button-sm hover:-translate-y-0.5 hover:shadow-button sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none",
                 ].join(" ")}
               >
                 <p className="font-display uppercase tracking-wideish text-highway">Carrier Transport</p>
@@ -468,8 +473,10 @@ export default function QuoteForm() {
                 type="button"
                 onClick={() => update("serviceType", "personal_driver")}
                 className={[
-                  "rounded-sm border p-5 text-left transition-colors",
-                  form.serviceType === "personal_driver" ? "border-rust bg-rust/10" : "border-slate-light/50",
+                  "rounded-btn sm:rounded-sm border p-5 text-left transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out active:scale-[0.98] sm:active:scale-100",
+                  form.serviceType === "personal_driver"
+                    ? "border-rust bg-rust/10 shadow-button hover:-translate-y-0.5 sm:shadow-none sm:hover:translate-y-0"
+                    : "border-slate-light/50 shadow-button-sm hover:-translate-y-0.5 hover:shadow-button sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none",
                 ].join(" ")}
               >
                 <p className="font-display uppercase tracking-wideish text-rust">Personal Driver</p>
@@ -489,6 +496,9 @@ export default function QuoteForm() {
                 <label htmlFor="vin" className="manifest-label">VIN</label>
                 <input
                   id="vin"
+                  autoCapitalize="characters"
+                  autoCorrect="off"
+                  spellCheck={false}
                   value={form.vin}
                   onChange={(e) => update("vin", e.target.value.toUpperCase())}
                   maxLength={17}
@@ -547,8 +557,11 @@ export default function QuoteForm() {
               </div>
             ) : (
               <div>
+                {/* Year always shows here. Type also lived in this same grid
+                    pre-session -- restored desktop-only (sm+) below, since
+                    <640px now uses the wheel picker further down instead. */}
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
+                  <div className="max-w-xs sm:max-w-none">
                     <label htmlFor="vehicleYear" className="manifest-label">Year</label>
                     <div className="relative">
                       <select
@@ -566,11 +579,11 @@ export default function QuoteForm() {
                     </div>
                     {fieldErrors.vehicleYear && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleYear}</p>}
                   </div>
-                  <div>
-                    <label htmlFor="vehicleType" className="manifest-label">Type</label>
+                  <div className="hidden sm:block">
+                    <label htmlFor="vehicleTypeDesktop" className="manifest-label">Type</label>
                     <div className="relative">
                       <select
-                        id="vehicleType"
+                        id="vehicleTypeDesktop"
                         value={form.vehicleType}
                         onChange={(e) => update("vehicleType", e.target.value as FormState["vehicleType"])}
                         className={selectClass(!!fieldErrors.vehicleType)}
@@ -645,6 +658,19 @@ export default function QuoteForm() {
               </div>
             )}
 
+            <div className="sm:hidden">
+              <label htmlFor="vehicleType" className="manifest-label">Type</label>
+              <div className="mt-2">
+                <VehicleTypePicker
+                  id="vehicleType"
+                  value={form.vehicleType}
+                  onChange={(v) => update("vehicleType", v)}
+                  hasError={!!fieldErrors.vehicleType}
+                />
+              </div>
+              {fieldErrors.vehicleType && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleType}</p>}
+            </div>
+
             <div>
               <span className="manifest-label">Condition</span>
               <div className="mt-2 flex flex-wrap gap-3">
@@ -663,7 +689,7 @@ export default function QuoteForm() {
                 <div className="mt-2 flex flex-wrap gap-3">
                   {(["open", "enclosed"] as const).map((val) => (
                     <OptionButton key={val} selected={form.enclosed === val} onClick={() => update("enclosed", val)}>
-                      <span className="capitalize">{val}</span>
+                      <span>{val}</span>
                     </OptionButton>
                   ))}
                 </div>
@@ -705,17 +731,19 @@ export default function QuoteForm() {
               onClick={() => update("roundTrip", !form.roundTrip)}
               aria-pressed={form.roundTrip}
               className={[
-                "flex items-center gap-3 rounded-sm border px-4 py-2 font-display text-sm uppercase tracking-wideish",
-                "transition-colors duration-150 ease-out active:scale-[0.97]",
+                "flex items-center gap-3 rounded-pill sm:rounded-sm border px-4 py-2 font-display text-sm uppercase tracking-wideish",
+                "transition-[transform,box-shadow,background-color,color,border-color] duration-150 ease-out active:scale-[0.97] sm:active:scale-100",
                 form.roundTrip
-                  ? "border-highway bg-highway/10 text-highway"
-                  : "border-slate-light/50 text-ink/70 hover:border-slate-light",
+                  ? "border-highway bg-highway text-paper shadow-button hover:shadow-button-hover hover:-translate-y-px sm:bg-highway/10 sm:text-highway sm:shadow-none sm:hover:shadow-none sm:hover:translate-y-0"
+                  : "border-transparent bg-paper text-ink/70 shadow-button-sm hover:shadow-button hover:-translate-y-px sm:border-slate-light/50 sm:bg-transparent sm:shadow-none sm:hover:border-slate-light sm:hover:shadow-none sm:hover:translate-y-0",
               ].join(" ")}
             >
               <span
                 className={[
-                  "flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2",
-                  form.roundTrip ? "border-highway bg-highway" : "border-slate-light/60 bg-paper",
+                  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full sm:rounded-sm border-2",
+                  form.roundTrip
+                    ? "border-paper/70 bg-transparent sm:border-highway sm:bg-highway"
+                    : "border-slate-light/60 bg-paper",
                 ].join(" ")}
               >
                 {form.roundTrip && (
@@ -799,6 +827,8 @@ export default function QuoteForm() {
               <label htmlFor="contactName" className="manifest-label">Full name</label>
               <input
                 id="contactName"
+                autoComplete="name"
+                enterKeyHint="next"
                 value={form.contactName}
                 onChange={(e) => update("contactName", e.target.value)}
                 className={inputClass(!!fieldErrors.contactName)}
@@ -811,6 +841,8 @@ export default function QuoteForm() {
                 <input
                   id="contactPhone"
                   type="tel"
+                  autoComplete="tel"
+                  enterKeyHint="next"
                   value={form.contactPhone}
                   onChange={(e) => update("contactPhone", e.target.value)}
                   className={inputClass(!!fieldErrors.contactPhone)}
@@ -822,6 +854,8 @@ export default function QuoteForm() {
                 <input
                   id="contactEmail"
                   type="email"
+                  autoComplete="email"
+                  enterKeyHint="done"
                   value={form.contactEmail}
                   onChange={(e) => update("contactEmail", e.target.value)}
                   className={inputClass(!!fieldErrors.contactEmail)}
@@ -853,7 +887,7 @@ export default function QuoteForm() {
               type="button"
               onClick={goNext}
               disabled={!isStepValid(stepIndex)}
-              className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-60"
+              className="rounded-pill sm:rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper shadow-button transition-[transform,box-shadow,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:bg-brass-dark hover:shadow-button-hover active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:opacity-60 disabled:shadow-button-sm sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none sm:active:scale-100 sm:disabled:shadow-none"
             >
               Next
             </button>
@@ -862,7 +896,7 @@ export default function QuoteForm() {
               type="button"
               onClick={handleSubmit}
               disabled={submitState === "submitting" || !isStepValid(stepIndex)}
-              className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-60"
+              className="rounded-pill sm:rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper shadow-button transition-[transform,box-shadow,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:bg-brass-dark hover:shadow-button-hover active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:opacity-60 disabled:shadow-button-sm sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none sm:active:scale-100 sm:disabled:shadow-none"
             >
               {submitState === "submitting" ? "Submitting\u2026" : "Submit Request"}
             </button>
@@ -906,7 +940,7 @@ export default function QuoteForm() {
                 <button
                   type="button"
                   onClick={switchToRoundTrip}
-                  className="rounded-sm bg-brass px-5 py-2 font-display text-sm uppercase tracking-wideish text-paper transition-colors duration-150 hover:bg-brass-dark active:scale-[0.97]"
+                  className="rounded-pill sm:rounded-sm bg-brass px-5 py-2 font-display text-sm uppercase tracking-wideish text-paper shadow-button transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-0.5 hover:bg-brass-dark hover:shadow-button-hover active:translate-y-0 active:scale-[0.97] sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none sm:active:scale-100"
                 >
                   Add round trip
                 </button>
