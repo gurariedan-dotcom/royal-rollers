@@ -58,6 +58,17 @@ export async function POST(req: NextRequest) {
   const depositAmountCents = Math.round(quote.quoted_amount_cents * DEPOSIT_PERCENT);
   const balanceAmountCents = quote.quoted_amount_cents - depositAmountCents;
 
+  // Stripe rejects any Checkout Session whose total is under $0.50 USD. A
+  // quote priced low enough that its deposit share falls below that floor
+  // would otherwise fail inside createDepositCheckoutSession with an opaque
+  // "Could not start checkout" -- catching it here gives a real explanation.
+  if (depositAmountCents < 50) {
+    return NextResponse.json(
+      { error: "This quote's deposit is too small to charge. Please contact us to re-price it." },
+      { status: 422 }
+    );
+  }
+
   // Written as "pending" before the customer even reaches Stripe, so the
   // consent acknowledgment (with its timestamp/IP, which matters for
   // payment-processor disputes) is captured up front rather than only on
