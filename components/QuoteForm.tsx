@@ -258,11 +258,12 @@ export default function QuoteForm() {
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
   const [vinDecodeStatus, setVinDecodeStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
-  const [entryMode, setEntryMode] = useState<"vin" | "manual">("vin");
+  const [entryMode, setEntryMode] = useState<"vin" | "manual">("manual");
   const [makeIsOther, setMakeIsOther] = useState(false);
   const [estimate, setEstimate] = useState<{ lowCents: number; highCents: number } | null>(null);
   const [estimateStatus, setEstimateStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [roundTripPromptOpen, setRoundTripPromptOpen] = useState(false);
+  const [roundTripEstimate, setRoundTripEstimate] = useState<{ lowCents: number; highCents: number } | null>(null);
   const roundTripAsked = useRef(false);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -386,6 +387,44 @@ export default function QuoteForm() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.pickupZip, form.dropoffZip, form.serviceType, form.enclosed, form.isRunning, form.vehicleType, form.roundTrip]);
+
+  // The round-trip prompt asks the customer to add a round trip with no
+  // sense of what that costs -- fetch the round-trip version of the same
+  // estimate just for that dialog, so "Add round trip" shows the increase
+  // instead of a blind guess.
+  useEffect(() => {
+    if (!roundTripPromptOpen) {
+      setRoundTripEstimate(null);
+      return;
+    }
+    const zipsValid = /^\d{5}$/.test(form.pickupZip) && /^\d{5}$/.test(form.dropoffZip);
+    if (!zipsValid || !form.vehicleType || !form.isRunning) return;
+
+    let cancelled = false;
+    const params = new URLSearchParams({
+      pickupZip: form.pickupZip,
+      dropoffZip: form.dropoffZip,
+      serviceType: form.serviceType,
+      isRunning: form.isRunning,
+      vehicleType: form.vehicleType,
+      roundTrip: "true",
+    });
+    if (form.enclosed) params.set("enclosed", form.enclosed);
+
+    fetch(`/api/route-distance?${params.toString()}`)
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((data: { estimateLowCents: number; estimateHighCents: number }) => {
+        if (!cancelled) setRoundTripEstimate({ lowCents: data.estimateLowCents, highCents: data.estimateHighCents });
+      })
+      .catch(() => {
+        if (!cancelled) setRoundTripEstimate(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roundTripPromptOpen]);
 
   function fieldsForStep(index: number): (keyof FormState)[] {
     switch (STEPS[index]) {
@@ -678,6 +717,9 @@ export default function QuoteForm() {
               </div>
             ) : (
               <div>
+                <p className="mb-4 text-xs text-slate">
+                  No VIN needed to get your quote — we&apos;ll just need it before your vehicle ships.
+                </p>
                 {/* Year always shows here. Type also lived in this same grid
                     pre-session -- restored desktop-only (sm+) below, since
                     <640px now uses the wheel picker further down instead. */}
@@ -1052,6 +1094,17 @@ export default function QuoteForm() {
               <p className="mt-2 text-sm text-ink/70">
                 We&apos;ll quote pickup to dropoff only. Say the word if you also need it brought back.
               </p>
+              {estimate && roundTripEstimate && (
+                <p className="mt-3 rounded-sm border border-highway/30 bg-highway/5 p-3 text-sm text-ink">
+                  Round trip runs about{" "}
+                  <span className="font-mono font-semibold text-highway">
+                    +${((roundTripEstimate.lowCents - estimate.lowCents) / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                    –$
+                    {((roundTripEstimate.highCents - estimate.highCents) / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                  </span>{" "}
+                  more than one-way.
+                </p>
+              )}
               <div className="mt-5 flex justify-end gap-3">
                 <button
                   type="button"
