@@ -812,7 +812,46 @@ export default function QuoteForm() {
 
             <div>
               <span className="manifest-label">Vehicle type</span>
-              <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+
+              {/* Mobile (<640px): horizontal scroll-snap row, same icons/data as the grid below. */}
+              <div
+                role="radiogroup"
+                aria-label="Vehicle type"
+                className="mt-2 flex snap-x snap-mandatory gap-2 overflow-x-auto py-1 sm:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {VEHICLE_TYPES.map((type) => {
+                  const selected = form.vehicleType === type;
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      onClick={(e) => {
+                        update("vehicleType", type);
+                        e.currentTarget.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+                      }}
+                      className={[
+                        "flex w-[4.75rem] shrink-0 snap-center flex-col items-center gap-1 rounded-sm border px-2 py-2.5 transition-colors duration-150 ease-out active:scale-[0.97]",
+                        selected ? "border-highway bg-highway/10" : "border-slate-light/50",
+                      ].join(" ")}
+                    >
+                      <VehicleIcon type={type} active={selected} />
+                      <span
+                        className={[
+                          "w-full text-center font-display text-xs uppercase leading-tight tracking-wideish [overflow-wrap:anywhere]",
+                          selected ? "text-highway" : "text-ink/70",
+                        ].join(" ")}
+                      >
+                        {VEHICLE_TYPE_LABELS[type]}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* sm+: unchanged icon grid. */}
+              <div className="hidden gap-3 sm:mt-2 sm:grid sm:grid-cols-3">
                 {VEHICLE_TYPES.map((type) => {
                   const selected = form.vehicleType === type;
                   return (
