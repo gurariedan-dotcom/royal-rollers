@@ -6,8 +6,14 @@ import { Plus } from "@phosphor-icons/react/dist/ssr";
 
 type FaqItem = { q: string; a: string };
 
-export default function FaqAccordion({ items }: { items: FaqItem[] }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+export default function FaqAccordion({
+  items,
+  defaultOpenIndex = 0,
+}: {
+  items: FaqItem[];
+  defaultOpenIndex?: number | null;
+}) {
+  const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
   const reduce = useReducedMotion();
 
   return (
