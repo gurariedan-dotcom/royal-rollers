@@ -281,6 +281,13 @@ export default function QuoteForm() {
     }
   }, []);
 
+  // Each step can be taller or shorter than the last, and a customer who
+  // scrolled down to reach the "Next" button would otherwise land mid-page
+  // on the next step with no way to tell they're at its top.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [stepIndex]);
+
   // Switching modes clears the fields the other mode owns, so stale data
   // from one path never silently rides along hidden in the other.
   function switchToManual() {
