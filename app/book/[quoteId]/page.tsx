@@ -5,7 +5,13 @@ export const metadata = {
   description: "Confirm your priced quote and pay your deposit securely to book your vehicle transport.",
 };
 
-export default function BookPage({ params }: { params: { quoteId: string } }) {
+export default function BookPage({
+  params,
+  searchParams,
+}: {
+  params: { quoteId: string };
+  searchParams: { canceled?: string };
+}) {
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
       <p className="manifest-label">Book your move</p>
@@ -16,7 +22,7 @@ export default function BookPage({ params }: { params: { quoteId: string } }) {
       </p>
 
       <div className="mt-10 rounded-sm border border-ink/10 bg-paper p-6 shadow-panel md:p-10">
-        <BookingForm quoteId={params.quoteId} />
+        <BookingForm quoteId={params.quoteId} canceled={searchParams.canceled === "1"} />
       </div>
     </div>
   );

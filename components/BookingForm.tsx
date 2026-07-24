@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import { loadStripe, type Stripe as StripeJs } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { ShieldCheck } from "@phosphor-icons/react/dist/ssr";
 
 type QuoteSummary = {
   id: string;
@@ -24,31 +22,15 @@ function formatDollars(cents: number) {
   return (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
 }
 
-let stripePromise: Promise<StripeJs | null> | null = null;
-function getStripePromise() {
-  if (!stripePromise) {
-    const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-    if (!key) {
-      // Fails loudly rather than silently rendering a broken card field --
-      // see .env.example for the variable this needs.
-      throw new Error("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not set.");
-    }
-    stripePromise = loadStripe(key);
-  }
-  return stripePromise;
-}
-
-function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const reduce = useReducedMotion();
+function InnerBookingForm({ quote, canceled }: { quote: QuoteSummary; canceled: boolean }) {
   const [consent, setConsent] = useState(false);
-  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [message, setMessage] = useState("");
+  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "error">("idle");
+  const [message, setMessage] = useState(
+    canceled ? "Checkout was canceled. You can try again whenever you're ready." : ""
+  );
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!stripe || !elements) return;
     if (!consent) {
       setMessage("Please confirm you understand the automatic balance charge before booking.");
       return;
@@ -57,32 +39,12 @@ function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
     setSubmitState("submitting");
     setMessage("");
 
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) {
-      setSubmitState("error");
-      setMessage("Card field failed to load. Please refresh and try again.");
-      return;
-    }
-
-    const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardElement,
-      billing_details: { name: quote.contactName, email: quote.contactEmail },
-    });
-
-    if (pmError || !paymentMethod) {
-      setSubmitState("error");
-      setMessage(pmError?.message ?? "Could not process that card.");
-      return;
-    }
-
     try {
-      const res = await fetch("/api/booking", {
+      const res = await fetch("/api/booking/checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           quoteRequestId: quote.id,
-          paymentMethodId: paymentMethod.id,
           contactName: quote.contactName,
           contactEmail: quote.contactEmail,
           consentToAutoCharge: true,
@@ -91,76 +53,19 @@ function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
 
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.error ?? "Booking failed.");
+        throw new Error(body.error ?? "Could not start checkout.");
       }
 
-      const result = await res.json();
-
-      if (result.requiresAction) {
-        // Card needs 3D Secure -- this is what actually shows the
-        // authentication challenge (a Stripe-hosted popup/modal). Without
-        // this call, a "requires_action" PaymentIntent just sits there
-        // unauthenticated and Stripe shows it as "Incomplete."
-        const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(result.clientSecret);
-
-        if (confirmError) {
-          setSubmitState("error");
-          setMessage(confirmError.message ?? "Card authentication failed.");
-          return;
-        }
-        if (paymentIntent?.status !== "succeeded") {
-          setSubmitState("error");
-          setMessage("Payment could not be authenticated. Please try again.");
-          return;
-        }
-
-        const confirmRes = await fetch(`/api/booking/${result.bookingId}/confirm`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ paymentIntentId: paymentIntent.id }),
-        });
-        if (!confirmRes.ok) {
-          const confirmBody = await confirmRes.json().catch(() => ({}));
-          throw new Error(confirmBody.error ?? "Booking failed.");
-        }
-      }
-
-      setSubmitState("success");
+      const { checkoutUrl } = await res.json();
+      window.location.href = checkoutUrl;
     } catch (err) {
       setSubmitState("error");
       setMessage(err instanceof Error ? err.message : "Something went wrong.");
     }
   }
 
-  if (submitState === "success") {
-    return (
-      <motion.div
-        initial={reduce ? false : { opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-sm border border-highway bg-highway/10 p-8 text-center shadow-panel"
-      >
-        <p className="font-display text-xl uppercase tracking-signage text-highway">Booked</p>
-        <p className="mt-3 text-ink/80">
-          Your deposit of {quote.depositAmountCents ? formatDollars(quote.depositAmountCents) : ""} has
-          been charged, and your card is on file for the remaining balance on delivery.
-        </p>
-      </motion.div>
-    );
-  }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="rounded-sm border border-ink/10 p-4">
-        <label className="manifest-label">Card details</label>
-        <div className="mt-2 rounded-sm border border-slate-light/60 p-3">
-          {/* Stripe Elements renders in a sandboxed iframe -- no CSS custom
-              properties reach it, so this hex has to be a literal kept in
-              sync with the ink token by hand. */}
-          <CardElement options={{ style: { base: { fontSize: "16px", color: "#16181C" } } }} />
-        </div>
-      </div>
-
       <label className="flex items-start gap-3 text-sm text-ink/80">
         <input
           type="checkbox"
@@ -179,20 +84,25 @@ function InnerBookingForm({ quote }: { quote: QuoteSummary }) {
 
       <button
         type="submit"
-        disabled={!stripe || submitState === "submitting"}
+        disabled={submitState === "submitting"}
         className="w-full rounded-sm bg-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-60"
       >
         {submitState === "submitting"
-          ? "Processing\u2026"
+          ? "Redirecting to checkout…"
           : quote.depositAmountCents
           ? `Pay Deposit, ${formatDollars(quote.depositAmountCents)}`
           : "Pay Deposit"}
       </button>
+
+      <p className="flex items-center justify-center gap-2 text-xs text-slate">
+        <ShieldCheck size={16} weight="duotone" aria-hidden="true" />
+        Secure checkout powered by Stripe &mdash; Apple Pay and Google Pay supported
+      </p>
     </form>
   );
 }
 
-export default function BookingForm({ quoteId }: { quoteId: string }) {
+export default function BookingForm({ quoteId, canceled }: { quoteId: string; canceled?: boolean }) {
   const [quote, setQuote] = useState<QuoteSummary | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -247,9 +157,7 @@ export default function BookingForm({ quoteId }: { quoteId: string }) {
         </dl>
       </div>
 
-      <Elements stripe={getStripePromise()}>
-        <InnerBookingForm quote={quote} />
-      </Elements>
+      <InnerBookingForm quote={quote} canceled={!!canceled} />
     </div>
   );
 }

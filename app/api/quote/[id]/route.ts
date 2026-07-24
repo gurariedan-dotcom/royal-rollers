@@ -14,8 +14,9 @@ import { getDb, type QuoteRequestRow } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 // Deposit split lives here, server-side, so it's never something a client
-// request can override (see app/api/booking/route.ts, which reads the same
-// stored quoted_amount_cents rather than trusting a client-supplied number).
+// request can override (see app/api/booking/checkout-session/route.ts,
+// which reads the same stored quoted_amount_cents rather than trusting a
+// client-supplied number).
 // The percentage itself is a placeholder -- the handoff doc explicitly
 // leaves "deposit amount or structure" as an open decision (Section 10).
 // Swap this for whatever the owner decides (flat fee vs. percentage).

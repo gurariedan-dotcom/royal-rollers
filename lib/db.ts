@@ -68,6 +68,7 @@ export type BookingRow = {
   deposit_status: "pending" | "paid";
   stripe_customer_id: string | null;
   stripe_payment_method_id: string | null;
+  stripe_checkout_session_id: string | null;
   balance_amount_cents: number | null;
   balance_charge_status: "not_charged" | "charged" | "failed";
   consent_given_at: string | null;

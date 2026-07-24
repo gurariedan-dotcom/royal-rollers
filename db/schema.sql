@@ -40,6 +40,7 @@ create table bookings (
   deposit_status text not null default 'pending' check (deposit_status in ('pending', 'paid')),
   stripe_customer_id text,
   stripe_payment_method_id text,
+  stripe_checkout_session_id text unique, -- ties a pending row back to its Checkout Session for idempotent finalization
   balance_amount_cents integer,
   balance_charge_status text not null default 'not_charged'
     check (balance_charge_status in ('not_charged', 'charged', 'failed')),

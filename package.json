@@ -9,16 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@base-ui-components/react": "^1.0.0-rc.0",
     "@phosphor-icons/react": "^2.1.10",
-    "@stripe/react-stripe-js": "^2.8.0",
-    "@stripe/stripe-js": "^4.4.0",
     "@supabase/supabase-js": "^2.45.4",
+    "clsx": "^2.1.1",
     "motion": "^12.42.2",
     "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "resend": "^4.0.0",
     "stripe": "^16.8.0",
+    "tailwind-merge": "^3.6.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

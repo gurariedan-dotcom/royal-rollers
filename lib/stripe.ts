@@ -21,58 +21,74 @@ export function getStripe(): Stripe {
 
 // --- Booking flow (Section 4.5 of the handoff doc) ---------------------
 //
-// 1. createBookingCustomerAndDeposit: creates a Stripe Customer, charges the
-//    deposit with a PaymentIntent, and (via setup_future_usage) saves the
-//    card used for that payment so it can be charged again later
-//    off-session. This is the standard "save a card while taking a real
-//    payment" pattern -- see Stripe's docs on setup_future_usage.
-// 2. chargeRemainingBalance: runs later (triggered by whatever marks a job
+// 1. createDepositCheckoutSession: a Stripe-hosted Checkout page for the
+//    deposit, with `setup_future_usage: "off_session"` on the underlying
+//    PaymentIntent so the card used still gets saved for the balance charge
+//    later, same as the old custom Elements flow did -- Checkout just
+//    replaces the card form and 3D Secure handling, which Stripe's hosted
+//    page now does natively (no client-side confirmCardPayment dance).
+//    Cards only (Apple Pay / Google Pay ride along automatically as
+//    wallets on the card payment method) -- PayPal is deliberately not
+//    offered here because Stripe's off-session reuse support for a saved
+//    PayPal account isn't reliable enough for the automatic
+//    charge-on-delivery balance flow this depends on.
+// 2. retrieveCheckoutSession / finalizeBookingFromSession (lib/booking.ts):
+//    read back the Customer + PaymentMethod Checkout attached once payment
+//    completes.
+// 3. chargeRemainingBalance: runs later (triggered by whatever marks a job
 //    "delivered" -- see the open question in README.md about what that
 //    trigger actually is) and charges the saved payment method off-session.
 
-export async function createBookingCustomerAndDeposit(params: {
+export async function createDepositCheckoutSession(params: {
   email: string;
   name: string;
   depositAmountCents: number;
-  paymentMethodId: string;
   quoteRequestId: string;
+  bookingId: string;
+  successUrl: string;
+  cancelUrl: string;
 }) {
   const stripe = getStripe();
 
-  const customer = await stripe.customers.create({
-    email: params.email,
-    name: params.name,
-    payment_method: params.paymentMethodId,
-    invoice_settings: { default_payment_method: params.paymentMethodId },
-    metadata: { quote_request_id: params.quoteRequestId },
-  });
-
-  const depositIntent = await stripe.paymentIntents.create({
-    amount: params.depositAmountCents,
-    currency: "usd",
-    customer: customer.id,
-    payment_method: params.paymentMethodId,
-    // Cards only -- the saved payment method needs to be chargeable off-session
-    // later for the balance, which redirect-based methods generally can't do.
-    // Restricting the type here also avoids Stripe requiring a `return_url`,
-    // which only applies to payment methods that might redirect the customer.
+  return stripe.checkout.sessions.create({
+    mode: "payment",
     payment_method_types: ["card"],
-    off_session: false, // customer is present for the deposit itself
-    confirm: true,
-    setup_future_usage: "off_session", // <- this is what saves the card
-    metadata: { quote_request_id: params.quoteRequestId, purpose: "deposit" },
+    customer_email: params.email,
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          unit_amount: params.depositAmountCents,
+          product_data: {
+            name: "Royal Rollers — Transport Deposit",
+            description: `Booking deposit for quote ${params.quoteRequestId}`,
+          },
+        },
+      },
+    ],
+    payment_intent_data: {
+      setup_future_usage: "off_session", // <- this is what saves the card for the balance charge
+      metadata: { quote_request_id: params.quoteRequestId, booking_id: params.bookingId, purpose: "deposit" },
+    },
+    metadata: { quote_request_id: params.quoteRequestId, booking_id: params.bookingId },
+    success_url: params.successUrl,
+    cancel_url: params.cancelUrl,
   });
-
-  return { customer, depositIntent };
 }
 
-// Used after the client completes 3D Secure authentication for the deposit
-// (see app/api/booking/[id]/confirm/route.ts) -- the server re-checks the
-// PaymentIntent's actual status with Stripe rather than trusting whatever
-// the client claims happened.
-export async function retrievePaymentIntent(id: string) {
+// Expanded so the caller can read the saved Customer + PaymentMethod ids
+// straight off the session without a second round trip to Stripe.
+export async function retrieveCheckoutSession(id: string) {
   const stripe = getStripe();
-  return stripe.paymentIntents.retrieve(id);
+  return stripe.checkout.sessions.retrieve(id, {
+    expand: ["payment_intent.payment_method"],
+  });
+}
+
+export async function constructWebhookEvent(payload: string | Buffer, signature: string) {
+  const stripe = getStripe();
+  return stripe.webhooks.constructEvent(payload, signature, getEnv("STRIPE_WEBHOOK_SECRET"));
 }
 
 export async function chargeRemainingBalance(params: {
