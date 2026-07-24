@@ -832,8 +832,10 @@ export default function QuoteForm() {
                         e.currentTarget.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
                       }}
                       className={[
-                        "flex w-[4.75rem] shrink-0 snap-center flex-col items-center gap-1 rounded-sm border px-2 py-2.5 transition-colors duration-150 ease-out active:scale-[0.97]",
-                        selected ? "border-highway bg-highway/10" : "border-slate-light/50",
+                        "flex w-[4.75rem] shrink-0 snap-center flex-col items-center gap-1 rounded-btn border px-2 py-2.5 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out active:scale-[0.95]",
+                        selected
+                          ? "border-transparent bg-highway/10 shadow-button -translate-y-px"
+                          : "border-transparent bg-paper shadow-button-sm hover:shadow-button hover:-translate-y-px",
                       ].join(" ")}
                     >
                       <VehicleIcon type={type} active={selected} />
