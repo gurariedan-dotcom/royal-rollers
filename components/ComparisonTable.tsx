@@ -44,23 +44,28 @@ export default function ComparisonTable() {
   return (
     <>
       {/* Stacked cards below md: a 3-column table forced sideways-scrollable
-          is unreadable at phone widths, so each row becomes its own card. */}
-      <div className="space-y-4 md:hidden">
+          is unreadable at phone widths, so each row becomes its own card.
+          Deliberately rounded/soft on mobile only, at the user's request —
+          the desktop table keeps the site's flat, zero-radius system. */}
+      <div className="space-y-5 md:hidden">
         {ROWS.map((row) => (
-          <div key={row.label} className="rounded-sm bg-paper p-5 shadow-panel">
-            <p className="manifest-label text-ink/50">{row.label}</p>
-            <div className="mt-3 space-y-3">
+          <div
+            key={row.label}
+            className="rounded-btn border-2 border-ink/10 bg-paper p-6"
+          >
+            <p className="text-base font-bold tracking-tight text-ink">{row.label}</p>
+            <div className="mt-4 space-y-4">
               <div>
-                <span className="inline-block rounded-sm bg-highway px-3 py-1 font-display text-xs uppercase tracking-wideish text-paper">
+                <span className="inline-block rounded-pill bg-highway px-4 py-1.5 text-sm font-semibold tracking-tight text-paper">
                   Carrier Transport
                 </span>
-                <p className="mt-2 text-sm text-ink">{row.carrier}</p>
+                <p className="mt-2.5 text-base leading-relaxed text-ink/80">{row.carrier}</p>
               </div>
-              <div>
-                <span className="inline-block rounded-sm bg-rust px-3 py-1 font-display text-xs uppercase tracking-wideish text-paper">
+              <div className="border-t border-ink/10 pt-4">
+                <span className="inline-block rounded-pill bg-rust px-4 py-1.5 text-sm font-semibold tracking-tight text-paper">
                   Personal Driver
                 </span>
-                <p className="mt-2 text-sm text-ink">{row.personalDriver}</p>
+                <p className="mt-2.5 text-base leading-relaxed text-ink/80">{row.personalDriver}</p>
               </div>
             </div>
           </div>
