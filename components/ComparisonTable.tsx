@@ -60,13 +60,13 @@ export default function ComparisonTable() {
             <p className="text-lg font-bold tracking-tight text-ink">{row.label}</p>
             <div className="mt-5 space-y-5">
               <div>
-                <span className="inline-block rounded-pill bg-highway px-5 py-2 text-base font-semibold tracking-tight text-paper">
+                <span className="inline-block rounded-btn bg-highway px-5 py-2 text-base font-semibold tracking-tight text-paper">
                   Carrier Transport
                 </span>
                 <p className="mt-3 text-lg leading-relaxed text-ink/80">{row.carrier}</p>
               </div>
               <div className="border-t border-ink/10 pt-5">
-                <span className="inline-block rounded-pill bg-rust px-5 py-2 text-base font-semibold tracking-tight text-paper">
+                <span className="inline-block rounded-btn bg-rust px-5 py-2 text-base font-semibold tracking-tight text-paper">
                   Personal Driver
                 </span>
                 <p className="mt-3 text-lg leading-relaxed text-ink/80">{row.personalDriver}</p>

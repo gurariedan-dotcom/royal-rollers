@@ -544,6 +544,19 @@ export default function QuoteForm() {
 
   return (
     <div>
+      {/* Mobile-only: the in-flow Back link at the bottom is hidden on
+          mobile (the Next/Submit button below becomes a floating button
+          there, same idea as ContactButton, so it no longer sits next to
+          Back), so each step gets its own top-left return control instead. */}
+      <button
+        type="button"
+        onClick={goBack}
+        disabled={stepIndex === 0}
+        className="mb-4 inline-flex items-center gap-1 font-display text-sm uppercase tracking-wideish text-ink/60 disabled:opacity-0 sm:hidden"
+      >
+        &larr; Back
+      </button>
+
       <RouteProgress steps={STEPS} currentIndex={stepIndex} />
 
       <div className="mt-10 space-y-5">
@@ -982,11 +995,12 @@ export default function QuoteForm() {
         )}
 
         <div className="flex items-center justify-between pt-4">
+          {/* Mobile has its own top-left return control instead (above). */}
           <button
             type="button"
             onClick={goBack}
             disabled={stepIndex === 0}
-            className="font-display text-sm uppercase tracking-wideish text-ink/60 disabled:opacity-0"
+            className="hidden font-display text-sm uppercase tracking-wideish text-ink/60 disabled:opacity-0 sm:inline-block"
           >
             &larr; Back
           </button>
@@ -996,7 +1010,7 @@ export default function QuoteForm() {
               type="button"
               onClick={goNext}
               disabled={!isStepValid(stepIndex)}
-              className="rounded-pill sm:rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper shadow-button transition-[transform,box-shadow,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:bg-brass-dark hover:shadow-button-hover active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:opacity-60 disabled:shadow-button-sm sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none sm:active:scale-100 sm:disabled:shadow-none"
+              className="fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom,0px)+0.75rem))] right-4 z-50 rounded-pill bg-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper shadow-button-hover transition-[transform,box-shadow,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:bg-brass-dark active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:opacity-60 sm:static sm:right-auto sm:bottom-auto sm:rounded-sm sm:px-6 sm:py-2.5 sm:shadow-none sm:hover:translate-y-0 sm:disabled:shadow-none"
             >
               Next
             </button>
@@ -1005,7 +1019,7 @@ export default function QuoteForm() {
               type="button"
               onClick={handleSubmit}
               disabled={submitState === "submitting" || !isStepValid(stepIndex)}
-              className="rounded-pill sm:rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper shadow-button transition-[transform,box-shadow,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:bg-brass-dark hover:shadow-button-hover active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:opacity-60 disabled:shadow-button-sm sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none sm:active:scale-100 sm:disabled:shadow-none"
+              className="fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom,0px)+0.75rem))] right-4 z-50 rounded-pill bg-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper shadow-button-hover transition-[transform,box-shadow,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:bg-brass-dark active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:opacity-60 sm:static sm:right-auto sm:bottom-auto sm:rounded-sm sm:px-6 sm:py-2.5 sm:shadow-none sm:hover:translate-y-0 sm:disabled:shadow-none"
             >
               {submitState === "submitting" ? "Submitting\u2026" : "Submit Request"}
             </button>
