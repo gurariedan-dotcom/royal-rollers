@@ -76,6 +76,24 @@ function selectClass(hasError: boolean) {
   ].join(" ");
 }
 
+// Manual vehicle-entry fields (Year/Make/Model) only: same floating look as
+// the vehicle-type picker on mobile -- rounded-btn + shadow-button-sm,
+// reverting to the flat bordered rounded-sm/no-shadow look at sm+. This is
+// still a real <select>/<input>, so native pickers (iOS wheel, etc.) are
+// untouched -- only the closed trigger's paint changes.
+function vehicleFieldClass(hasError: boolean) {
+  return [
+    "w-full rounded-btn sm:rounded-sm border bg-paper px-3 py-2 text-ink placeholder:text-slate-light",
+    "shadow-button-sm hover:shadow-button sm:shadow-none sm:hover:shadow-none transition-[box-shadow,border-color] duration-150 ease-out",
+    "focus:outline-none",
+    hasError ? "border-brass-dark" : "border-slate-light/60 sm:hover:border-slate-light",
+  ].join(" ");
+}
+
+function vehicleSelectClass(hasError: boolean) {
+  return [vehicleFieldClass(hasError), "cursor-pointer appearance-none pr-9"].join(" ");
+}
+
 // Solid-silhouette side-profile icons for the vehicle-type picker, styled
 // after flat-fill vehicle iconography: filled body, cut-out window panes,
 // wheels with a cut-out rim. Not vehicle-specific art, one shared style.
@@ -738,7 +756,7 @@ export default function QuoteForm() {
                         id="vehicleYear"
                         value={form.vehicleYear}
                         onChange={(e) => update("vehicleYear", e.target.value)}
-                        className={selectClass(!!fieldErrors.vehicleYear)}
+                        className={vehicleSelectClass(!!fieldErrors.vehicleYear)}
                       >
                         <option value="">Select year&hellip;</option>
                         {VEHICLE_YEARS.map((year) => (
@@ -760,7 +778,7 @@ export default function QuoteForm() {
                         value={form.vehicleMake}
                         onChange={(e) => update("vehicleMake", e.target.value)}
                         placeholder="Type the make"
-                        className={inputClass(!!fieldErrors.vehicleMake)}
+                        className={vehicleFieldClass(!!fieldErrors.vehicleMake)}
                       />
                     ) : (
                       <div className="relative">
@@ -775,7 +793,7 @@ export default function QuoteForm() {
                               update("vehicleMake", e.target.value);
                             }
                           }}
-                          className={selectClass(!!fieldErrors.vehicleMake)}
+                          className={vehicleSelectClass(!!fieldErrors.vehicleMake)}
                         >
                           <option value="">Select make&hellip;</option>
                           {COMMON_MAKES.map((make) => (
@@ -794,7 +812,7 @@ export default function QuoteForm() {
                       id="vehicleModel"
                       value={form.vehicleModel}
                       onChange={(e) => update("vehicleModel", e.target.value)}
-                      className={inputClass(!!fieldErrors.vehicleModel)}
+                      className={vehicleFieldClass(!!fieldErrors.vehicleModel)}
                     />
                     {fieldErrors.vehicleModel && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleModel}</p>}
                   </div>
