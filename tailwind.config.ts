@@ -26,6 +26,14 @@ const config: Config = {
       full: "0px",
     },
     extend: {
+      // Buttons opt into real elevation/roundness via these tokens
+      // (rounded-btn/rounded-pill, shadow-button/shadow-button-hover)
+      // without touching the flat 0-radius/no-shadow scale everything
+      // else in the system still uses.
+      borderRadius: {
+        btn: "14px",
+        pill: "999px",
+      },
       colors: {
         ink: {
           DEFAULT: "#201E1D", // primary text, headers
@@ -63,9 +71,14 @@ const config: Config = {
         signage: "0.02em",
       },
       boxShadow: {
-        // Flat design system -- no drop shadows anywhere.
+        // Flat design system everywhere else -- panels stay shadowless.
         panel: "none",
         "panel-lg": "none",
+        // Buttons only: real elevation, so primary/interactive controls
+        // read as tappable, floating surfaces rather than flat rects.
+        button: "0 1px 2px rgba(32,30,29,0.08), 0 10px 24px -8px rgba(32,30,29,0.35)",
+        "button-hover": "0 2px 4px rgba(32,30,29,0.10), 0 16px 32px -8px rgba(32,30,29,0.4)",
+        "button-sm": "0 1px 2px rgba(32,30,29,0.08), 0 6px 14px -6px rgba(32,30,29,0.3)",
       },
       keyframes: {
         "pop-in": {

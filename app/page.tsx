@@ -4,11 +4,13 @@ import Reveal from "@/components/Reveal";
 import RoadTexture from "@/components/RoadTexture";
 import { ShieldCheck, SteeringWheel } from "@phosphor-icons/react/dist/ssr";
 
+// Mobile (<640px) gets a filled, elevated pill. sm+ reverts every changed
+// property back to the original bordered/flat desktop look, untouched.
 const ghostCta =
-  "rounded-lg border border-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-brass transition-all hover:bg-brass hover:text-paper hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
+  "rounded-pill bg-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper shadow-button transition-all hover:bg-brass-dark hover:shadow-button-hover hover:-translate-y-px active:translate-y-0 active:scale-[0.98] sm:rounded-lg sm:border sm:border-brass sm:bg-transparent sm:text-brass sm:shadow-none sm:hover:bg-brass sm:hover:text-paper sm:hover:shadow-none sm:active:scale-100";
 
 const ghostCtaOnDark =
-  "rounded-lg border border-paper px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper transition-all hover:bg-paper hover:text-ink hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
+  "rounded-pill bg-paper px-6 py-3 font-display text-sm uppercase tracking-wideish text-ink shadow-button-hover transition-all hover:-translate-y-px active:translate-y-0 active:scale-[0.98] sm:rounded-lg sm:border sm:border-paper sm:bg-transparent sm:text-paper sm:shadow-none sm:hover:bg-paper sm:hover:text-ink sm:active:scale-100";
 
 export default function HomePage() {
   return (
@@ -19,9 +21,9 @@ export default function HomePage() {
           className="pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-brass/10 blur-3xl"
         />
 
-        <div className="relative z-10 max-w-2xl">
+        <div className="relative z-10 max-w-3xl sm:max-w-2xl">
           <p className="manifest-label">Nationwide Transport</p>
-          <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl">
+          <h1 className="mt-3 text-5xl font-semibold leading-[1.02] tracking-tight sm:text-4xl sm:leading-[1.05] md:text-5xl">
             Your car, moved anywhere.{" "}
             <span className="text-brass">Your call how.</span>
           </h1>
@@ -36,7 +38,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/services"
-              className="rounded-lg border border-ink/20 px-6 py-3 font-display text-sm uppercase tracking-wideish text-ink transition-all hover:border-ink/50 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
+              className="rounded-pill border border-transparent bg-paper px-6 py-3 font-display text-sm uppercase tracking-wideish text-ink shadow-button-sm transition-all hover:shadow-button hover:-translate-y-px active:translate-y-0 active:scale-[0.98] sm:rounded-lg sm:border-ink/20 sm:bg-transparent sm:shadow-none sm:hover:border-ink/50 sm:hover:shadow-none sm:active:scale-100"
             >
               Compare Options
             </Link>

@@ -63,14 +63,29 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
 
   return (
     <div ref={rootRef} className="relative">
-      <button
+      {/* Native picker on touch/mobile widths -- gives iOS Safari (and Android
+          Chrome) their own real wheel/calendar UI rather than a custom one,
+          which reads as more "native app" than any bespoke popup could. */}
+      <input
+        type="date"
         id={id}
+        value={value}
+        min={toKey(today)}
+        onChange={(e) => onChange(e.target.value)}
+        className={[
+          "block w-full rounded-sm border bg-paper px-3 py-2 text-ink sm:hidden",
+          "focus:outline-none",
+          hasError ? "border-brass-dark" : "border-slate-light/60",
+        ].join(" ")}
+      />
+
+      <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="dialog"
         aria-expanded={open}
         className={[
-          "flex w-full items-center justify-between gap-2 rounded-sm border bg-paper px-3 py-2 text-left text-ink transition-colors duration-150",
+          "hidden w-full items-center justify-between gap-2 rounded-sm border bg-paper px-3 py-2 text-left text-ink transition-colors duration-150 sm:flex",
           "focus:outline-none",
           hasError ? "border-brass-dark" : "border-slate-light/60 hover:border-slate-light",
         ].join(" ")}
