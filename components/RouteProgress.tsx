@@ -14,11 +14,11 @@ export default function RouteProgress({ steps, currentIndex }: RouteProgressProp
         const isCurrent = i === currentIndex;
         return (
           <li key={step} className="flex flex-1 items-center last:flex-none">
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-1.5 sm:gap-2">
               <span
                 aria-current={isCurrent ? "step" : undefined}
                 className={[
-                  "flex h-8 w-8 items-center justify-center rounded-full border-2 font-mono text-xs transition-colors duration-300",
+                  "flex h-6 w-6 items-center justify-center rounded-full border-2 font-mono text-xs transition-colors duration-300 sm:h-8 sm:w-8",
                   isComplete
                     ? "border-highway bg-highway text-paper"
                     : isCurrent
@@ -31,7 +31,7 @@ export default function RouteProgress({ steps, currentIndex }: RouteProgressProp
               <span
                 className={[
                   "manifest-label whitespace-nowrap",
-                  isCurrent ? "text-ink" : "text-slate",
+                  isCurrent ? "block text-ink" : "hidden text-slate sm:block",
                 ].join(" ")}
               >
                 {step}
@@ -41,7 +41,7 @@ export default function RouteProgress({ steps, currentIndex }: RouteProgressProp
               <div
                 aria-hidden="true"
                 className={[
-                  "mx-2 mb-5 h-[2px] flex-1 transition-colors duration-300",
+                  "mx-1 mb-4 h-[2px] flex-1 transition-colors duration-300 sm:mx-2 sm:mb-5",
                   isComplete ? "bg-highway" : "bg-slate-light/40",
                 ].join(" ")}
                 style={
