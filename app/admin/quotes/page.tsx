@@ -1,4 +1,4 @@
-import Link from "next/link";
+import AdminNavTabs from "@/components/AdminNavTabs";
 import AdminQuotesPage from "@/components/AdminQuotesPage";
 
 export const metadata = {
@@ -15,11 +15,9 @@ export default function Page() {
         Set a price on an incoming request to email the customer their quote and booking link.
         Sorted newest first — search by customer name or email to find a request.
       </p>
-      <p className="mt-2 text-sm text-ink/50">
-        <Link href="/admin/bookings" className="underline hover:text-brass">
-          Go to Bookings →
-        </Link>
-      </p>
+      <div className="mt-6">
+        <AdminNavTabs />
+      </div>
       <div className="mt-10">
         <AdminQuotesPage />
       </div>

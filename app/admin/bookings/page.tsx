@@ -1,4 +1,4 @@
-import Link from "next/link";
+import AdminNavTabs from "@/components/AdminNavTabs";
 import AdminBookingsPage from "@/components/AdminBookingsPage";
 
 export const metadata = {
@@ -15,11 +15,9 @@ export default function Page() {
         Charge the remaining balance once a vehicle has been delivered. Sorted newest first —
         search by customer name or email to find a job.
       </p>
-      <p className="mt-2 text-sm text-ink/50">
-        <Link href="/admin/quotes" className="underline hover:text-brass">
-          Go to Quotes →
-        </Link>
-      </p>
+      <div className="mt-6">
+        <AdminNavTabs />
+      </div>
       <div className="mt-10">
         <AdminBookingsPage />
       </div>
