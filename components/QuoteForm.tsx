@@ -689,7 +689,7 @@ export default function QuoteForm() {
                 <div className="mt-2 flex flex-wrap gap-3">
                   {(["open", "enclosed"] as const).map((val) => (
                     <OptionButton key={val} selected={form.enclosed === val} onClick={() => update("enclosed", val)}>
-                      <span>{val}</span>
+                      {val === "open" ? "Open" : "Enclosed"}
                     </OptionButton>
                   ))}
                 </div>
