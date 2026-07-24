@@ -90,8 +90,8 @@ function InnerBookingForm({ quote, canceled }: { quote: QuoteSummary; canceled: 
         {submitState === "submitting"
           ? "Redirecting to checkout…"
           : quote.depositAmountCents
-          ? `Pay Deposit, ${formatDollars(quote.depositAmountCents)}`
-          : "Pay Deposit"}
+          ? `Continue to Payment, ${formatDollars(quote.depositAmountCents)}`
+          : "Continue to Payment"}
       </button>
 
       <p className="flex items-center justify-center gap-2 text-xs text-slate">
