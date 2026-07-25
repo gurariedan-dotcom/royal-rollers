@@ -64,14 +64,14 @@ export default function VehicleTypePicker({ id, value, onChange, hasError }: Veh
               e.currentTarget.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
             }}
             className={[
-              "flex w-20 shrink-0 snap-center flex-col items-center gap-1.5 rounded-btn border px-1.5 py-2 text-center transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out active:scale-[0.95]",
+              "flex w-16 shrink-0 snap-center flex-col items-center gap-1.5 rounded-btn border px-1.5 py-2 text-center transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out active:scale-[0.95]",
               selected
                 ? "border-transparent bg-brass text-paper shadow-button"
                 : "border-transparent bg-paper text-ink/70 shadow-button-sm hover:shadow-button",
             ].join(" ")}
           >
             <Icon size={20} weight={selected ? "fill" : "regular"} aria-hidden="true" />
-            <span className="w-full break-words font-mono text-xs uppercase leading-snug [overflow-wrap:anywhere]">
+            <span className="w-full break-words font-mono text-xs uppercase leading-tight tracking-wideish [overflow-wrap:anywhere]">
               {VEHICLE_TYPE_LABELS[type]}
             </span>
           </button>
