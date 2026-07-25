@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     // nobody outside this system can see.
     const { data: quote } = await db
       .from("quote_requests")
-      .select("contact_name, contact_email")
+      .select("contact_name, contact_email, order_number")
       .eq("id", b.quote_request_id)
       .single();
 
@@ -86,14 +86,14 @@ export async function POST(req: NextRequest) {
           contactName: quote.contact_name,
           contactEmail: quote.contact_email,
           balanceAmountCents: b.balance_amount_cents,
-          quoteRequestId: b.quote_request_id,
+          orderNumber: quote.order_number,
           reason: result.reason,
         }),
         sendBalanceChargeFailedOwnerAlertEmail({
           contactName: quote.contact_name,
           contactEmail: quote.contact_email,
           balanceAmountCents: b.balance_amount_cents,
-          quoteRequestId: b.quote_request_id,
+          orderNumber: quote.order_number,
           reason: result.reason,
         }),
       ]);

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import { formatOrderNumber } from "@/lib/orderNumber";
 
 type BookingListItem = {
   id: string;
+  orderNumber: number | null;
   contactName: string;
   contactEmail: string;
   vehicle: string;
@@ -164,14 +166,18 @@ export default function AdminBookingsPage() {
 
   const filtered = bookings.filter((b) => {
     const q = search.toLowerCase();
-    return b.contactName.toLowerCase().includes(q) || b.contactEmail.toLowerCase().includes(q);
+    return (
+      (b.orderNumber != null && formatOrderNumber(b.orderNumber).toLowerCase().includes(q)) ||
+      b.contactName.toLowerCase().includes(q) ||
+      b.contactEmail.toLowerCase().includes(q)
+    );
   });
 
   return (
     <div>
       <input
         type="text"
-        placeholder="Search by customer name or email…"
+        placeholder="Search by order #, customer name, or email…"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="mb-6 w-full max-w-sm rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
@@ -180,6 +186,7 @@ export default function AdminBookingsPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-ink/10 text-left text-ink/60">
+              <th className="py-2 pr-4 font-normal">Order #</th>
               <th className="py-2 pr-4 font-normal">Customer</th>
               <th className="py-2 pr-4 font-normal">Vehicle</th>
               <th className="py-2 pr-4 font-normal">Route</th>
@@ -197,6 +204,9 @@ export default function AdminBookingsPage() {
 
               return (
                 <tr key={b.id} className="border-b border-ink/5 align-top">
+                  <td className="py-3 pr-4 font-mono text-ink">
+                    {b.orderNumber != null ? formatOrderNumber(b.orderNumber) : "—"}
+                  </td>
                   <td className="py-3 pr-4">
                     <div className="text-ink">{b.contactName}</div>
                     <div className="text-xs text-ink/50">{b.contactEmail}</div>
@@ -288,7 +298,7 @@ export default function AdminBookingsPage() {
             })}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-ink/50">
+                <td colSpan={8} className="py-6 text-center text-ink/50">
                   No bookings match “{search}”.
                 </td>
               </tr>

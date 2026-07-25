@@ -10,8 +10,11 @@
 
 create extension if not exists "pgcrypto";
 
+create sequence quote_requests_order_number_seq start with 1000;
+
 create table quote_requests (
   id uuid primary key default gen_random_uuid(),
+  order_number integer not null default nextval('quote_requests_order_number_seq') unique, -- short customer-facing reference, e.g. "RR-1000" (see lib/orderNumber.ts)
   service_type text not null check (service_type in ('carrier', 'personal_driver')),
   vin text, -- nullable: customers without a VIN handy can enter vehicle info manually instead
   vehicle_year integer,
