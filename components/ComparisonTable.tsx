@@ -40,68 +40,62 @@ const ROWS: Row[] = [
   },
 ];
 
+const COLUMNS = [
+  { key: "carrier", title: "Carrier Transport", accent: "border-highway" },
+  { key: "personalDriver", title: "Personal Driver", accent: "border-rust" },
+] as const;
+
 export default function ComparisonTable() {
   return (
     <>
-      {/* Stacked cards below md: a 3-column table forced sideways-scrollable
-          is unreadable at phone widths, so each row becomes its own card.
-          Deliberately rounded/soft/centered on mobile only, at the user's
-          request, in Manrope rather than the site's Archivo — the desktop
-          table keeps the site's flat, zero-radius, one-grotesk system. */}
+      {/* Below md: two plain side-by-side lists, one per option, instead of
+          a row-per-card layout — easier to scan than stacked cards, and
+          headings are plain text with an accent underline rather than
+          rounded pill badges. */}
       <div
-        className="space-y-5 text-center md:hidden"
+        className="grid grid-cols-2 gap-x-6 md:hidden"
         style={{ fontFamily: "var(--font-manrope)" }}
       >
-        {ROWS.map((row) => (
-          <div
-            key={row.label}
-            className="rounded-btn border-2 border-ink/10 bg-paper p-7"
-          >
-            <p className="text-lg font-bold tracking-tight text-ink">{row.label}</p>
-            <div className="mt-5 space-y-5">
-              <div>
-                <span className="inline-block rounded-btn bg-highway px-5 py-2 text-base font-semibold tracking-tight text-paper">
-                  Carrier Transport
-                </span>
-                <p className="mt-3 text-lg leading-relaxed text-ink/80">{row.carrier}</p>
-              </div>
-              <div className="border-t border-ink/10 pt-5">
-                <span className="inline-block rounded-btn bg-rust px-5 py-2 text-base font-semibold tracking-tight text-paper">
-                  Personal Driver
-                </span>
-                <p className="mt-3 text-lg leading-relaxed text-ink/80">{row.personalDriver}</p>
-              </div>
-            </div>
+        {COLUMNS.map((col) => (
+          <div key={col.key}>
+            <h3 className={`border-b-2 pb-2 text-sm font-bold uppercase tracking-tight text-ink ${col.accent}`}>
+              {col.title}
+            </h3>
+            <ul className="mt-4 space-y-4">
+              {ROWS.map((row) => (
+                <li key={row.label}>
+                  <p className="text-xs uppercase tracking-wide text-ink/50">{row.label}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-ink/80">{row[col.key]}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
 
-      <div className="hidden overflow-x-auto rounded-sm shadow-panel md:block">
-        <table className="w-full min-w-[640px] border-collapse text-left">
+      {/* md and up: simplified table — modern underline-style column
+          headings instead of solid color pills on a dark bar, no zebra
+          striping, just a hairline divider between rows. */}
+      <div className="hidden rounded-sm border border-ink/10 md:block">
+        <table className="w-full border-collapse text-left">
           <caption className="sr-only">Comparison of Carrier Transport and Personal Driver service</caption>
           <thead>
-            <tr className="bg-ink">
-              <th scope="col" className="w-1/4 py-5 pr-4 pl-6 manifest-label text-paper/50">
+            <tr>
+              <th scope="col" className="w-1/4 py-5 pr-4 pl-6">
                 &nbsp;
               </th>
-              <th scope="col" className="py-5 pr-4">
-                <span className="inline-block rounded-sm bg-highway px-3 py-1 font-display text-sm uppercase tracking-wideish text-paper">
-                  Carrier Transport
-                </span>
-              </th>
-              <th scope="col" className="py-5 pr-6">
-                <span className="inline-block rounded-sm bg-rust px-3 py-1 font-display text-sm uppercase tracking-wideish text-paper">
-                  Personal Driver
-                </span>
-              </th>
+              {COLUMNS.map((col) => (
+                <th key={col.key} scope="col" className="py-5 pr-6 first:pr-4">
+                  <span className={`inline-block border-b-2 pb-1 font-display text-sm uppercase tracking-wideish text-ink ${col.accent}`}>
+                    {col.title}
+                  </span>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {ROWS.map((row, i) => (
-              <tr
-                key={row.label}
-                className={i % 2 === 0 ? "bg-paper" : "bg-paper-dim"}
-              >
+            {ROWS.map((row) => (
+              <tr key={row.label} className="border-t border-ink/10">
                 <th scope="row" className="py-4 pr-4 pl-6 align-top font-display text-sm uppercase tracking-wideish text-ink/70">
                   {row.label}
                 </th>
