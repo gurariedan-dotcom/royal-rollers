@@ -38,7 +38,11 @@ export default function Footer() {
         <div className="route-rule mt-10 opacity-40" />
 
         <p className="mt-6 text-xs text-paper/50">
-          &copy; {new Date().getFullYear()} Royal Rollers. Quotes are estimates until confirmed in writing.
+          Royal Rollers LLC &middot; 393 Beach 12th Street, Far Rockaway, NY 11691
+          &middot; USDOT# 6895738 &middot; MC# 73292138
+        </p>
+        <p className="mt-2 text-xs text-paper/50">
+          &copy; {new Date().getFullYear()} Royal Rollers LLC. Quotes are estimates until confirmed in writing.
         </p>
       </div>
     </footer>
