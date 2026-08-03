@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 const BASE_URL = "https://royal-rollers.com";
 
-const ROUTES = ["", "/services", "/how-it-works", "/faq", "/about", "/contact", "/reviews", "/quote"];
+const ROUTES = ["", "/services", "/how-it-works", "/faq", "/about", "/contact", "/reviews", "/quote", "/privacy"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return ROUTES.map((route) => ({

@@ -42,7 +42,8 @@ export default function Footer() {
           &middot; USDOT# 6895738 &middot; MC# 73292138
         </p>
         <p className="mt-2 text-xs text-paper/50">
-          &copy; {new Date().getFullYear()} Royal Rollers LLC. Quotes are estimates until confirmed in writing.
+          &copy; {new Date().getFullYear()} Royal Rollers LLC. Quotes are estimates until confirmed in writing.{" "}
+          <Link href="/privacy" className="underline hover:text-brass-light">Privacy Policy</Link>
         </p>
       </div>
     </footer>
