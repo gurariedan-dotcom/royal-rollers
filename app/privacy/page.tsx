@@ -115,8 +115,8 @@ export default function PrivacyPage() {
               quotes@royalrollers.example
             </a>{" "}
             or call{" "}
-            <a href="tel:+15555555555" className="underline hover:text-brass">
-              (555) 555-5555
+            <a href="tel:+16465892334" className="underline hover:text-brass">
+              (646) 589-2334
             </a>
             .
           </p>

@@ -32,13 +32,13 @@ export default function ContactPage() {
           </span>
         </a>
         <a
-          href="tel:+15555555555"
+          href="tel:+16465892334"
           className="flex items-center gap-4 rounded-sm border border-ink/10 p-5 transition-all hover:border-brass hover:shadow-panel"
         >
           <Phone size={22} className="shrink-0 text-brass" />
           <span>
             <span className="manifest-label block">Phone</span>
-            <span className="mt-1 block text-lg text-ink">(555) 555-5555</span>
+            <span className="mt-1 block text-lg text-ink">(646) 589-2334</span>
           </span>
         </a>
       </div>
