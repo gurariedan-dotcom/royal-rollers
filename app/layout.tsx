@@ -39,7 +39,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.royalrollers.example"),
+  metadataBase: new URL("https://royal-rollers.com"),
   title: {
     default: "Royal Rollers | Nationwide Vehicle Transport",
     template: "%s | Royal Rollers",

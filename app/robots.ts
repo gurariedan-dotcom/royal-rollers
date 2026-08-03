@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/api", "/book"],
     },
-    sitemap: "https://www.royalrollers.example/sitemap.xml",
+    sitemap: "https://royal-rollers.com/sitemap.xml",
   };
 }
