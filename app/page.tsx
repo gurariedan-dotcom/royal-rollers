@@ -55,7 +55,7 @@ export default function HomePage() {
           <Link href="/quote?service=carrier" className="block">
             <Reveal
               hover
-              className="rounded-2xl bg-highway p-8 text-paper shadow-panel transition-shadow duration-200 hover:shadow-2xl md:p-10"
+              className="rounded-[28px] border-2 border-paper/40 bg-highway p-8 text-paper shadow-panel transition-shadow duration-200 hover:shadow-2xl md:p-10"
             >
               <ShieldCheck size={32} weight="duotone" className="text-paper/90" />
               <p className="mt-4 font-display text-xl uppercase tracking-wideish">
@@ -71,7 +71,7 @@ export default function HomePage() {
             <Reveal
               delay={0.1}
               hover
-              className="rounded-2xl bg-rust p-8 text-paper shadow-panel transition-shadow duration-200 hover:shadow-2xl md:p-10"
+              className="rounded-[28px] border-2 border-paper/40 bg-rust p-8 text-paper shadow-panel transition-shadow duration-200 hover:shadow-2xl md:p-10"
             >
               <SteeringWheel size={32} weight="duotone" className="text-paper/90" />
               <p className="mt-4 font-display text-xl uppercase tracking-wideish">
