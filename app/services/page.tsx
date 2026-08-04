@@ -27,20 +27,29 @@ export default function ServicesPage() {
             <ShieldCheck size={24} weight="duotone" className="text-highway" />
             <h2 className="mt-3 text-xl text-highway">A note on insurance</h2>
             <p className="mt-2 text-sm text-ink/70">
-              Carrier Transport is fully insured through the carrier hauling your
-              vehicle. With Personal Driver, there&apos;s no hauler-side insurance
-              policy to speak of. Instead, your vehicle simply accumulates
-              the miles a driver puts on it getting from A to B.
+              <strong className="text-ink">Carrier Transport:</strong> Your
+              vehicle is covered by our carrier&apos;s cargo insurance for the
+              full duration of transport &mdash; protecting against collision
+              and damage from pickup to delivery.
+            </p>
+            <p className="mt-3 text-sm text-ink/70">
+              <strong className="text-ink">Personal Driver:</strong> We want
+              your car protected every mile of the way. That&apos;s why we ask
+              that your vehicle carry full coverage insurance (comprehensive
+              and collision) during the drive &mdash; the standard protection
+              most vehicles already have. Don&apos;t worry, this is common and
+              easy to confirm with your insurance provider if you&apos;re not
+              sure.
             </p>
           </div>
           <div className="rounded-sm bg-rust/5 p-6">
             <Gauge size={24} weight="duotone" className="text-rust" />
             <h2 className="mt-3 text-xl text-rust">A note on mileage</h2>
             <p className="mt-2 text-sm text-ink/70">
-              We want this upfront, not discovered later. Personal Driver means a
-              person is physically driving your car to its destination, so it
-              will accumulate mileage in transit. Carrier Transport avoids this
-              entirely since your car rides on a hauler.
+              Only Personal Driver adds mileage &mdash; a person is physically
+              driving your car to its destination, so it accumulates miles in
+              transit. Carrier Transport avoids this entirely since your car
+              rides on a hauler.
             </p>
           </div>
         </div>

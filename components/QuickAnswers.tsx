@@ -11,7 +11,7 @@ const QUICK_ANSWERS = [
   },
   {
     q: "Is my vehicle insured during transport?",
-    a: "Yes, for Carrier Transport. Your vehicle rides on an insured, licensed carrier's policy. Personal Driver has no hauler-side policy, since there's no hauler involved.",
+    a: "Yes. Carrier Transport is covered by our carrier's cargo insurance the whole way. Personal Driver relies on your own full coverage insurance (comprehensive and collision) being active during the drive -- standard protection most vehicles already have.",
   },
   {
     q: "How much will it cost?",
