@@ -108,7 +108,7 @@ export default function HomePage() {
           <h2 className="text-3xl text-paper">A priced quote sent straight to your inbox</h2>
           <p className="mx-auto mt-4 max-w-xl text-paper/80">
             Submit your vehicle and route details once. You&apos;ll get a real number
-            back by email, not a callback promise.
+            back by email.
           </p>
           <Link href="/quote" className={`mt-8 inline-block ${ghostCtaOnDark}`}>
             Get a Quote

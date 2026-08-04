@@ -11,8 +11,8 @@ const FAQS = [
     a: "Carrier Transport means your vehicle rides on an insured, licensed carrier's hauler, no mileage added, typically 1-4 days. Personal Driver means a driver takes your car directly, point to point, typically 24-30 hours, more precise timing, but mileage is added to the vehicle.",
   },
   {
-    q: "Why do you need my VIN just for a quote?",
-    a: "We price and post loads using the same vehicle details a carrier needs on Central Dispatch, the industry load board. Collecting the VIN upfront means your quote reflects your actual vehicle and nothing has to be re-collected later by phone.",
+    q: "Why do you need my VIN?",
+    a: "It's not just for the quote -- the VIN is required information to actually ship your car, since it's what identifies your exact vehicle to the carrier on the industry load board. We collect it upfront so it's already on file, and nothing has to be re-collected later by phone.",
   },
   {
     q: "How will I get my quote?",

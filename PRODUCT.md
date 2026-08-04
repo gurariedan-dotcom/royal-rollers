@@ -23,7 +23,7 @@ Submit your vehicle and route once, and get an actual priced quote back by email
 ## Conversion & proof
 
 - Primary and secondary CTA: Primary — "Get a Quote" (routes to `/quote`, present in the header on every page and repeated at section ends). Secondary — "Compare Options" / "See the full side-by-side comparison" (routes to `/services`), for visitors not ready to commit.
-- The line a visitor remembers after 10 seconds: "A priced quote sent straight to your inbox — not a callback promise."
+- The line a visitor remembers after 10 seconds: "A priced quote sent straight to your inbox."
 - Belief ladder: (1) this broker will actually give me a number, not just a sales call; (2) the two transport options (insured carrier vs. personal driver) are explained clearly enough to pick one; (3) the price I get is real and the deposit is safe to pay; (4) the company follows through after I've paid.
 - Proof on hand: none yet. `/reviews` exists but currently holds placeholder testimonial copy (`app/reviews/page.tsx`) — swap for real customer quotes once available.
 

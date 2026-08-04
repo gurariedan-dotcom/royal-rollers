@@ -13,7 +13,7 @@ const STEPS = [
   },
   {
     title: "Get a priced quote by email",
-    body: "We email you a real number, not a callback promise, based on your route and vehicle.",
+    body: "We email you a real number based on your route and vehicle.",
   },
   {
     title: "Book with a deposit",
@@ -21,7 +21,7 @@ const STEPS = [
   },
   {
     title: "We arrange the move",
-    body: "Carrier Transport: your load is posted to a licensed, insured carrier via Central Dispatch. Personal Driver: a driver is scheduled to take your car directly.",
+    body: "Carrier Transport: your load is posted to a licensed, insured carrier. Personal Driver: a driver is scheduled to take your car directly.",
   },
   {
     title: "Balance charged on delivery",

@@ -27,7 +27,7 @@ export default function AboutPage() {
           </p>
           <p>
             Wherever your car needs to go, we&apos;ll quote it directly,
-            with a real number, not a callback promise.
+            with a real number.
           </p>
           <p>
             Every quote is priced by a person who knows the routes, not a

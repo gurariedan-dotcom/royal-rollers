@@ -49,9 +49,9 @@ export default function PrivacyPage() {
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>Price and email you a quote.</li>
             <li>
-              Post your load, using your vehicle and route details, to
-              Central Dispatch, the industry load board carriers use, if you
-              book Carrier Transport.
+              Post your load, using your vehicle and route details, to the
+              industry load board carriers use, if you book Carrier
+              Transport.
             </li>
             <li>Coordinate pickup and delivery, and contact you about your booking.</li>
             <li>
