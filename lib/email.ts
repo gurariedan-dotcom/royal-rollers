@@ -17,6 +17,9 @@ const OWNER_ALERT_ADDRESS = process.env.OWNER_ALERT_EMAIL ?? "owner@royalrollers
 // callers just `await resend.emails.send(...)` and ignore the return value,
 // a rejected send looks identical to a successful one and fails silently.
 async function send(resend: Resend, params: Parameters<Resend["emails"]["send"]>[0]) {
+  // ponytail: dev/staging catch-all, remove EMAIL_OVERRIDE_TO in prod to send to real recipients
+  const overrideTo = process.env.EMAIL_OVERRIDE_TO;
+  if (overrideTo) params = { ...params, to: overrideTo };
   const { error } = await resend.emails.send(params);
   if (error) {
     throw new Error(`Resend rejected the email to ${params.to}: ${error.message}`);
