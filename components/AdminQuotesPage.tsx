@@ -46,6 +46,7 @@ export default function AdminQuotesPage() {
   const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({});
   const [sending, setSending] = useState<string | null>(null);
   const [rowMessages, setRowMessages] = useState<Record<string, string>>({});
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const stored = sessionStorage.getItem(SECRET_STORAGE_KEY);
@@ -144,18 +145,31 @@ export default function AdminQuotesPage() {
 
   const filtered = quotes.filter((q) => {
     const query = search.toLowerCase();
-    return q.contactName.toLowerCase().includes(query) || q.contactEmail.toLowerCase().includes(query);
+    const matchesSearch = q.contactName.toLowerCase().includes(query) || q.contactEmail.toLowerCase().includes(query);
+    const matchesStatus = showAll || q.status === "pending" || q.status === "quoted";
+    return matchesSearch && matchesStatus;
   });
+  const hiddenCount = quotes.length - quotes.filter((q) => q.status === "pending" || q.status === "quoted").length;
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search by customer name or email…"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="mb-6 w-full max-w-sm rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
-      />
+      <div className="mb-6 flex flex-wrap items-center gap-4">
+        <input
+          type="text"
+          placeholder="Search by customer name or email…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full max-w-sm rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
+        />
+        {hiddenCount > 0 && (
+          <button
+            onClick={() => setShowAll((v) => !v)}
+            className="text-xs text-ink/50 underline hover:text-ink/80"
+          >
+            {showAll ? "Show needs-action only" : `Show ${hiddenCount} booked & completed`}
+          </button>
+        )}
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
@@ -210,27 +224,33 @@ export default function AdminQuotesPage() {
                     )}
                   </td>
                   <td className="py-3 pr-4">
-                    <div className="flex items-center gap-1">
-                      <span className="text-ink/50">$</span>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1"
-                        placeholder="0"
-                        value={priceDrafts[q.id] ?? ""}
-                        onChange={(e) => setPriceDrafts((prev) => ({ ...prev, [q.id]: e.target.value }))}
-                        className="w-24 rounded-sm border border-slate-light/60 bg-paper px-2 py-1 text-ink"
-                      />
-                    </div>
+                    {(q.status === "booked" || q.status === "completed") && !rowMessages[q.id] ? (
+                      <span className="text-ink/30">—</span>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <span className="text-ink/50">$</span>
+                        <input
+                          type="number"
+                          min="0"
+                          step="1"
+                          placeholder="0"
+                          value={priceDrafts[q.id] ?? ""}
+                          onChange={(e) => setPriceDrafts((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                          className="w-24 rounded-sm border border-slate-light/60 bg-paper px-2 py-1 text-ink"
+                        />
+                      </div>
+                    )}
                   </td>
                   <td className="py-3 pr-4">
-                    <button
-                      onClick={() => handleSendQuote(q.id)}
-                      disabled={isSending}
-                      className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-50"
-                    >
-                      {isSending ? "Sending…" : q.status === "pending" ? "Send Quote" : "Resend"}
-                    </button>
+                    {(q.status === "booked" || q.status === "completed") && !rowMessages[q.id] ? null : (
+                      <button
+                        onClick={() => handleSendQuote(q.id)}
+                        disabled={isSending}
+                        className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-50"
+                      >
+                        {isSending ? "Sending…" : q.status === "pending" ? "Send Quote" : "Resend"}
+                      </button>
+                    )}
                     {rowMessages[q.id] && (
                       <p
                         className={`mt-1 max-w-[180px] text-xs ${
