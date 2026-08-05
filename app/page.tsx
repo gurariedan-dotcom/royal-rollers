@@ -28,9 +28,9 @@ export default function HomePage() {
             <span className="text-brass">Your call how.</span>
           </h1>
           <p className="mt-6 max-w-md text-ink/75">
-            Royal Rollers arranges vehicle transport anywhere in the country,
-            on an insured multi-car hauler, or driven directly by a personal
-            driver. Two real options, quoted directly by us.
+            Royal Rollers is a vehicle transport broker at your service anywhere in
+            the country — whether on an insured multi-car hauler or driven
+            directly by our personal driver service, Royal Rollers has your back.
           </p>
           <div className="mt-8 flex gap-4">
             <Link href="/quote" className={ghostCta}>
