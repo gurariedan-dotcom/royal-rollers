@@ -1,6 +1,7 @@
 import { Text } from "@react-email/components";
 import { Layout } from "./components/Layout";
 import { DataRow } from "./components/DataRow";
+import { ShipmentDetails } from "./components/ShipmentDetails";
 import { colors } from "./components/tokens";
 
 export type BookingConfirmedProps = {
@@ -10,6 +11,7 @@ export type BookingConfirmedProps = {
   depositDollars: string;
   balanceDollars: string;
   orderNumber: string;
+  detailRows: { label: string; value: string }[];
 };
 
 export default function BookingConfirmed({
@@ -19,6 +21,7 @@ export default function BookingConfirmed({
   depositDollars,
   balanceDollars,
   orderNumber,
+  detailRows,
 }: BookingConfirmedProps) {
   return (
     <Layout
@@ -39,6 +42,7 @@ export default function BookingConfirmed({
         The remaining balance is charged automatically to the card on file once your vehicle is delivered —
         no action needed from you.
       </Text>
+      <ShipmentDetails rows={detailRows} />
     </Layout>
   );
 }
@@ -50,4 +54,10 @@ BookingConfirmed.PreviewProps = {
   depositDollars: "$290.00",
   balanceDollars: "$1,160.00",
   orderNumber: "RR-1007",
+  detailRows: [
+    { label: "VIN", value: "1HGCM82633A004352" },
+    { label: "Running", value: "Yes" },
+    { label: "Enclosed", value: "No (open)" },
+    { label: "Preferred date", value: "2026-08-20 (± 3 days)" },
+  ],
 } satisfies BookingConfirmedProps;

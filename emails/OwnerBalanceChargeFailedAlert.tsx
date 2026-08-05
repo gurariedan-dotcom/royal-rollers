@@ -2,6 +2,7 @@ import { Text } from "@react-email/components";
 import { Layout } from "./components/Layout";
 import { DataRow } from "./components/DataRow";
 import { CtaButton } from "./components/CtaButton";
+import { ShipmentDetails } from "./components/ShipmentDetails";
 import { colors } from "./components/tokens";
 
 export type OwnerBalanceChargeFailedAlertProps = {
@@ -11,6 +12,7 @@ export type OwnerBalanceChargeFailedAlertProps = {
   reasonText: string;
   orderNumber: string;
   adminUrl: string;
+  detailRows: { label: string; value: string }[];
 };
 
 export default function OwnerBalanceChargeFailedAlert({
@@ -20,6 +22,7 @@ export default function OwnerBalanceChargeFailedAlert({
   reasonText,
   orderNumber,
   adminUrl,
+  detailRows,
 }: OwnerBalanceChargeFailedAlertProps) {
   return (
     <Layout
@@ -36,6 +39,7 @@ export default function OwnerBalanceChargeFailedAlert({
       <div style={{ marginTop: "24px" }}>
         <CtaButton href={adminUrl}>View in admin</CtaButton>
       </div>
+      <ShipmentDetails rows={detailRows} />
     </Layout>
   );
 }
@@ -47,4 +51,12 @@ OwnerBalanceChargeFailedAlert.PreviewProps = {
   reasonText: "the card on file was declined",
   orderNumber: "RR-1007",
   adminUrl: "https://royalrollers.example/admin/bookings",
+  detailRows: [
+    { label: "VIN", value: "1HGCM82633A004352" },
+    { label: "Vehicle", value: "2021 Toyota Camry (Sedan)" },
+    { label: "Running", value: "Yes" },
+    { label: "Enclosed", value: "No (open)" },
+    { label: "Route", value: "90210 → 10001" },
+    { label: "Preferred date", value: "2026-08-20 (± 3 days)" },
+  ],
 } satisfies OwnerBalanceChargeFailedAlertProps;

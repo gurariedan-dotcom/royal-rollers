@@ -44,6 +44,28 @@ function routeLabel(quote: QuoteRequestRow): string {
   return `${quote.pickup_zip} → ${quote.dropoff_zip}${quote.round_trip ? " (round trip)" : ""}`;
 }
 
+type DetailRow = { label: string; value: string };
+
+// Every field on the quote, for the "Full shipment details" disclosure.
+// Templates that already show vehicle/route inline drop those two rows to
+// avoid repeating them (see the .filter() calls below).
+function shipmentDetailRows(quote: QuoteRequestRow): DetailRow[] {
+  const rows: DetailRow[] = [
+    { label: "VIN", value: quote.vin ?? "Not provided" },
+    { label: "Vehicle", value: vehicleLabel(quote) || "—" },
+    { label: "Running", value: quote.is_running ? "Yes" : "No" },
+  ];
+  if (quote.service_type === "carrier") {
+    rows.push({ label: "Enclosed", value: quote.enclosed ? "Yes" : "No (open)" });
+  }
+  rows.push({ label: "Route", value: routeLabel(quote) });
+  rows.push({
+    label: "Preferred date",
+    value: `${quote.preferred_pickup_date ?? "—"} (${quote.flexibility_window ?? "—"})`,
+  });
+  return rows;
+}
+
 // The Resend SDK doesn't throw on API-level failures (bad recipient, domain
 // not verified, etc.) -- it resolves with { data: null, error } instead. If
 // callers just `await resend.emails.send(...)` and ignore the return value,
@@ -75,6 +97,7 @@ export async function sendQuoteReceivedEmail(quote: QuoteRequestRow) {
       pickupZip: quote.pickup_zip,
       dropoffZip: quote.dropoff_zip,
       orderNumber: formatOrderNumber(quote.order_number),
+      detailRows: shipmentDetailRows(quote),
     }),
   });
 }
@@ -124,6 +147,7 @@ export async function sendQuoteReadyEmail(quote: QuoteRequestRow, quoteAmountCen
       dollars: formatDollars(quoteAmountCents),
       bookingUrl,
       orderNumber: formatOrderNumber(quote.order_number),
+      detailRows: shipmentDetailRows(quote).filter((r) => r.label !== "Route"),
     }),
   });
 }
@@ -145,26 +169,24 @@ function balanceFailureReasonText(reason: BalanceChargeFailureReason): string {
 // triggered from /api/charge-balance) fails. Without this, a customer whose
 // card was declined or needs re-authentication never hears anything -- the
 // failure was only ever visible internally via balance_charge_status.
-export async function sendBalanceChargeFailedEmail(params: {
-  contactName: string;
-  contactEmail: string;
-  balanceAmountCents: number;
-  orderNumber: number;
-  reason: BalanceChargeFailureReason;
-}) {
+export async function sendBalanceChargeFailedEmail(
+  quote: QuoteRequestRow,
+  params: { balanceAmountCents: number; reason: BalanceChargeFailureReason }
+) {
   const resend = getResend();
 
   await send(resend, {
     from: FROM_ADDRESS,
-    to: params.contactEmail,
+    to: quote.contact_email,
     subject: "We couldn't charge your card — Royal Rollers",
     react: BalanceChargeFailed({
-      contactName: params.contactName,
+      contactName: quote.contact_name,
       dollars: formatDollars(params.balanceAmountCents),
       reasonText: balanceFailureReasonText(params.reason),
-      orderNumber: formatOrderNumber(params.orderNumber),
+      orderNumber: formatOrderNumber(quote.order_number),
       phoneHref: SUPPORT_PHONE_HREF,
       phoneDisplay: SUPPORT_PHONE_DISPLAY,
+      detailRows: shipmentDetailRows(quote),
     }),
   });
 }
@@ -172,26 +194,24 @@ export async function sendBalanceChargeFailedEmail(params: {
 // Internal alert so the owner knows a delivered job's balance charge needs
 // manual follow-up -- the customer gets their own email too, but that email
 // can get missed, bounce, or land in spam, so this shouldn't be the only copy.
-export async function sendBalanceChargeFailedOwnerAlertEmail(params: {
-  contactName: string;
-  contactEmail: string;
-  balanceAmountCents: number;
-  orderNumber: number;
-  reason: BalanceChargeFailureReason;
-}) {
+export async function sendBalanceChargeFailedOwnerAlertEmail(
+  quote: QuoteRequestRow,
+  params: { balanceAmountCents: number; reason: BalanceChargeFailureReason }
+) {
   const resend = getResend();
 
   await send(resend, {
     from: FROM_ADDRESS,
     to: OWNER_ALERT_ADDRESS,
-    subject: `Balance charge failed: ${params.contactName}`,
+    subject: `Balance charge failed: ${quote.contact_name}`,
     react: OwnerBalanceChargeFailedAlert({
-      contactName: params.contactName,
-      contactEmail: params.contactEmail,
+      contactName: quote.contact_name,
+      contactEmail: quote.contact_email,
       dollars: formatDollars(params.balanceAmountCents),
       reasonText: balanceFailureReasonText(params.reason),
-      orderNumber: formatOrderNumber(params.orderNumber),
+      orderNumber: formatOrderNumber(quote.order_number),
       adminUrl: `${siteUrl()}/admin/bookings`,
+      detailRows: shipmentDetailRows(quote),
     }),
   });
 }
@@ -213,6 +233,7 @@ export async function sendBookingConfirmedEmail(quote: QuoteRequestRow, booking:
       depositDollars: formatDollars(booking.deposit_amount_cents),
       balanceDollars: booking.balance_amount_cents != null ? formatDollars(booking.balance_amount_cents) : "—",
       orderNumber: formatOrderNumber(quote.order_number),
+      detailRows: shipmentDetailRows(quote).filter((r) => r.label !== "Vehicle" && r.label !== "Route"),
     }),
   });
 }
@@ -236,6 +257,7 @@ export async function sendOwnerNewBookingAlertEmail(quote: QuoteRequestRow, book
       balanceDollars: booking.balance_amount_cents != null ? formatDollars(booking.balance_amount_cents) : "—",
       orderNumber: formatOrderNumber(quote.order_number),
       adminUrl: `${siteUrl()}/admin/bookings`,
+      detailRows: shipmentDetailRows(quote).filter((r) => r.label !== "Vehicle" && r.label !== "Route"),
     }),
   });
 }

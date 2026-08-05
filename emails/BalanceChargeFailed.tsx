@@ -1,6 +1,7 @@
 import { Text } from "@react-email/components";
 import { Layout } from "./components/Layout";
 import { CtaButton } from "./components/CtaButton";
+import { ShipmentDetails } from "./components/ShipmentDetails";
 import { colors } from "./components/tokens";
 
 export type BalanceChargeFailedProps = {
@@ -10,6 +11,7 @@ export type BalanceChargeFailedProps = {
   orderNumber: string;
   phoneHref: string;
   phoneDisplay: string;
+  detailRows: { label: string; value: string }[];
 };
 
 export default function BalanceChargeFailed({
@@ -19,6 +21,7 @@ export default function BalanceChargeFailed({
   orderNumber,
   phoneHref,
   phoneDisplay,
+  detailRows,
 }: BalanceChargeFailedProps) {
   return (
     <Layout
@@ -35,6 +38,7 @@ export default function BalanceChargeFailed({
         Give us a call so we can update your payment method and complete the charge.
       </Text>
       <CtaButton href={phoneHref}>Call us — {phoneDisplay}</CtaButton>
+      <ShipmentDetails rows={detailRows} />
     </Layout>
   );
 }
@@ -46,4 +50,12 @@ BalanceChargeFailed.PreviewProps = {
   orderNumber: "RR-1007",
   phoneHref: "tel:+16465892334",
   phoneDisplay: "(646) 589-2334",
+  detailRows: [
+    { label: "VIN", value: "1HGCM82633A004352" },
+    { label: "Vehicle", value: "2021 Toyota Camry (Sedan)" },
+    { label: "Running", value: "Yes" },
+    { label: "Enclosed", value: "No (open)" },
+    { label: "Route", value: "90210 → 10001" },
+    { label: "Preferred date", value: "2026-08-20 (± 3 days)" },
+  ],
 } satisfies BalanceChargeFailedProps;

@@ -2,6 +2,7 @@ import { Text } from "@react-email/components";
 import { Layout } from "./components/Layout";
 import { DataRow } from "./components/DataRow";
 import { CtaButton } from "./components/CtaButton";
+import { ShipmentDetails } from "./components/ShipmentDetails";
 import { colors } from "./components/tokens";
 
 export type QuoteReadyProps = {
@@ -10,9 +11,17 @@ export type QuoteReadyProps = {
   dollars: string;
   bookingUrl: string;
   orderNumber: string;
+  detailRows: { label: string; value: string }[];
 };
 
-export default function QuoteReady({ contactName, route, dollars, bookingUrl, orderNumber }: QuoteReadyProps) {
+export default function QuoteReady({
+  contactName,
+  route,
+  dollars,
+  bookingUrl,
+  orderNumber,
+  detailRows,
+}: QuoteReadyProps) {
   return (
     <Layout
       previewText="Your Royal Rollers quote is ready"
@@ -28,6 +37,7 @@ export default function QuoteReady({ contactName, route, dollars, bookingUrl, or
         when your vehicle is delivered.
       </Text>
       <CtaButton href={bookingUrl}>Book now</CtaButton>
+      <ShipmentDetails rows={detailRows} />
     </Layout>
   );
 }
@@ -38,4 +48,11 @@ QuoteReady.PreviewProps = {
   dollars: "$1,450.00",
   bookingUrl: "https://royalrollers.example/book/quote-id",
   orderNumber: "RR-1007",
+  detailRows: [
+    { label: "VIN", value: "1HGCM82633A004352" },
+    { label: "Vehicle", value: "2021 Toyota Camry (Sedan)" },
+    { label: "Running", value: "Yes" },
+    { label: "Enclosed", value: "No (open)" },
+    { label: "Preferred date", value: "2026-08-20 (± 3 days)" },
+  ],
 } satisfies QuoteReadyProps;

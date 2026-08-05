@@ -2,6 +2,7 @@ import { Text } from "@react-email/components";
 import { Layout } from "./components/Layout";
 import { DataRow } from "./components/DataRow";
 import { CtaButton } from "./components/CtaButton";
+import { ShipmentDetails } from "./components/ShipmentDetails";
 import { colors } from "./components/tokens";
 
 export type OwnerNewBookingAlertProps = {
@@ -14,6 +15,7 @@ export type OwnerNewBookingAlertProps = {
   balanceDollars: string;
   orderNumber: string;
   adminUrl: string;
+  detailRows: { label: string; value: string }[];
 };
 
 export default function OwnerNewBookingAlert({
@@ -26,6 +28,7 @@ export default function OwnerNewBookingAlert({
   balanceDollars,
   orderNumber,
   adminUrl,
+  detailRows,
 }: OwnerNewBookingAlertProps) {
   return (
     <Layout previewText={`New booking: ${contactName}`} orderNumber={orderNumber} footerNote="Internal alert.">
@@ -41,6 +44,7 @@ export default function OwnerNewBookingAlert({
       <div style={{ marginTop: "24px" }}>
         <CtaButton href={adminUrl}>View in admin</CtaButton>
       </div>
+      <ShipmentDetails rows={detailRows} />
     </Layout>
   );
 }
@@ -55,4 +59,10 @@ OwnerNewBookingAlert.PreviewProps = {
   balanceDollars: "$1,160.00",
   orderNumber: "RR-1007",
   adminUrl: "https://royalrollers.example/admin/bookings",
+  detailRows: [
+    { label: "VIN", value: "1HGCM82633A004352" },
+    { label: "Running", value: "Yes" },
+    { label: "Enclosed", value: "No (open)" },
+    { label: "Preferred date", value: "2026-08-20 (± 3 days)" },
+  ],
 } satisfies OwnerNewBookingAlertProps;
