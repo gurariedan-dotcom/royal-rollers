@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     .from("bookings")
     .select(
       "id, deposit_amount_cents, deposit_status, balance_amount_cents, balance_charge_status, created_at, " +
-        "quote_requests(contact_name, contact_email, vehicle_year, vehicle_make, vehicle_model, vehicle_type, pickup_zip, dropoff_zip, round_trip)"
+        "quote_requests(order_number, contact_name, contact_email, vehicle_year, vehicle_make, vehicle_model, vehicle_type, pickup_zip, dropoff_zip, round_trip)"
     )
     .order("created_at", { ascending: false });
 
@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
     const quote = row.quote_requests as Record<string, unknown> | null;
     return {
       id: row.id,
+      orderNumber: quote?.order_number ?? null,
       contactName: quote?.contact_name ?? "(quote not found)",
       contactEmail: quote?.contact_email ?? "",
       vehicle: [quote?.vehicle_year, quote?.vehicle_make, quote?.vehicle_model, quote?.vehicle_type ? `(${quote.vehicle_type})` : null]

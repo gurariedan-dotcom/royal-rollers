@@ -1,5 +1,6 @@
 import Stripe from "stripe";
-import { getDb, type BookingRow } from "@/lib/db";
+import { getDb, type BookingRow, type QuoteRequestRow } from "@/lib/db";
+import { sendBookingConfirmedEmail, sendOwnerNewBookingAlertEmail } from "@/lib/email";
 
 // Finalizes a booking after its Stripe Checkout Session has been paid.
 // Called from two places that race to be first: the success-page redirect
@@ -48,7 +49,25 @@ export async function finalizeBookingFromSession(session: Stripe.Checkout.Sessio
     })
     .eq("id", bookingRow.id);
 
-  await db.from("quote_requests").update({ status: "booked" }).eq("id", bookingRow.quote_request_id);
+  const { data: updatedQuote } = await db
+    .from("quote_requests")
+    .update({ status: "booked" })
+    .eq("id", bookingRow.quote_request_id)
+    .select()
+    .single();
+
+  if (updatedQuote) {
+    const quote = updatedQuote as QuoteRequestRow;
+    const emailResults = await Promise.allSettled([
+      sendBookingConfirmedEmail(quote, bookingRow),
+      sendOwnerNewBookingAlertEmail(quote, bookingRow),
+    ]);
+    emailResults.forEach((result, i) => {
+      if (result.status === "rejected") {
+        console.error(`Booking email ${i === 0 ? "to customer" : "to owner"} failed:`, result.reason);
+      }
+    });
+  }
 
   return { status: "finalized" as const, bookingId: bookingRow.id };
 }

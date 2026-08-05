@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const { data, error } = await db
     .from("quote_requests")
     .select(
-      "id, service_type, vin, vehicle_year, vehicle_make, vehicle_model, vehicle_type, is_running, " +
+      "id, order_number, service_type, vin, vehicle_year, vehicle_make, vehicle_model, vehicle_type, is_running, " +
         "enclosed, pickup_zip, dropoff_zip, round_trip, preferred_pickup_date, flexibility_window, " +
         "contact_name, contact_phone, contact_email, status, quoted_amount_cents, created_at"
     )
@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
 
   const quotes = ((data ?? []) as unknown as Record<string, unknown>[]).map((q) => ({
     id: q.id,
+    orderNumber: q.order_number,
     serviceType: q.service_type,
     vin: q.vin,
     vehicle: [q.vehicle_year, q.vehicle_make, q.vehicle_model].filter(Boolean).join(" "),

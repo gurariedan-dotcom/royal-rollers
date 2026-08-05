@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { formatOrderNumber } from "@/lib/orderNumber";
 
 type QuoteListItem = {
   id: string;
+  orderNumber: number;
   serviceType: "carrier" | "personal_driver";
   vin: string | null;
   vehicle: string;
@@ -158,6 +160,7 @@ export default function AdminQuotesPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-ink/10 text-left text-ink/60">
+              <th className="py-2 pr-4 font-normal">Order</th>
               <th className="py-2 pr-4 font-normal">Customer</th>
               <th className="py-2 pr-4 font-normal">Service</th>
               <th className="py-2 pr-4 font-normal">Vehicle</th>
@@ -172,6 +175,7 @@ export default function AdminQuotesPage() {
               const isSending = sending === q.id;
               return (
                 <tr key={q.id} className="border-b border-ink/5 align-top">
+                  <td className="py-3 pr-4 font-mono text-xs text-ink/70">{formatOrderNumber(q.orderNumber)}</td>
                   <td className="py-3 pr-4">
                     <div className="text-ink">{q.contactName}</div>
                     <div className="text-xs text-ink/50">{q.contactEmail}</div>
@@ -242,7 +246,7 @@ export default function AdminQuotesPage() {
             })}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-ink/50">
+                <td colSpan={8} className="py-6 text-center text-ink/50">
                   No quotes match “{search}”.
                 </td>
               </tr>

@@ -1,5 +1,13 @@
 import { Resend } from "resend";
-import type { QuoteRequestRow } from "./db";
+import type { BookingRow, QuoteRequestRow } from "./db";
+import { formatOrderNumber } from "./orderNumber";
+import QuoteReceived from "@/emails/QuoteReceived";
+import OwnerNewQuoteAlert from "@/emails/OwnerNewQuoteAlert";
+import QuoteReady from "@/emails/QuoteReady";
+import BalanceChargeFailed from "@/emails/BalanceChargeFailed";
+import OwnerBalanceChargeFailedAlert from "@/emails/OwnerBalanceChargeFailedAlert";
+import BookingConfirmed from "@/emails/BookingConfirmed";
+import OwnerNewBookingAlert from "@/emails/OwnerNewBookingAlert";
 
 function getResend(): Resend {
   const key = process.env.RESEND_API_KEY;
@@ -11,6 +19,30 @@ function getResend(): Resend {
 
 const FROM_ADDRESS = process.env.EMAIL_FROM_ADDRESS ?? "quotes@royalrollers.example";
 const OWNER_ALERT_ADDRESS = process.env.OWNER_ALERT_EMAIL ?? "owner@royalrollers.example";
+const SUPPORT_PHONE_HREF = "tel:+16465892334";
+const SUPPORT_PHONE_DISPLAY = "(646) 589-2334";
+
+function siteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://royalrollers.example";
+}
+
+function serviceLabel(serviceType: QuoteRequestRow["service_type"]): string {
+  return serviceType === "carrier" ? "Carrier Transport" : "Personal Driver";
+}
+
+function formatDollars(cents: number): string {
+  return (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
+}
+
+function vehicleLabel(quote: QuoteRequestRow): string {
+  return [quote.vehicle_year, quote.vehicle_make, quote.vehicle_model, quote.vehicle_type ? `(${quote.vehicle_type})` : null]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function routeLabel(quote: QuoteRequestRow): string {
+  return `${quote.pickup_zip} → ${quote.dropoff_zip}${quote.round_trip ? " (round trip)" : ""}`;
+}
 
 // The Resend SDK doesn't throw on API-level failures (bad recipient, domain
 // not verified, etc.) -- it resolves with { data: null, error } instead. If
@@ -32,24 +64,18 @@ async function send(resend: Resend, params: Parameters<Resend["emails"]["send"]>
 // and a real SLA were never decided, so the copy doesn't commit to one.
 export async function sendQuoteReceivedEmail(quote: QuoteRequestRow) {
   const resend = getResend();
-  const serviceLabel = quote.service_type === "carrier" ? "Carrier Transport" : "Personal Driver";
 
   await send(resend, {
     from: FROM_ADDRESS,
     to: quote.contact_email,
-    subject: "We've got your quote request \u2014 Royal Rollers",
-    text: [
-      `Hi ${quote.contact_name},`,
-      "",
-      `Thanks for requesting a quote for ${serviceLabel.toLowerCase()} `
-        + `from ${quote.pickup_zip} to ${quote.dropoff_zip}.`,
-      "",
-      "We'll follow up by email with a priced quote.",
-      "",
-      `Reference: ${quote.id}`,
-      "",
-      "\u2014 Royal Rollers",
-    ].join("\n"),
+    subject: "We've got your quote request — Royal Rollers",
+    react: QuoteReceived({
+      contactName: quote.contact_name,
+      serviceLabel: serviceLabel(quote.service_type),
+      pickupZip: quote.pickup_zip,
+      dropoffZip: quote.dropoff_zip,
+      orderNumber: formatOrderNumber(quote.order_number),
+    }),
   });
 }
 
@@ -59,28 +85,25 @@ export async function sendQuoteReceivedEmail(quote: QuoteRequestRow) {
 // an SMS provider (e.g. Twilio) rather than relying on inbox checking alone.
 export async function sendOwnerAlertEmail(quote: QuoteRequestRow) {
   const resend = getResend();
-  const serviceLabel = quote.service_type === "carrier" ? "Carrier Transport" : "Personal Driver";
 
   await send(resend, {
     from: FROM_ADDRESS,
     to: OWNER_ALERT_ADDRESS,
-    subject: `New quote request: ${quote.contact_name} (${serviceLabel})`,
-    text: [
-      `Service: ${serviceLabel}`,
-      `VIN: ${quote.vin ?? "not provided — confirm with customer"}`,
-      `Vehicle: ${quote.vehicle_year ?? "?"} ${quote.vehicle_make ?? ""} ${quote.vehicle_model ?? ""}${
-        quote.vehicle_type ? ` (${quote.vehicle_type})` : ""
-      }`,
-      `Running: ${quote.is_running ? "Yes" : "No"}`,
-      quote.service_type === "carrier" ? `Enclosed: ${quote.enclosed ? "Yes" : "No (open)"}` : null,
-      `Route: ${quote.pickup_zip} \u2192 ${quote.dropoff_zip}${quote.round_trip ? " (round trip)" : ""}`,
-      `Preferred date: ${quote.preferred_pickup_date ?? "\u2014"} (${quote.flexibility_window ?? "\u2014"})`,
-      `Contact: ${quote.contact_name} \u2014 ${quote.contact_phone} \u2014 ${quote.contact_email}`,
-      "",
-      `Reference: ${quote.id}`,
-    ]
-      .filter(Boolean)
-      .join("\n"),
+    subject: `New quote request: ${quote.contact_name} (${serviceLabel(quote.service_type)})`,
+    react: OwnerNewQuoteAlert({
+      serviceLabel: serviceLabel(quote.service_type),
+      vin: quote.vin ?? "not provided — confirm with customer",
+      vehicle: vehicleLabel(quote) || "—",
+      running: quote.is_running ? "Yes" : "No",
+      enclosed: quote.service_type === "carrier" ? (quote.enclosed ? "Yes" : "No (open)") : null,
+      route: routeLabel(quote),
+      preferredDate: `${quote.preferred_pickup_date ?? "—"} (${quote.flexibility_window ?? "—"})`,
+      contactName: quote.contact_name,
+      contactPhone: quote.contact_phone,
+      contactEmail: quote.contact_email,
+      orderNumber: formatOrderNumber(quote.order_number),
+      adminUrl: `${siteUrl()}/admin/quotes`,
+    }),
   });
 }
 
@@ -89,25 +112,19 @@ export async function sendOwnerAlertEmail(quote: QuoteRequestRow) {
 // quoted_amount_cents onto the quote_requests row -- see db/schema.sql.
 export async function sendQuoteReadyEmail(quote: QuoteRequestRow, quoteAmountCents: number) {
   const resend = getResend();
-  const dollars = (quoteAmountCents / 100).toFixed(2);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://royalrollers.example";
-  const bookingUrl = `${siteUrl}/book/${quote.id}`;
+  const bookingUrl = `${siteUrl()}/book/${quote.id}`;
 
   await send(resend, {
     from: FROM_ADDRESS,
     to: quote.contact_email,
     subject: "Your Royal Rollers quote is ready",
-    text: [
-      `Hi ${quote.contact_name},`,
-      "",
-      `Your quote for ${quote.pickup_zip} \u2192 ${quote.dropoff_zip} is $${dollars}.`,
-      "",
-      `Ready to book? ${bookingUrl}`,
-      "Booking takes a deposit and a card on file for the remaining balance,",
-      "which is charged automatically when your vehicle is delivered.",
-      "",
-      `Reference: ${quote.id}`,
-    ].join("\n"),
+    react: QuoteReady({
+      contactName: quote.contact_name,
+      route: routeLabel(quote),
+      dollars: formatDollars(quoteAmountCents),
+      bookingUrl,
+      orderNumber: formatOrderNumber(quote.order_number),
+    }),
   });
 }
 
@@ -132,29 +149,23 @@ export async function sendBalanceChargeFailedEmail(params: {
   contactName: string;
   contactEmail: string;
   balanceAmountCents: number;
-  quoteRequestId: string;
+  orderNumber: number;
   reason: BalanceChargeFailureReason;
 }) {
   const resend = getResend();
-  const dollars = (params.balanceAmountCents / 100).toFixed(2);
 
   await send(resend, {
     from: FROM_ADDRESS,
     to: params.contactEmail,
     subject: "We couldn't charge your card — Royal Rollers",
-    text: [
-      `Hi ${params.contactName},`,
-      "",
-      `Your vehicle has been delivered, but we weren't able to charge the remaining `
-        + `balance of $${dollars} — ${balanceFailureReasonText(params.reason)}.`,
-      "",
-      "Please reply to this email or give us a call so we can update your payment",
-      "method and complete the charge.",
-      "",
-      `Reference: ${params.quoteRequestId}`,
-      "",
-      "— Royal Rollers",
-    ].join("\n"),
+    react: BalanceChargeFailed({
+      contactName: params.contactName,
+      dollars: formatDollars(params.balanceAmountCents),
+      reasonText: balanceFailureReasonText(params.reason),
+      orderNumber: formatOrderNumber(params.orderNumber),
+      phoneHref: SUPPORT_PHONE_HREF,
+      phoneDisplay: SUPPORT_PHONE_DISPLAY,
+    }),
   });
 }
 
@@ -165,22 +176,66 @@ export async function sendBalanceChargeFailedOwnerAlertEmail(params: {
   contactName: string;
   contactEmail: string;
   balanceAmountCents: number;
-  quoteRequestId: string;
+  orderNumber: number;
   reason: BalanceChargeFailureReason;
 }) {
   const resend = getResend();
-  const dollars = (params.balanceAmountCents / 100).toFixed(2);
 
   await send(resend, {
     from: FROM_ADDRESS,
     to: OWNER_ALERT_ADDRESS,
     subject: `Balance charge failed: ${params.contactName}`,
-    text: [
-      `Balance charge of $${dollars} failed for ${params.contactName} (${params.contactEmail}).`,
-      `Reason: ${balanceFailureReasonText(params.reason)}`,
-      "The customer has been emailed asking them to follow up.",
-      "",
-      `Reference: ${params.quoteRequestId}`,
-    ].join("\n"),
+    react: OwnerBalanceChargeFailedAlert({
+      contactName: params.contactName,
+      contactEmail: params.contactEmail,
+      dollars: formatDollars(params.balanceAmountCents),
+      reasonText: balanceFailureReasonText(params.reason),
+      orderNumber: formatOrderNumber(params.orderNumber),
+      adminUrl: `${siteUrl()}/admin/bookings`,
+    }),
+  });
+}
+
+// Sent to the customer once their deposit clears (lib/booking.ts
+// finalizeBookingFromSession) -- previously nothing fired here at all, so a
+// customer who paid a deposit got no receipt confirming it.
+export async function sendBookingConfirmedEmail(quote: QuoteRequestRow, booking: BookingRow) {
+  const resend = getResend();
+
+  await send(resend, {
+    from: FROM_ADDRESS,
+    to: quote.contact_email,
+    subject: "You're booked — Royal Rollers",
+    react: BookingConfirmed({
+      contactName: quote.contact_name,
+      vehicle: vehicleLabel(quote) || "—",
+      route: routeLabel(quote),
+      depositDollars: formatDollars(booking.deposit_amount_cents),
+      balanceDollars: booking.balance_amount_cents != null ? formatDollars(booking.balance_amount_cents) : "—",
+      orderNumber: formatOrderNumber(quote.order_number),
+    }),
+  });
+}
+
+// Internal alert so the owner knows a booking came in, same trigger as
+// sendBookingConfirmedEmail -- previously nothing alerted the owner either.
+export async function sendOwnerNewBookingAlertEmail(quote: QuoteRequestRow, booking: BookingRow) {
+  const resend = getResend();
+
+  await send(resend, {
+    from: FROM_ADDRESS,
+    to: OWNER_ALERT_ADDRESS,
+    subject: `New booking: ${quote.contact_name}`,
+    react: OwnerNewBookingAlert({
+      contactName: quote.contact_name,
+      contactEmail: quote.contact_email,
+      contactPhone: quote.contact_phone,
+      vehicle: vehicleLabel(quote) || "—",
+      route: routeLabel(quote),
+      depositDollars: formatDollars(booking.deposit_amount_cents),
+      balanceDollars: booking.balance_amount_cents != null ? formatDollars(booking.balance_amount_cents) : "—",
+      orderNumber: formatOrderNumber(quote.order_number),
+      adminUrl: `${siteUrl()}/admin/bookings`,
+    }),
   });
 }
