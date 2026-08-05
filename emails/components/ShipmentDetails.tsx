@@ -1,15 +1,23 @@
+import { Section, Text } from "@react-email/components";
 import { DataRow } from "./DataRow";
 import { colors, fontStack } from "./tokens";
 
-// Native <details>/<summary> disclosure -- no JS, degrades safely in clients
-// that don't support the toggle (content just renders open instead of broken).
+// Static list, not an interactive dropdown -- <details>/<summary> is stripped
+// or rendered non-interactively by several mobile mail clients (notably
+// Gmail's app), which made it read as unstyled plain text. A plain bordered
+// card renders identically everywhere.
 export function ShipmentDetails({ rows }: { rows: { label: string; value: string }[] }) {
   return (
-    <details style={{ marginTop: "20px", borderTop: `1px solid ${colors.slateLight}` }}>
-      <summary
+    <Section
+      style={{
+        marginTop: "32px",
+        border: `1px solid ${colors.slateLight}`,
+        padding: "20px",
+      }}
+    >
+      <Text
         style={{
-          cursor: "pointer",
-          padding: "12px 0",
+          margin: "0 0 16px",
           fontFamily: fontStack,
           fontSize: "13px",
           fontWeight: 700,
@@ -18,13 +26,11 @@ export function ShipmentDetails({ rows }: { rows: { label: string; value: string
           letterSpacing: "0.03em",
         }}
       >
-        Full shipment details
-      </summary>
-      <div style={{ paddingTop: "4px" }}>
-        {rows.map((row) => (
-          <DataRow key={row.label} label={row.label} value={row.value} />
-        ))}
-      </div>
-    </details>
+        Shipment details
+      </Text>
+      {rows.map((row) => (
+        <DataRow key={row.label} label={row.label} value={row.value} />
+      ))}
+    </Section>
   );
 }
