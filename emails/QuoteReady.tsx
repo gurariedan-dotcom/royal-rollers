@@ -26,7 +26,7 @@ export default function QuoteReady({
     <Layout
       previewText="Your Royal Rollers quote is ready"
       orderNumber={orderNumber}
-      footerNote="Questions? Just reply to this email."
+      footerNote="Questions or changes? Just reply to this email."
     >
       <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink }}>Hi {contactName},</Text>
       <Text style={{ margin: "0 0 10px", fontSize: "15px", color: colors.ink }}>Your quote is ready:</Text>

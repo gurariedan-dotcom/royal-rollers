@@ -24,7 +24,7 @@ export default function QuoteReceived({
     <Layout
       previewText="We've got your quote request"
       orderNumber={orderNumber}
-      footerNote="Questions? Just reply to this email."
+      footerNote="Questions or changes? Just reply to this email."
     >
       <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink }}>Hi {contactName},</Text>
       <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink, lineHeight: "20px" }}>

@@ -27,7 +27,7 @@ export default function BalanceChargeFailed({
     <Layout
       previewText="We couldn't charge your card"
       orderNumber={orderNumber}
-      footerNote="Or reply to this email — either works."
+      footerNote="Questions or changes? Reply to this email — either works."
     >
       <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink }}>Hi {contactName},</Text>
       <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink, lineHeight: "20px" }}>
