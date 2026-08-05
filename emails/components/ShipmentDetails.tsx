@@ -12,16 +12,16 @@ export function ShipmentDetails({ rows }: { rows: { label: string; value: string
       style={{
         marginTop: "18px",
         border: `1px solid ${colors.slateLight}`,
-        padding: "12px 14px",
+        padding: "10px 12px",
       }}
     >
       <Text
         style={{
-          margin: "0 0 8px",
+          margin: "0 0 6px",
           fontFamily: fontStack,
-          fontSize: "11px",
+          fontSize: "10px",
           fontWeight: 700,
-          color: colors.ink,
+          color: colors.slate,
           textTransform: "uppercase",
           letterSpacing: "0.03em",
         }}

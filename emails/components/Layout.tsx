@@ -50,11 +50,14 @@ export function Layout({
             <Text style={{ margin: "4px 0 0", fontSize: "11px", color: colors.slate }}>{footerNote}</Text>
             <Text style={{ margin: "8px 0 0", fontSize: "11px", color: colors.slate }}>
               Or contact us at:{" "}
-              <Link href={`mailto:${CONTACT_EMAIL}`} style={{ color: colors.slate }}>
+              <Link
+                href={`mailto:${CONTACT_EMAIL}`}
+                style={{ color: colors.brass, textDecoration: "underline" }}
+              >
                 {CONTACT_EMAIL}
               </Link>
               {" · "}
-              <Link href={CONTACT_PHONE_HREF} style={{ color: colors.slate }}>
+              <Link href={CONTACT_PHONE_HREF} style={{ color: colors.brass, textDecoration: "underline" }}>
                 {CONTACT_PHONE_DISPLAY}
               </Link>
             </Text>
