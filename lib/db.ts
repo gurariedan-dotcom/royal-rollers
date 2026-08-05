@@ -40,6 +40,7 @@ export function getDb() {
 // re-derive types from raw query results.
 export type QuoteRequestRow = {
   id: string;
+  order_number: number;
   service_type: "carrier" | "personal_driver";
   vin: string | null;
   vehicle_year: number | null;

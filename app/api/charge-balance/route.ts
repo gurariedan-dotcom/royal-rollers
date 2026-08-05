@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { getDb, type BookingRow } from "@/lib/db";
+import { getDb, type BookingRow, type QuoteRequestRow } from "@/lib/db";
 import { chargeRemainingBalance } from "@/lib/stripe";
 import { sendBalanceChargeFailedEmail, sendBalanceChargeFailedOwnerAlertEmail } from "@/lib/email";
 
@@ -76,24 +76,19 @@ export async function POST(req: NextRequest) {
     // nobody outside this system can see.
     const { data: quote } = await db
       .from("quote_requests")
-      .select("contact_name, contact_email")
+      .select("*")
       .eq("id", b.quote_request_id)
       .single();
 
     if (quote) {
+      const quoteRow = quote as QuoteRequestRow;
       const emailResults = await Promise.allSettled([
-        sendBalanceChargeFailedEmail({
-          contactName: quote.contact_name,
-          contactEmail: quote.contact_email,
+        sendBalanceChargeFailedEmail(quoteRow, {
           balanceAmountCents: b.balance_amount_cents,
-          quoteRequestId: b.quote_request_id,
           reason: result.reason,
         }),
-        sendBalanceChargeFailedOwnerAlertEmail({
-          contactName: quote.contact_name,
-          contactEmail: quote.contact_email,
+        sendBalanceChargeFailedOwnerAlertEmail(quoteRow, {
           balanceAmountCents: b.balance_amount_cents,
-          quoteRequestId: b.quote_request_id,
           reason: result.reason,
         }),
       ]);

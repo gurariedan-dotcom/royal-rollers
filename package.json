@@ -6,11 +6,13 @@
     "dev": "next dev -p 3010",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "email:dev": "email dev --dir emails -p 3013"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",
     "@phosphor-icons/react": "^2.1.10",
+    "@react-email/components": "^1.0.12",
     "@supabase/supabase-js": "^2.45.4",
     "clsx": "^2.1.1",
     "motion": "^12.42.2",
@@ -23,11 +25,13 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@react-email/ui": "^6.9.1",
     "@types/node": "^20.14.15",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.41",
+    "react-email": "^6.9.1",
     "tailwindcss": "^3.4.9",
     "typescript": "^5.5.4"
   }
