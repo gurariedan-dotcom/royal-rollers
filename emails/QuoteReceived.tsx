@@ -26,11 +26,11 @@ export default function QuoteReceived({
       orderNumber={orderNumber}
       footerNote="Questions? Just reply to this email."
     >
-      <Text style={{ margin: "0 0 16px", fontSize: "16px", color: colors.ink }}>Hi {contactName},</Text>
-      <Text style={{ margin: "0 0 16px", fontSize: "16px", color: colors.ink, lineHeight: "24px" }}>
+      <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink }}>Hi {contactName},</Text>
+      <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink, lineHeight: "20px" }}>
         Thanks for requesting a quote for {serviceLabel.toLowerCase()} from {pickupZip} to {dropoffZip}.
       </Text>
-      <Text style={{ margin: 0, fontSize: "16px", color: colors.ink }}>We&apos;ll follow up by email with a priced quote.</Text>
+      <Text style={{ margin: 0, fontSize: "15px", color: colors.ink }}>We&apos;ll follow up by email with a priced quote.</Text>
       <ShipmentDetails rows={detailRows} />
     </Layout>
   );

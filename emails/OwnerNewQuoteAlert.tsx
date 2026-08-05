@@ -35,7 +35,7 @@ export default function OwnerNewQuoteAlert({
 }: OwnerNewQuoteAlertProps) {
   return (
     <Layout previewText={`New quote request: ${contactName}`} orderNumber={orderNumber} footerNote="Internal alert.">
-      <Text style={{ margin: "0 0 20px", fontSize: "16px", color: colors.ink, fontWeight: 700 }}>
+      <Text style={{ margin: "0 0 10px", fontSize: "15px", color: colors.ink, fontWeight: 700 }}>
         New quote request from {contactName}
       </Text>
       <DataRow label="Service" value={serviceLabel} />
@@ -47,7 +47,7 @@ export default function OwnerNewQuoteAlert({
       <DataRow label="Preferred date" value={preferredDate} />
       <DataRow label="Contact" value={`${contactName} — ${contactPhone}`} />
       <DataRow label="Email" value={contactEmail} />
-      <div style={{ marginTop: "24px" }}>
+      <div style={{ marginTop: "12px" }}>
         <CtaButton href={adminUrl}>View in admin</CtaButton>
       </div>
     </Layout>

@@ -28,11 +28,11 @@ export default function QuoteReady({
       orderNumber={orderNumber}
       footerNote="Questions? Just reply to this email."
     >
-      <Text style={{ margin: "0 0 16px", fontSize: "16px", color: colors.ink }}>Hi {contactName},</Text>
-      <Text style={{ margin: "0 0 20px", fontSize: "16px", color: colors.ink }}>Your quote is ready:</Text>
+      <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink }}>Hi {contactName},</Text>
+      <Text style={{ margin: "0 0 10px", fontSize: "15px", color: colors.ink }}>Your quote is ready:</Text>
       <DataRow label="Route" value={route} />
       <DataRow label="Price" value={dollars} />
-      <Text style={{ margin: "20px 0 24px", fontSize: "14px", color: colors.slate, lineHeight: "22px" }}>
+      <Text style={{ margin: "10px 0 12px", fontSize: "13px", color: colors.slate, lineHeight: "18px" }}>
         Booking takes a deposit and a card on file for the remaining balance, which is charged automatically
         when your vehicle is delivered.
       </Text>

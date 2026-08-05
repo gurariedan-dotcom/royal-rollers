@@ -30,13 +30,13 @@ export default function OwnerBalanceChargeFailedAlert({
       orderNumber={orderNumber}
       footerNote="Internal alert. The customer has been emailed asking them to follow up."
     >
-      <Text style={{ margin: "0 0 20px", fontSize: "16px", color: colors.ink, fontWeight: 700 }}>
+      <Text style={{ margin: "0 0 10px", fontSize: "15px", color: colors.ink, fontWeight: 700 }}>
         Balance charge failed for {contactName}
       </Text>
       <DataRow label="Amount" value={dollars} />
       <DataRow label="Reason" value={reasonText} />
       <DataRow label="Customer" value={`${contactName} — ${contactEmail}`} />
-      <div style={{ marginTop: "24px" }}>
+      <div style={{ marginTop: "12px" }}>
         <CtaButton href={adminUrl}>View in admin</CtaButton>
       </div>
       <ShipmentDetails rows={detailRows} />

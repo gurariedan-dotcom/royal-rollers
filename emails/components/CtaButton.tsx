@@ -10,11 +10,11 @@ export function CtaButton({ href, children }: { href: string; children: ReactNod
         backgroundColor: colors.brass,
         color: colors.paper,
         fontFamily: fontStack,
-        fontSize: "14px",
+        fontSize: "13px",
         fontWeight: 700,
         textTransform: "uppercase",
         letterSpacing: "0.03em",
-        padding: "14px 28px",
+        padding: "10px 22px",
         borderRadius: "14px",
       }}
     >

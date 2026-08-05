@@ -17,14 +17,14 @@ export function Layout({
     <Html>
       <Head />
       <Preview>{previewText}</Preview>
-      <Body style={{ backgroundColor: colors.paperDim, margin: 0, padding: "32px 16px", fontFamily: fontStack }}>
+      <Body style={{ backgroundColor: colors.paperDim, margin: 0, padding: "16px 10px", fontFamily: fontStack }}>
         <Container style={{ maxWidth: "560px", backgroundColor: colors.paper }}>
-          <Section style={{ backgroundColor: colors.ink, padding: "24px 32px" }}>
+          <Section style={{ backgroundColor: colors.ink, padding: "14px 24px" }}>
             <Text
               style={{
                 margin: 0,
                 color: colors.paper,
-                fontSize: "18px",
+                fontSize: "15px",
                 fontWeight: 800,
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
@@ -37,12 +37,12 @@ export function Layout({
             &nbsp;
           </Section>
 
-          <Section style={{ padding: "32px" }}>{children}</Section>
+          <Section style={{ padding: "20px 24px" }}>{children}</Section>
 
           <Hr style={{ borderColor: colors.slateLight, opacity: 0.4, margin: 0 }} />
-          <Section style={{ padding: "20px 32px" }}>
-            <Text style={{ margin: 0, fontSize: "12px", color: colors.slate }}>Order {orderNumber}</Text>
-            <Text style={{ margin: "8px 0 0", fontSize: "12px", color: colors.slate }}>{footerNote}</Text>
+          <Section style={{ padding: "12px 24px" }}>
+            <Text style={{ margin: 0, fontSize: "11px", color: colors.slate }}>Order {orderNumber}</Text>
+            <Text style={{ margin: "4px 0 0", fontSize: "11px", color: colors.slate }}>{footerNote}</Text>
           </Section>
         </Container>
       </Body>

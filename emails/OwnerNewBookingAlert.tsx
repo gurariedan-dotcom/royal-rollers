@@ -32,7 +32,7 @@ export default function OwnerNewBookingAlert({
 }: OwnerNewBookingAlertProps) {
   return (
     <Layout previewText={`New booking: ${contactName}`} orderNumber={orderNumber} footerNote="Internal alert.">
-      <Text style={{ margin: "0 0 20px", fontSize: "16px", color: colors.ink, fontWeight: 700 }}>
+      <Text style={{ margin: "0 0 10px", fontSize: "15px", color: colors.ink, fontWeight: 700 }}>
         {contactName} just booked
       </Text>
       <DataRow label="Vehicle" value={vehicle} />
@@ -41,7 +41,7 @@ export default function OwnerNewBookingAlert({
       <DataRow label="Balance due" value={balanceDollars} />
       <DataRow label="Contact" value={`${contactName} — ${contactPhone}`} />
       <DataRow label="Email" value={contactEmail} />
-      <div style={{ marginTop: "24px" }}>
+      <div style={{ marginTop: "12px" }}>
         <CtaButton href={adminUrl}>View in admin</CtaButton>
       </div>
       <ShipmentDetails rows={detailRows} />

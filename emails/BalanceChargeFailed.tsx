@@ -29,12 +29,12 @@ export default function BalanceChargeFailed({
       orderNumber={orderNumber}
       footerNote="Or reply to this email — either works."
     >
-      <Text style={{ margin: "0 0 16px", fontSize: "16px", color: colors.ink }}>Hi {contactName},</Text>
-      <Text style={{ margin: "0 0 16px", fontSize: "16px", color: colors.ink, lineHeight: "24px" }}>
+      <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink }}>Hi {contactName},</Text>
+      <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink, lineHeight: "20px" }}>
         Your vehicle has been delivered, but we weren&apos;t able to charge the remaining balance of{" "}
         <strong>{dollars}</strong> — {reasonText}.
       </Text>
-      <Text style={{ margin: "0 0 24px", fontSize: "16px", color: colors.ink, lineHeight: "24px" }}>
+      <Text style={{ margin: "0 0 12px", fontSize: "15px", color: colors.ink, lineHeight: "20px" }}>
         Give us a call so we can update your payment method and complete the charge.
       </Text>
       <CtaButton href={phoneHref}>Call us — {phoneDisplay}</CtaButton>

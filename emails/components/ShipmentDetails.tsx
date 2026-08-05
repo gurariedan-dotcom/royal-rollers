@@ -10,16 +10,16 @@ export function ShipmentDetails({ rows }: { rows: { label: string; value: string
   return (
     <Section
       style={{
-        marginTop: "32px",
+        marginTop: "18px",
         border: `1px solid ${colors.slateLight}`,
-        padding: "20px",
+        padding: "12px 14px",
       }}
     >
       <Text
         style={{
-          margin: "0 0 16px",
+          margin: "0 0 8px",
           fontFamily: fontStack,
-          fontSize: "13px",
+          fontSize: "11px",
           fontWeight: 700,
           color: colors.ink,
           textTransform: "uppercase",

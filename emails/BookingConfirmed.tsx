@@ -29,8 +29,8 @@ export default function BookingConfirmed({
       orderNumber={orderNumber}
       footerNote="Questions? Just reply to this email."
     >
-      <Text style={{ margin: "0 0 16px", fontSize: "16px", color: colors.ink }}>Hi {contactName},</Text>
-      <Text style={{ margin: "0 0 20px", fontSize: "16px", color: colors.ink, lineHeight: "24px" }}>
+      <Text style={{ margin: "0 0 8px", fontSize: "15px", color: colors.ink }}>Hi {contactName},</Text>
+      <Text style={{ margin: "0 0 10px", fontSize: "15px", color: colors.ink, lineHeight: "20px" }}>
         You&apos;re booked. Your deposit of <strong>{depositDollars}</strong> has been charged. Here&apos;s
         what we have on file:
       </Text>
@@ -38,7 +38,7 @@ export default function BookingConfirmed({
       <DataRow label="Route" value={route} />
       <DataRow label="Deposit paid" value={depositDollars} />
       <DataRow label="Balance due at delivery" value={balanceDollars} />
-      <Text style={{ margin: "20px 0 0", fontSize: "14px", color: colors.slate, lineHeight: "22px" }}>
+      <Text style={{ margin: "10px 0 0", fontSize: "13px", color: colors.slate, lineHeight: "18px" }}>
         The remaining balance is charged automatically to the card on file once your vehicle is delivered —
         no action needed from you.
       </Text>
