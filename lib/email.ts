@@ -93,9 +93,6 @@ export async function sendQuoteReceivedEmail(quote: QuoteRequestRow) {
     subject: "We've got your quote request — Royal Rollers",
     react: QuoteReceived({
       contactName: quote.contact_name,
-      serviceLabel: serviceLabel(quote.service_type),
-      pickupZip: quote.pickup_zip,
-      dropoffZip: quote.dropoff_zip,
       orderNumber: formatOrderNumber(quote.order_number),
       detailRows: shipmentDetailRows(quote),
     }),
