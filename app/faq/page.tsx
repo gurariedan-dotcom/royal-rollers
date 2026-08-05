@@ -30,6 +30,26 @@ const FAQS = [
     q: "Does Personal Driver really add mileage to my car?",
     a: "Yes, since a person is driving your car to its destination rather than hauling it, mileage is added in transit. We'd rather you know that going in than be surprised by it.",
   },
+  {
+    q: "Do you service my area, or is there a service area limit?",
+    a: "No. Royal Rollers arranges transport anywhere in the country, so wherever your car is coming from and wherever it's headed, we can quote the route.",
+  },
+  {
+    q: "Can I ship a car I just bought at auction or from a dealer?",
+    a: "Yes. Just have your auction or dealer paperwork on hand (bill of sale, release authorization) and let us know the pickup location when you request your quote, so we can coordinate directly with the seller.",
+  },
+  {
+    q: "What happens if my car is damaged during transport?",
+    a: "For Carrier Transport, your vehicle is covered by the carrier's cargo insurance the entire trip. For Personal Driver, coverage relies on your own active insurance (comprehensive and collision) being in place -- standard protection most vehicles already have. Either way, we'll walk you through next steps if anything ever comes up.",
+  },
+  {
+    q: "Do I need to be present at pickup and delivery?",
+    a: "You, or someone you designate, needs to be there for both pickup and delivery to hand off keys and do a quick inspection with the driver.",
+  },
+  {
+    q: "Can I ship personal items inside the vehicle?",
+    a: "A small amount of personal items in the trunk is generally fine, but they aren't covered by transport insurance and travel at your own risk -- so keep it light and skip anything valuable or fragile.",
+  },
 ];
 
 export default function FaqPage() {
