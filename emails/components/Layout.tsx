@@ -49,6 +49,7 @@ export function Layout({
             <Text style={{ margin: 0, fontSize: "11px", color: colors.slate }}>Order {orderNumber}</Text>
             <Text style={{ margin: "4px 0 0", fontSize: "11px", color: colors.slate }}>{footerNote}</Text>
             <Text style={{ margin: "8px 0 0", fontSize: "11px", color: colors.slate }}>
+              Or contact us at:{" "}
               <Link href={`mailto:${CONTACT_EMAIL}`} style={{ color: colors.slate }}>
                 {CONTACT_EMAIL}
               </Link>
