@@ -61,6 +61,7 @@ export default function AdminBookingsPage() {
   const [processing, setProcessing] = useState<Processing | null>(null);
   const [approvedId, setApprovedId] = useState<string | null>(null);
   const [rowMessages, setRowMessages] = useState<Record<string, string>>({});
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const stored = sessionStorage.getItem(SECRET_STORAGE_KEY);
@@ -166,18 +167,31 @@ export default function AdminBookingsPage() {
 
   const filtered = bookings.filter((b) => {
     const q = search.toLowerCase();
-    return b.contactName.toLowerCase().includes(q) || b.contactEmail.toLowerCase().includes(q);
+    const matchesSearch = b.contactName.toLowerCase().includes(q) || b.contactEmail.toLowerCase().includes(q);
+    const matchesStatus = showAll || b.balanceChargeStatus !== "charged";
+    return matchesSearch && matchesStatus;
   });
+  const hiddenCount = bookings.filter((b) => b.balanceChargeStatus === "charged").length;
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search by customer name or email…"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="mb-6 w-full max-w-sm rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
-      />
+      <div className="mb-6 flex flex-wrap items-center gap-4">
+        <input
+          type="text"
+          placeholder="Search by customer name or email…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full max-w-sm rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
+        />
+        {hiddenCount > 0 && (
+          <button
+            onClick={() => setShowAll((v) => !v)}
+            className="text-xs text-ink/50 underline hover:text-ink/80"
+          >
+            {showAll ? "Show needs-action only" : `Show ${hiddenCount} fully charged`}
+          </button>
+        )}
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
