@@ -22,13 +22,13 @@ export default function ContactPage() {
 
       <div className="mt-8 space-y-4">
         <a
-          href="mailto:quotes@royalrollers.example"
+          href="mailto:support@royal-rollers.com"
           className="flex items-center gap-4 rounded-sm border border-ink/10 p-5 transition-all hover:border-brass hover:shadow-panel"
         >
           <EnvelopeSimple size={22} className="shrink-0 text-brass" />
           <span>
             <span className="manifest-label block">Email</span>
-            <span className="mt-1 block text-lg text-ink">quotes@royalrollers.example</span>
+            <span className="mt-1 block text-lg text-ink">support@royal-rollers.com</span>
           </span>
         </a>
         <a
