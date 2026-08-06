@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { List, X } from "@phosphor-icons/react/dist/ssr";
+import { Crown, List, X } from "@phosphor-icons/react/dist/ssr";
 
 const NAV_LINKS = [
   { href: "/how-it-works", label: "How It Works" },
@@ -20,11 +20,17 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="group flex items-center gap-2">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-mark.png" alt="Royal Rollers" className="h-9 w-auto sm:hidden" />
-          <span className="hidden font-display text-2xl font-semibold uppercase tracking-signage text-ink sm:inline">
-            Royal Rollers
+        <Link href="/" className="group flex items-baseline gap-2">
+          <span className="font-display text-2xl font-semibold uppercase tracking-signage text-ink">
+            <span className="relative inline-block">
+              <Crown
+                weight="fill"
+                className="absolute -top-1.5 -left-0.5 h-3.5 w-3.5 -rotate-[20deg] text-brass"
+                aria-hidden
+              />
+              R
+            </span>
+            oyal Rollers
           </span>
           <span className="manifest-label hidden sm:inline">Nationwide Transport</span>
         </Link>
