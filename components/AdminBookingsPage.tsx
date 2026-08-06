@@ -286,7 +286,7 @@ export default function AdminBookingsPage() {
                             onClick={() => setPendingAction({ id: b.id, type: "charge" })}
                             className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark"
                           >
-                            Mark Delivered & Charge
+                            Mark Delivered & Charge {formatDollars(b.balanceAmountCents)}
                           </button>
                         ) : (
                           <span className="block text-xs text-ink/40">
