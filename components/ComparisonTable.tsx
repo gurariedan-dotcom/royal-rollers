@@ -10,8 +10,8 @@ type Row = {
 const ROWS: Row[] = [
   {
     label: "Insurance",
-    carrier: "Covered by the carrier's cargo insurance",
-    personalDriver: "Requires your own full coverage insurance",
+    carrier: "Fully insured for collision and damages under our carrier's insurance",
+    personalDriver: "Covered by your car's personal insurance",
   },
   {
     label: "Mileage on your car",
