@@ -111,8 +111,8 @@ export default function PrivacyPage() {
           <h2 className="font-display text-xl text-ink">Contact us</h2>
           <p className="mt-3">
             Questions about this policy? Email{" "}
-            <a href="mailto:quotes@royalrollers.example" className="underline hover:text-brass">
-              quotes@royalrollers.example
+            <a href="mailto:support@royal-rollers.com" className="underline hover:text-brass">
+              support@royal-rollers.com
             </a>{" "}
             or call{" "}
             <a href="tel:+16465892334" className="underline hover:text-brass">
