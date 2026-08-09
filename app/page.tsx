@@ -28,9 +28,9 @@ export default function HomePage() {
             <span className="text-brass">Your call how.</span>
           </h1>
           <p className="mt-6 max-w-md text-ink/75">
-            Royal Rollers is a vehicle transport broker at your service anywhere in
-            the country — whether on an insured multi-car hauler or driven
-            directly by our personal driver service, Royal Rollers has your back.
+            Royal Rollers is a vehicle transport broker, moving cars anywhere
+            in the country — whether on an insured multi-car hauler or driven
+            directly by our personal driver service, we&apos;ve got your back.
           </p>
           <div className="mt-8 flex gap-4">
             <Link href="/quote" className={ghostCta}>
@@ -85,11 +85,14 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <p className="mt-8 text-center text-sm text-ink/60">
-          <Link href="/services" className="underline hover:text-brass">
-            See the full side-by-side comparison
+        <div className="mt-8 text-center">
+          <Link
+            href="/services"
+            className="inline-block rounded-pill border-2 border-brass px-8 py-3 font-display text-sm uppercase tracking-wideish text-brass shadow-button-sm transition-all hover:-translate-y-px hover:bg-brass hover:text-paper hover:shadow-button active:translate-y-0 active:scale-[0.98]"
+          >
+            See the Full Side-by-Side Comparison
           </Link>
-        </p>
+        </div>
       </section>
 
       <div className="route-rule mx-auto max-w-6xl opacity-30" />

@@ -10,7 +10,7 @@ export const metadata = {
 export default function ServicesPage() {
   return (
       <div className="mx-auto max-w-5xl px-6 py-16">
-        <p className="manifest-label">Services</p>
+        <p className="manifest-label">Our Services</p>
         <h1 className="mt-2 text-3xl">Carrier Transport vs. Personal Driver</h1>
         <p className="mt-4 max-w-2xl text-ink/70">
           Both options get your car wherever it&apos;s headed, anywhere in the country.
