@@ -44,13 +44,13 @@ const config: Config = {
           dim: "#E7E5E4",
         },
         brass: {
-          DEFAULT: "#EC3013", // the one red accent — primary CTAs, focus rings
-          dark: "#AE1800",
-          light: "#FF8266",
+          DEFAULT: "#2E4573", // the one accent — primary CTAs, focus rings
+          dark: "#1B2A4A",
+          light: "#8CA0C4",
         },
         highway: {
-          DEFAULT: "#EC3013", // Carrier / insured — accent red
-          light: "#FF8266",
+          DEFAULT: "#2E4573", // Carrier / insured — accent navy
+          light: "#8CA0C4",
         },
         rust: {
           DEFAULT: "#201E1D", // Personal Driver — ink black
