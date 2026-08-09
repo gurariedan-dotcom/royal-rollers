@@ -50,6 +50,26 @@ const FAQS = [
     q: "Can I ship personal items inside the vehicle?",
     a: "A small amount of personal items in the trunk is generally fine, but they aren't covered by transport insurance and travel at your own risk -- so keep it light and skip anything valuable or fragile.",
   },
+  {
+    q: "How far in advance should I book?",
+    a: "We recommend booking 1-2 weeks ahead of your preferred pickup window to help guarantee availability.",
+  },
+  {
+    q: "What if my vehicle isn't ready on the scheduled pickup day?",
+    a: "Just let us know as soon as possible and we'll get you rescheduled. A small rescheduling fee applies to cover the adjustment.",
+  },
+  {
+    q: "What's your cancellation policy?",
+    a: "Cancellations are fully refundable, with the exception of your $350 deposit, which is non-refundable.",
+  },
+  {
+    q: "Do you ship internationally or only within the U.S.?",
+    a: "We service both the United States and Canada.",
+  },
+  {
+    q: "How do I track my vehicle during transport?",
+    a: "Once your vehicle is booked, you'll receive a live tracking link by email so you can follow its progress from pickup to delivery.",
+  },
 ];
 
 export default function FaqPage() {
