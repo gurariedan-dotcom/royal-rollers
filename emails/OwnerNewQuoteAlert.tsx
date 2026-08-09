@@ -38,6 +38,8 @@ export default function OwnerNewQuoteAlert({
       <Text style={{ margin: "0 0 10px", fontSize: "15px", color: colors.ink, fontWeight: 700 }}>
         New quote request from {contactName}
       </Text>
+      <DataRow label="Contact" value={`${contactName} — ${contactPhone}`} />
+      <DataRow label="Email" value={contactEmail} />
       <DataRow label="Service" value={serviceLabel} />
       <DataRow label="VIN" value={vin} />
       <DataRow label="Vehicle" value={vehicle} />
@@ -45,8 +47,6 @@ export default function OwnerNewQuoteAlert({
       {enclosed && <DataRow label="Enclosed" value={enclosed} />}
       <DataRow label="Route" value={route} />
       <DataRow label="Preferred date" value={preferredDate} />
-      <DataRow label="Contact" value={`${contactName} — ${contactPhone}`} />
-      <DataRow label="Email" value={contactEmail} />
       <div style={{ marginTop: "12px" }}>
         <CtaButton href={adminUrl}>View in admin</CtaButton>
       </div>
