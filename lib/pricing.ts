@@ -32,6 +32,10 @@ const CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES = envNumber(
   1300,
 );
 const CARRIER_LONG_HAUL_DISCOUNT_PERCENT = envNumber("ESTIMATE_CARRIER_LONG_HAUL_DISCOUNT_PERCENT", 15);
+const PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS = envNumber(
+  "ESTIMATE_PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS",
+  20000,
+);
 
 // ARCHIVED 2026-08-10: vehicle-size surcharge, disabled per request -- carrier
 // and personal-driver quotes are now flat rate regardless of vehicleType.
@@ -79,6 +83,9 @@ export function computeEstimate(input: EstimateInput): EstimateResult {
     }
   } else {
     midpoint = BASE_FEE_CENTS * legs + totalMiles * PERSONAL_DRIVER_PER_MILE_CENTS;
+    if (input.roundTrip) {
+      midpoint -= PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS;
+    }
   }
 
   if (input.isRunning === "not_running") {
