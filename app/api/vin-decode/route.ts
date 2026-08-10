@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit } from "@/lib/http";
 
 // Proxies NHTSA's free vPIC VIN-decode API (no key, no signup -- see
 // https://vpic.nhtsa.dot.gov/api/) rather than calling it from the browser,
 // so a flaky/slow third-party host can't leak into client code and errors
 // can be normalized into just what the quote form needs.
 export async function GET(req: NextRequest) {
+  const limited = rateLimit(req, "vin-decode", 30, 5 * 60_000);
+  if (limited) return limited;
+
   const vin = req.nextUrl.searchParams.get("vin") ?? "";
   if (!/^[A-HJ-NPR-Z0-9]{17}$/i.test(vin)) {
     return NextResponse.json({ error: "Invalid VIN." }, { status: 400 });

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, type BookingRow } from "@/lib/db";
+import { rateLimit } from "@/lib/http";
 
 // Deletes a booking and its underlying quote request -- used from the
 // internal /admin/bookings page to clear out test/example data or handle a
@@ -7,6 +8,9 @@ import { getDb, type BookingRow } from "@/lib/db";
 // payment method, and charge history stay there as the permanent financial
 // record. This only removes our own copy of the data.
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const limited = rateLimit(req, "ops-secret", 5, 15 * 60_000);
+  if (limited) return limited;
+
   const authHeader = req.headers.get("authorization");
   const expected = process.env.INTERNAL_OPS_SECRET;
   if (!expected || authHeader !== `Bearer ${expected}`) {

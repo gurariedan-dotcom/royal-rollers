@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { rateLimit } from "@/lib/http";
 
 // Read-only list for the internal /admin/quotes page -- lets the owner see
 // every incoming quote request (not just ones that became bookings) and
 // price the ones still pending. Same shared-secret auth as the other
 // internal ops routes (bookings, charge-balance, quote pricing).
 export async function GET(req: NextRequest) {
+  const limited = rateLimit(req, "ops-secret", 5, 15 * 60_000);
+  if (limited) return limited;
+
   const authHeader = req.headers.get("authorization");
   const expected = process.env.INTERNAL_OPS_SECRET;
   if (!expected || authHeader !== `Bearer ${expected}`) {

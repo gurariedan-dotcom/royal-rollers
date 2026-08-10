@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { computeEstimate } from "@/lib/pricing";
 import { VEHICLE_TYPES, toPricingVehicleType } from "@/lib/validation";
+import { rateLimit } from "@/lib/http";
 
 const ZIP_REGEX = /^\d{5}$/;
 
@@ -47,6 +48,9 @@ async function geocodeZip(zip: string): Promise<{ lat: number; lon: number } | n
 // need to be exposed to the client. This route never touches the DB and
 // never affects the real, manually-set quote price.
 export async function GET(req: NextRequest) {
+  const limited = rateLimit(req, "route-distance", 30, 5 * 60_000);
+  if (limited) return limited;
+
   const pickupZip = req.nextUrl.searchParams.get("pickupZip") ?? "";
   const dropoffZip = req.nextUrl.searchParams.get("dropoffZip") ?? "";
   const serviceType = req.nextUrl.searchParams.get("serviceType");
