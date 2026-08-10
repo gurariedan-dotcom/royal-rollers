@@ -22,7 +22,7 @@ const CARRIER_PER_MILE_CENTS = envNumber("ESTIMATE_CARRIER_PER_MILE_CENTS", 86);
 const PERSONAL_DRIVER_PER_MILE_CENTS = envNumber("ESTIMATE_PERSONAL_DRIVER_PER_MILE_CENTS", 80);
 const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 40);
 const NOT_RUNNING_FLAT_ADD_CENTS = envNumber("ESTIMATE_NOT_RUNNING_FLAT_ADD_CENTS", 20000);
-const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 15);
+const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 5);
 
 // ARCHIVED 2026-08-10: vehicle-size surcharge, disabled per request -- carrier
 // and personal-driver quotes are now flat rate regardless of vehicleType.
@@ -70,8 +70,11 @@ export function computeEstimate(input: EstimateInput): EstimateResult {
   }
 
   const spread = midpoint * (RANGE_SPREAD_PERCENT / 100);
+  // Rounded to the nearest $10 -- this is a rough estimate, not a quote, no
+  // need for cent-level precision.
+  const roundToTenDollars = (cents: number) => Math.round(cents / 1000) * 1000;
   return {
-    lowCents: Math.max(0, Math.round(midpoint - spread)),
-    highCents: Math.round(midpoint + spread),
+    lowCents: Math.max(0, roundToTenDollars(midpoint - spread)),
+    highCents: roundToTenDollars(midpoint + spread),
   };
 }
