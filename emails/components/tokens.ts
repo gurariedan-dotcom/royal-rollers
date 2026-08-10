@@ -5,8 +5,8 @@ export const colors = {
   ink: "#201E1D",
   paper: "#F3F2F2",
   paperDim: "#E7E5E4",
-  brass: "#EC3013",
-  brassDark: "#AE1800",
+  brass: "#2E4573",
+  brassDark: "#1B2A4A",
   slate: "#605D5D",
   slateLight: "#8A8785",
 };
