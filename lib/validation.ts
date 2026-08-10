@@ -80,6 +80,9 @@ export const quoteRequestSchema = z
       .trim()
       .regex(/^[\d\s()+-]{7,20}$/, "Enter a valid phone number."),
     contactEmail: z.string().trim().email("Enter a valid email address."),
+    agreedToTerms: z.literal(true, {
+      errorMap: () => ({ message: "You must agree to the Terms of Service and Privacy Policy to continue." }),
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.serviceType === "carrier" && !data.enclosed) {
