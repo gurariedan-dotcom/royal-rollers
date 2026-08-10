@@ -17,12 +17,21 @@ function envNumber(name: string, fallback: number): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+// Personal driver only -- carrier has no base fee (flat per-mile instead).
 const BASE_FEE_CENTS = envNumber("ESTIMATE_BASE_FEE_CENTS", 15000);
-const CARRIER_PER_MILE_CENTS = envNumber("ESTIMATE_CARRIER_PER_MILE_CENTS", 86);
+const CARRIER_PER_MILE_CENTS = envNumber("ESTIMATE_CARRIER_PER_MILE_CENTS", 100);
 const PERSONAL_DRIVER_PER_MILE_CENTS = envNumber("ESTIMATE_PERSONAL_DRIVER_PER_MILE_CENTS", 80);
 const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 40);
 const NOT_RUNNING_FLAT_ADD_CENTS = envNumber("ESTIMATE_NOT_RUNNING_FLAT_ADD_CENTS", 20000);
 const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 5);
+// Carrier long-haul discount -- checked against the total trip distance,
+// i.e. after round trip doubles it (a 900mi one-way becomes 1800mi and
+// qualifies even though 900mi alone wouldn't).
+const CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES = envNumber(
+  "ESTIMATE_CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES",
+  1300,
+);
+const CARRIER_LONG_HAUL_DISCOUNT_PERCENT = envNumber("ESTIMATE_CARRIER_LONG_HAUL_DISCOUNT_PERCENT", 15);
 
 // ARCHIVED 2026-08-10: vehicle-size surcharge, disabled per request -- carrier
 // and personal-driver quotes are now flat rate regardless of vehicleType.
@@ -43,7 +52,8 @@ export type EstimateInput = {
   vehicleType: "sedan" | "suv" | "minivan" | "pickup" | "full_size_suv";
   // Round trip = the vehicle goes out and comes back later (common for
   // Tri-State <-> Florida snowbirds, see app/about/page.tsx). Priced as two
-  // one-way jobs -- simplest model, no separate discount knob for now.
+  // one-way jobs -- doubles total mileage, which can push a carrier trip
+  // past the long-haul discount threshold on its own.
   roundTrip?: boolean;
 };
 
@@ -55,18 +65,24 @@ export type EstimateResult = {
 // Pure -- no fetch/DB calls, safe to call from a server route (current use)
 // or unit-test directly.
 export function computeEstimate(input: EstimateInput): EstimateResult {
-  const perMileCents =
-    input.serviceType === "carrier" ? CARRIER_PER_MILE_CENTS : PERSONAL_DRIVER_PER_MILE_CENTS;
-  let midpoint = BASE_FEE_CENTS + input.miles * perMileCents;
+  const legs = input.roundTrip ? 2 : 1;
+  const totalMiles = input.miles * legs;
 
-  if (input.serviceType === "carrier" && input.enclosed === "enclosed") {
-    midpoint *= 1 + ENCLOSED_SURCHARGE_PERCENT / 100;
+  let midpoint: number;
+  if (input.serviceType === "carrier") {
+    midpoint = totalMiles * CARRIER_PER_MILE_CENTS;
+    if (totalMiles > CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES) {
+      midpoint *= 1 - CARRIER_LONG_HAUL_DISCOUNT_PERCENT / 100;
+    }
+    if (input.enclosed === "enclosed") {
+      midpoint *= 1 + ENCLOSED_SURCHARGE_PERCENT / 100;
+    }
+  } else {
+    midpoint = BASE_FEE_CENTS * legs + totalMiles * PERSONAL_DRIVER_PER_MILE_CENTS;
   }
+
   if (input.isRunning === "not_running") {
-    midpoint += NOT_RUNNING_FLAT_ADD_CENTS;
-  }
-  if (input.roundTrip) {
-    midpoint *= 2;
+    midpoint += NOT_RUNNING_FLAT_ADD_CENTS * legs;
   }
 
   const spread = midpoint * (RANGE_SPREAD_PERCENT / 100);
