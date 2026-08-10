@@ -1005,6 +1005,9 @@ export default function QuoteForm() {
                   ${(estimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                 </span>{" "}
                 estimated cost{form.roundTrip ? " for the round trip" : ""}. We&apos;ll email you your exact quote after you submit.
+                {form.serviceType === "personal_driver" && (
+                  <p className="mt-1 text-xs text-ink/50">Doesn&apos;t include gas or tolls.</p>
+                )}
               </div>
             )}
             {estimateStatus === "error" && (
