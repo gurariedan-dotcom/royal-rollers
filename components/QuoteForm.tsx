@@ -1008,6 +1008,11 @@ export default function QuoteForm() {
                 {form.serviceType === "personal_driver" && (
                   <p className="mt-1 text-xs text-ink/50">Doesn&apos;t include gas or tolls.</p>
                 )}
+                <p className="mt-1 text-xs text-ink/50">
+                  A quick note on pricing: Shorter travel distances don&apos;t always mean a lower
+                  fare. Fixed operational costs still apply, which can make short trips a bit more
+                  expensive relative to longer ones.
+                </p>
               </div>
             )}
             {estimateStatus === "error" && (
