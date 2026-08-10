@@ -43,6 +43,10 @@ export default function Footer() {
         <p className="mt-2 text-xs text-paper/50">
           &copy; {new Date().getFullYear()} Royal Rollers LLC. Quotes are estimates until confirmed in writing.{" "}
           <Link href="/privacy" className="underline hover:text-brass-light">Privacy Policy</Link>
+          {" "}&middot;{" "}
+          <Link href="/terms" className="underline hover:text-brass-light">Terms of Service</Link>
+          {" "}&middot;{" "}
+          <Link href="/accessibility" className="underline hover:text-brass-light">Accessibility</Link>
         </p>
       </div>
     </footer>
