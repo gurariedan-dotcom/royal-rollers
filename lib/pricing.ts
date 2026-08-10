@@ -17,22 +17,36 @@ function envNumber(name: string, fallback: number): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+// Personal driver only -- carrier has no base fee (flat per-mile instead).
 const BASE_FEE_CENTS = envNumber("ESTIMATE_BASE_FEE_CENTS", 15000);
-const PER_MILE_CENTS = envNumber("ESTIMATE_PER_MILE_CENTS", 105);
+const CARRIER_PER_MILE_CENTS = envNumber("ESTIMATE_CARRIER_PER_MILE_CENTS", 100);
+const PERSONAL_DRIVER_PER_MILE_CENTS = envNumber("ESTIMATE_PERSONAL_DRIVER_PER_MILE_CENTS", 80);
 const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 40);
-const PERSONAL_DRIVER_SURCHARGE_PERCENT = envNumber("ESTIMATE_PERSONAL_DRIVER_SURCHARGE_PERCENT", 0);
 const NOT_RUNNING_FLAT_ADD_CENTS = envNumber("ESTIMATE_NOT_RUNNING_FLAT_ADD_CENTS", 20000);
-const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 15);
+const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 5);
+// Carrier long-haul discount -- checked against the total trip distance,
+// i.e. after round trip doubles it (a 900mi one-way becomes 1800mi and
+// qualifies even though 900mi alone wouldn't).
+const CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES = envNumber(
+  "ESTIMATE_CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES",
+  1300,
+);
+const CARRIER_LONG_HAUL_DISCOUNT_PERCENT = envNumber("ESTIMATE_CARRIER_LONG_HAUL_DISCOUNT_PERCENT", 15);
+const PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS = envNumber(
+  "ESTIMATE_PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS",
+  20000,
+);
 
-// Vehicle-size surcharge -- bigger vehicles cost more to haul. Sedan is the
-// baseline (0%, no env var needed). Applied to the base+mileage midpoint
-// before the carrier/enclosed/driver-type surcharge stacks on top of it.
-const VEHICLE_SURCHARGE_PERCENT: Record<Exclude<EstimateInput["vehicleType"], "sedan">, number> = {
-  suv: envNumber("ESTIMATE_SUV_SURCHARGE_PERCENT", 10),
-  minivan: envNumber("ESTIMATE_MINIVAN_SURCHARGE_PERCENT", 15),
-  pickup: envNumber("ESTIMATE_PICKUP_SURCHARGE_PERCENT", 20),
-  full_size_suv: envNumber("ESTIMATE_FULLSIZE_SUV_SURCHARGE_PERCENT", 30),
-};
+// ARCHIVED 2026-08-10: vehicle-size surcharge, disabled per request -- carrier
+// and personal-driver quotes are now flat rate regardless of vehicleType.
+// Kept here in case it needs to come back; not wired into computeEstimate.
+//
+// const VEHICLE_SURCHARGE_PERCENT: Record<Exclude<EstimateInput["vehicleType"], "sedan">, number> = {
+//   suv: envNumber("ESTIMATE_SUV_SURCHARGE_PERCENT", 10),
+//   minivan: envNumber("ESTIMATE_MINIVAN_SURCHARGE_PERCENT", 15),
+//   pickup: envNumber("ESTIMATE_PICKUP_SURCHARGE_PERCENT", 20),
+//   full_size_suv: envNumber("ESTIMATE_FULLSIZE_SUV_SURCHARGE_PERCENT", 30),
+// };
 
 export type EstimateInput = {
   miles: number;
@@ -42,7 +56,8 @@ export type EstimateInput = {
   vehicleType: "sedan" | "suv" | "minivan" | "pickup" | "full_size_suv";
   // Round trip = the vehicle goes out and comes back later (common for
   // Tri-State <-> Florida snowbirds, see app/about/page.tsx). Priced as two
-  // one-way jobs -- simplest model, no separate discount knob for now.
+  // one-way jobs -- doubles total mileage, which can push a carrier trip
+  // past the long-haul discount threshold on its own.
   roundTrip?: boolean;
 };
 
@@ -54,28 +69,35 @@ export type EstimateResult = {
 // Pure -- no fetch/DB calls, safe to call from a server route (current use)
 // or unit-test directly.
 export function computeEstimate(input: EstimateInput): EstimateResult {
-  let midpoint = BASE_FEE_CENTS + input.miles * PER_MILE_CENTS;
+  const legs = input.roundTrip ? 2 : 1;
+  const totalMiles = input.miles * legs;
 
-  if (input.vehicleType !== "sedan") {
-    midpoint *= 1 + VEHICLE_SURCHARGE_PERCENT[input.vehicleType] / 100;
+  let midpoint: number;
+  if (input.serviceType === "carrier") {
+    midpoint = totalMiles * CARRIER_PER_MILE_CENTS;
+    if (totalMiles > CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES) {
+      midpoint *= 1 - CARRIER_LONG_HAUL_DISCOUNT_PERCENT / 100;
+    }
+    if (input.enclosed === "enclosed") {
+      midpoint *= 1 + ENCLOSED_SURCHARGE_PERCENT / 100;
+    }
+  } else {
+    midpoint = BASE_FEE_CENTS * legs + totalMiles * PERSONAL_DRIVER_PER_MILE_CENTS;
+    if (input.roundTrip) {
+      midpoint -= PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS;
+    }
   }
 
-  if (input.serviceType === "carrier" && input.enclosed === "enclosed") {
-    midpoint *= 1 + ENCLOSED_SURCHARGE_PERCENT / 100;
-  }
-  if (input.serviceType === "personal_driver") {
-    midpoint *= 1 + PERSONAL_DRIVER_SURCHARGE_PERCENT / 100;
-  }
   if (input.isRunning === "not_running") {
-    midpoint += NOT_RUNNING_FLAT_ADD_CENTS;
-  }
-  if (input.roundTrip) {
-    midpoint *= 2;
+    midpoint += NOT_RUNNING_FLAT_ADD_CENTS * legs;
   }
 
   const spread = midpoint * (RANGE_SPREAD_PERCENT / 100);
+  // Rounded to the nearest $10 -- this is a rough estimate, not a quote, no
+  // need for cent-level precision.
+  const roundToTenDollars = (cents: number) => Math.round(cents / 1000) * 1000;
   return {
-    lowCents: Math.max(0, Math.round(midpoint - spread)),
-    highCents: Math.round(midpoint + spread),
+    lowCents: Math.max(0, roundToTenDollars(midpoint - spread)),
+    highCents: roundToTenDollars(midpoint + spread),
   };
 }

@@ -1005,6 +1005,14 @@ export default function QuoteForm() {
                   ${(estimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                 </span>{" "}
                 estimated cost{form.roundTrip ? " for the round trip" : ""}. We&apos;ll email you your exact quote after you submit.
+                {form.serviceType === "personal_driver" && (
+                  <p className="mt-1 text-xs text-ink/50">Doesn&apos;t include gas or tolls.</p>
+                )}
+                <p className="mt-1 text-xs text-ink/50">
+                  A quick note on pricing: Shorter travel distances don&apos;t always mean a lower
+                  fare. Fixed operational costs still apply, which can make short trips a bit more
+                  expensive relative to longer ones.
+                </p>
               </div>
             )}
             {estimateStatus === "error" && (
