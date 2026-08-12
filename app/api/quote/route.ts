@@ -2,16 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { quoteRequestSchema } from "@/lib/validation";
 import { getDb, type QuoteRequestRow } from "@/lib/db";
 import { sendOwnerAlertEmail, sendQuoteReceivedEmail } from "@/lib/email";
+import { rateLimit, readJsonBody } from "@/lib/http";
 
 export async function POST(req: NextRequest) {
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
+  const limited = rateLimit(req, "quote-create", 10, 15 * 60_000);
+  if (limited) return limited;
 
-  const parsed = quoteRequestSchema.safeParse(body);
+  const bodyResult = await readJsonBody(req);
+  if (!bodyResult.ok) return bodyResult.response;
+
+  const parsed = quoteRequestSchema.safeParse(bodyResult.body);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Validation failed.", issues: parsed.error.flatten() },

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getDb } from "@/lib/db";
 import { createDepositCheckoutSession } from "@/lib/stripe";
+import { rateLimit, readJsonBody } from "@/lib/http";
 
 // Deposit/balance amounts are deliberately NOT accepted from the client --
 // they're derived here from the quote's stored quoted_amount_cents (see
@@ -11,8 +12,8 @@ const DEPOSIT_PERCENT = Number(process.env.DEPOSIT_PERCENT ?? "20") / 100;
 
 const bookingSchema = z.object({
   quoteRequestId: z.string().uuid(),
-  contactEmail: z.string().email(),
-  contactName: z.string().min(1),
+  contactEmail: z.string().email().max(254),
+  contactName: z.string().min(1).max(200),
   // Required acknowledgment per Section 4.5 -- the auto-charge-on-arrival
   // consent checkbox. The API refuses to book without it, so this can't be
   // skipped by calling the route directly.
@@ -22,14 +23,13 @@ const bookingSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
+  const limited = rateLimit(req, "checkout-session", 10, 15 * 60_000);
+  if (limited) return limited;
 
-  const parsed = bookingSchema.safeParse(body);
+  const bodyResult = await readJsonBody(req);
+  if (!bodyResult.ok) return bodyResult.response;
+
+  const parsed = bookingSchema.safeParse(bodyResult.body);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Validation failed.", issues: parsed.error.flatten() },

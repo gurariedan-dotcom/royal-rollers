@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { rateLimit } from "@/lib/http";
 
 // Read-only list for the internal /admin/bookings page. Protected by the
 // same shared secret as the other internal ops routes (charge-balance,
@@ -9,6 +10,9 @@ import { getDb } from "@/lib/db";
 // (bookings.quote_request_id -> quote_requests.id) so the customer name,
 // vehicle, and route can be shown without a second round trip.
 export async function GET(req: NextRequest) {
+  const limited = rateLimit(req, "ops-secret", 5, 15 * 60_000);
+  if (limited) return limited;
+
   const authHeader = req.headers.get("authorization");
   const expected = process.env.INTERNAL_OPS_SECRET;
   if (!expected || authHeader !== `Bearer ${expected}`) {

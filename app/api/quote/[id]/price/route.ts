@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getDb, type QuoteRequestRow } from "@/lib/db";
 import { sendQuoteReadyEmail } from "@/lib/email";
+import { rateLimit, readJsonBody } from "@/lib/http";
 
 // There's no admin UI in this build (none was scoped in planning) -- this
 // route is the missing link identified during review: somewhere, the owner
@@ -14,20 +15,19 @@ const priceSchema = z.object({
 });
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+  const limited = rateLimit(req, "ops-secret", 5, 15 * 60_000);
+  if (limited) return limited;
+
   const authHeader = req.headers.get("authorization");
   const expected = process.env.INTERNAL_OPS_SECRET;
   if (!expected || authHeader !== `Bearer ${expected}`) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
+  const bodyResult = await readJsonBody(req);
+  if (!bodyResult.ok) return bodyResult.response;
 
-  const parsed = priceSchema.safeParse(body);
+  const parsed = priceSchema.safeParse(bodyResult.body);
   if (!parsed.success) {
     return NextResponse.json({ error: "Validation failed.", issues: parsed.error.flatten() }, { status: 422 });
   }

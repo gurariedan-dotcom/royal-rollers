@@ -62,8 +62,8 @@ export const quoteRequestSchema = z
       .int()
       .min(1980, "Year looks too old.")
       .max(new Date().getFullYear() + 1, "Year looks too far in the future."),
-    vehicleMake: z.string().trim().min(1, "Make is required."),
-    vehicleModel: z.string().trim().min(1, "Model is required."),
+    vehicleMake: z.string().trim().min(1, "Make is required.").max(100),
+    vehicleModel: z.string().trim().min(1, "Model is required.").max(100),
     vehicleType: z.enum(VEHICLE_TYPES, { required_error: "Choose a vehicle type." }),
     isRunning: z.enum(["running", "not_running"]),
     // Only meaningful for carrier transport -- enforced below via superRefine,
@@ -72,14 +72,17 @@ export const quoteRequestSchema = z
     pickupZip: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit ZIP code."),
     dropoffZip: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit ZIP code."),
     roundTrip: z.boolean().optional(),
-    preferredPickupDate: z.string().trim().min(1, "Pick a preferred date."),
+    preferredPickupDate: z.string().trim().min(1, "Pick a preferred date.").max(50),
     flexibilityWindow: z.enum(["exact", "plus_minus_2", "plus_minus_5", "flexible"]),
-    contactName: z.string().trim().min(1, "Name is required."),
+    contactName: z.string().trim().min(1, "Name is required.").max(200),
     contactPhone: z
       .string()
       .trim()
       .regex(/^[\d\s()+-]{7,20}$/, "Enter a valid phone number."),
-    contactEmail: z.string().trim().email("Enter a valid email address."),
+    contactEmail: z.string().trim().email("Enter a valid email address.").max(254),
+    agreedToTerms: z.literal(true, {
+      errorMap: () => ({ message: "You must agree to the Terms of Service and Privacy Policy to continue." }),
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.serviceType === "carrier" && !data.enclosed) {

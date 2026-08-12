@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { unstable_noStore as noStore } from "next/cache";
 import { getDb, type QuoteRequestRow } from "@/lib/db";
+import { rateLimit } from "@/lib/http";
 
 // This handler never touches a Next.js "dynamic" API (no headers(), no
 // request access), which makes it eligible for Next's default Route Handler
@@ -22,7 +23,10 @@ export const dynamic = "force-dynamic";
 // Swap this for whatever the owner decides (flat fee vs. percentage).
 const DEPOSIT_PERCENT = Number(process.env.DEPOSIT_PERCENT ?? "20") / 100;
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  const limited = rateLimit(req, "quote-status", 30, 5 * 60_000);
+  if (limited) return limited;
+
   noStore();
   const db = getDb();
   const { data, error } = await db

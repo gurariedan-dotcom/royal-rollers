@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { ShieldCheck } from "@phosphor-icons/react/dist/ssr";
 
 type QuoteSummary = {
@@ -76,7 +77,11 @@ function InnerBookingForm({ quote, canceled }: { quote: QuoteSummary; canceled: 
         <span>
           I understand my card will be saved on file and the remaining balance of{" "}
           {quote.balanceAmountCents ? formatDollars(quote.balanceAmountCents) : "the balance"}{" "}
-          will be charged automatically once my vehicle is delivered, without further action on my part.
+          will be charged automatically once my vehicle is delivered, without further action on my part,
+          and I agree to the{" "}
+          <Link href="/terms" target="_blank" className="underline hover:text-brass">Terms of Service</Link>
+          {" "}and{" "}
+          <Link href="/privacy" target="_blank" className="underline hover:text-brass">Privacy Policy</Link>.
         </span>
       </label>
 

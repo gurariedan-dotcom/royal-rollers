@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import Link from "next/link";
 import RouteProgress from "./RouteProgress";
 import DatePicker from "./DatePicker";
 import { quoteRequestSchema, FLEXIBILITY_LABELS, VEHICLE_TYPES, VEHICLE_TYPE_LABELS } from "@/lib/validation";
@@ -39,6 +40,7 @@ type FormState = {
   contactName: string;
   contactPhone: string;
   contactEmail: string;
+  agreedToTerms: boolean;
 };
 
 const EMPTY_FORM: FormState = {
@@ -58,6 +60,7 @@ const EMPTY_FORM: FormState = {
   contactName: "",
   contactPhone: "",
   contactEmail: "",
+  agreedToTerms: false,
 };
 
 function inputClass(hasError: boolean) {
@@ -469,7 +472,7 @@ export default function QuoteForm() {
       case "Timing":
         return ["preferredPickupDate", "flexibilityWindow"];
       case "Contact":
-        return ["contactName", "contactPhone", "contactEmail"];
+        return ["contactName", "contactPhone", "contactEmail", "agreedToTerms"];
       default:
         return [];
     }
@@ -1100,6 +1103,23 @@ export default function QuoteForm() {
                 />
                 {fieldErrors.contactEmail && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.contactEmail}</p>}
               </div>
+            </div>
+            <div>
+              <label className="flex items-start gap-3 text-sm text-ink/80">
+                <input
+                  type="checkbox"
+                  checked={form.agreedToTerms}
+                  onChange={(e) => update("agreedToTerms", e.target.checked)}
+                  className="mt-1"
+                />
+                <span>
+                  I agree to the{" "}
+                  <Link href="/terms" target="_blank" className="underline hover:text-brass">Terms of Service</Link>
+                  {" "}and{" "}
+                  <Link href="/privacy" target="_blank" className="underline hover:text-brass">Privacy Policy</Link>.
+                </span>
+              </label>
+              {fieldErrors.agreedToTerms && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.agreedToTerms}</p>}
             </div>
           </div>
         )}
