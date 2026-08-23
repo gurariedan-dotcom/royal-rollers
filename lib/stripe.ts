@@ -54,6 +54,13 @@ export async function createDepositCheckoutSession(params: {
     mode: "payment",
     payment_method_types: ["card"],
     customer_email: params.email,
+    // Required for the customer to receive a Customer object at all --
+    // "payment" mode defaults customer_creation to "if_required", and a
+    // plain deposit charge doesn't itself require one, so without this the
+    // setup_future_usage below has no Customer to attach the card to and
+    // finalizeBookingFromSession() (lib/booking.ts) fails with
+    // "missing_payment_details" even though the deposit charge succeeded.
+    customer_creation: "always",
     line_items: [
       {
         quantity: 1,
