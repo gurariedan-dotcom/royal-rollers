@@ -23,7 +23,7 @@ const chargeBalanceSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  const limited = rateLimit(req, "ops-secret", 5, 15 * 60_000);
+  const limited = rateLimit(req, "charge-balance", 30, 15 * 60_000);
   if (limited) return limited;
 
   const authHeader = req.headers.get("authorization");

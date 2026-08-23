@@ -8,7 +8,7 @@ import { rateLimit } from "@/lib/http";
 // payment method, and charge history stay there as the permanent financial
 // record. This only removes our own copy of the data.
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-  const limited = rateLimit(req, "ops-secret", 5, 15 * 60_000);
+  const limited = rateLimit(req, "admin-bookings-delete", 30, 15 * 60_000);
   if (limited) return limited;
 
   const authHeader = req.headers.get("authorization");

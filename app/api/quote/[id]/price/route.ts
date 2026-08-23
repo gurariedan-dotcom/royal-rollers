@@ -15,7 +15,7 @@ const priceSchema = z.object({
 });
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  const limited = rateLimit(req, "ops-secret", 5, 15 * 60_000);
+  const limited = rateLimit(req, "quote-price", 30, 15 * 60_000);
   if (limited) return limited;
 
   const authHeader = req.headers.get("authorization");

@@ -7,7 +7,7 @@ import { rateLimit } from "@/lib/http";
 // price the ones still pending. Same shared-secret auth as the other
 // internal ops routes (bookings, charge-balance, quote pricing).
 export async function GET(req: NextRequest) {
-  const limited = rateLimit(req, "ops-secret", 5, 15 * 60_000);
+  const limited = rateLimit(req, "admin-quotes", 30, 15 * 60_000);
   if (limited) return limited;
 
   const authHeader = req.headers.get("authorization");
