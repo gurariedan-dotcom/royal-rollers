@@ -122,7 +122,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Could not start checkout. Please try again." }, { status: 502 });
   }
 
-  await db.from("bookings").update({ stripe_checkout_session_id: session.id }).eq("id", booking.id);
+  const { error: linkError } = await db
+    .from("bookings")
+    .update({ stripe_checkout_session_id: session.id })
+    .eq("id", booking.id);
+
+  if (linkError) {
+    console.error("Failed to link booking to checkout session:", linkError);
+    // The customer hasn't paid yet at this point -- safe to bail before
+    // sending them to Stripe rather than let them pay into a session that
+    // can never be reconciled back to a booking (see lib/booking.ts).
+    await db.from("bookings").delete().eq("id", booking.id);
+    return NextResponse.json({ error: "Could not start checkout. Please try again." }, { status: 502 });
+  }
 
   return NextResponse.json({ checkoutUrl: session.url });
 }
