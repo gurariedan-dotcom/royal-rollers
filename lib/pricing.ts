@@ -21,17 +21,17 @@ function envNumber(name: string, fallback: number): number {
 const BASE_FEE_CENTS = envNumber("ESTIMATE_BASE_FEE_CENTS", 15000);
 const CARRIER_PER_MILE_CENTS = envNumber("ESTIMATE_CARRIER_PER_MILE_CENTS", 100);
 const PERSONAL_DRIVER_PER_MILE_CENTS = envNumber("ESTIMATE_PERSONAL_DRIVER_PER_MILE_CENTS", 80);
-const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 40);
-const NOT_RUNNING_FLAT_ADD_CENTS = envNumber("ESTIMATE_NOT_RUNNING_FLAT_ADD_CENTS", 20000);
+const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 30);
+const NOT_RUNNING_FLAT_ADD_CENTS = envNumber("ESTIMATE_NOT_RUNNING_FLAT_ADD_CENTS", 10000);
 const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 5);
-// Carrier long-haul discount -- checked against the total trip distance,
-// i.e. after round trip doubles it (a 900mi one-way becomes 1800mi and
-// qualifies even though 900mi alone wouldn't).
+// Carrier long-haul discount -- checked against the one-way distance, not
+// the round-trip total (a 900mi one-way stays undiscounted even though the
+// round trip sums to 1800mi).
 const CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES = envNumber(
   "ESTIMATE_CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES",
-  1300,
+  1200,
 );
-const CARRIER_LONG_HAUL_DISCOUNT_PERCENT = envNumber("ESTIMATE_CARRIER_LONG_HAUL_DISCOUNT_PERCENT", 15);
+const CARRIER_LONG_HAUL_DISCOUNT_PERCENT = envNumber("ESTIMATE_CARRIER_LONG_HAUL_DISCOUNT_PERCENT", 5);
 const PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS = envNumber(
   "ESTIMATE_PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS",
   20000,
@@ -75,7 +75,7 @@ export function computeEstimate(input: EstimateInput): EstimateResult {
   let midpoint: number;
   if (input.serviceType === "carrier") {
     midpoint = totalMiles * CARRIER_PER_MILE_CENTS;
-    if (totalMiles > CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES) {
+    if (input.miles > CARRIER_LONG_HAUL_DISCOUNT_THRESHOLD_MILES) {
       midpoint *= 1 - CARRIER_LONG_HAUL_DISCOUNT_PERCENT / 100;
     }
     if (input.enclosed === "enclosed") {
