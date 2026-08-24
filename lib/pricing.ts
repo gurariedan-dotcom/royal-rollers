@@ -36,6 +36,10 @@ const PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS = envNumber(
   "ESTIMATE_PERSONAL_DRIVER_ROUND_TRIP_DISCOUNT_CENTS",
   20000,
 );
+// Floor for the displayed range -- carrier pricing is a flat per-mile rate
+// with no base fee, so very short/local routes can midpoint under $25 and
+// round to $0 at $50 granularity. Never show a $0 estimate for a real trip.
+const MINIMUM_ESTIMATE_CENTS = envNumber("ESTIMATE_MINIMUM_CENTS", 5000);
 
 // ARCHIVED 2026-08-10: vehicle-size surcharge, disabled per request -- carrier
 // and personal-driver quotes are now flat rate regardless of vehicleType.
@@ -93,11 +97,11 @@ export function computeEstimate(input: EstimateInput): EstimateResult {
   }
 
   const spread = midpoint * (RANGE_SPREAD_PERCENT / 100);
-  // Rounded to the nearest $10 -- this is a rough estimate, not a quote, no
+  // Rounded to the nearest $50 -- this is a rough estimate, not a quote, no
   // need for cent-level precision.
-  const roundToTenDollars = (cents: number) => Math.round(cents / 1000) * 1000;
+  const roundToFiftyDollars = (cents: number) => Math.round(cents / 5000) * 5000;
   return {
-    lowCents: Math.max(0, roundToTenDollars(midpoint - spread)),
-    highCents: roundToTenDollars(midpoint + spread),
+    lowCents: Math.max(MINIMUM_ESTIMATE_CENTS, roundToFiftyDollars(midpoint - spread)),
+    highCents: Math.max(MINIMUM_ESTIMATE_CENTS, roundToFiftyDollars(midpoint + spread)),
   };
 }
