@@ -46,55 +46,63 @@ export function toPricingVehicleType(
 // VIN is optional: customers who don't have it handy can enter vehicle info
 // manually instead (year/make/model/type), and the owner confirms the VIN
 // later when following up on the quote.
-export const quoteRequestSchema = z
-  .object({
-    serviceType: z.enum(["carrier", "personal_driver"], {
-      required_error: "Choose Carrier Transport or Personal Driver.",
-    }),
-    vin: z
-      .string()
-      .trim()
-      .regex(/^[A-HJ-NPR-Z0-9]{17}$/i, "That doesn't look like a valid VIN (VINs skip the letters I, O, and Q).")
-      .optional()
-      .or(z.literal("")),
-    vehicleYear: z.coerce
-      .number()
-      .int()
-      .min(1980, "Year looks too old.")
-      .max(new Date().getFullYear() + 1, "Year looks too far in the future."),
-    vehicleMake: z.string().trim().min(1, "Make is required.").max(100),
-    vehicleModel: z.string().trim().min(1, "Model is required.").max(100),
-    vehicleType: z.enum(VEHICLE_TYPES, { required_error: "Choose a vehicle type." }),
-    isRunning: z.enum(["running", "not_running"]),
-    // Only meaningful for carrier transport -- enforced below via superRefine,
-    // not just hidden in the UI, so a direct API call can't skip the rule.
-    enclosed: z.enum(["open", "enclosed"]).optional(),
-    pickupZip: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit ZIP code."),
-    dropoffZip: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit ZIP code."),
-    roundTrip: z.boolean().optional(),
-    preferredPickupDate: z.string().trim().min(1, "Pick a preferred date.").max(50),
-    flexibilityWindow: z.enum(["exact", "plus_minus_2", "plus_minus_5", "flexible"]),
-    contactName: z.string().trim().min(1, "Name is required.").max(200),
-    contactPhone: z
-      .string()
-      .trim()
-      .regex(/^[\d\s()+-]{7,20}$/, "Enter a valid phone number."),
-    contactEmail: z.string().trim().email("Enter a valid email address.").max(254),
-    agreedToTerms: z.literal(true, {
-      errorMap: () => ({ message: "You must agree to the Terms of Service and Privacy Policy to continue." }),
-    }),
-  })
-  .superRefine((data, ctx) => {
-    if (data.serviceType === "carrier" && !data.enclosed) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Choose open or enclosed transport.",
-        path: ["enclosed"],
-      });
-    }
-  });
+const quoteRequestFields = z.object({
+  serviceType: z.enum(["carrier", "personal_driver"], {
+    required_error: "Choose Carrier Transport or Personal Driver.",
+  }),
+  vin: z
+    .string()
+    .trim()
+    .regex(/^[A-HJ-NPR-Z0-9]{17}$/i, "That doesn't look like a valid VIN (VINs skip the letters I, O, and Q).")
+    .optional()
+    .or(z.literal("")),
+  vehicleYear: z.coerce
+    .number()
+    .int()
+    .min(1980, "Year looks too old.")
+    .max(new Date().getFullYear() + 1, "Year looks too far in the future."),
+  vehicleMake: z.string().trim().min(1, "Make is required.").max(100),
+  vehicleModel: z.string().trim().min(1, "Model is required.").max(100),
+  vehicleType: z.enum(VEHICLE_TYPES, { required_error: "Choose a vehicle type." }),
+  isRunning: z.enum(["running", "not_running"]),
+  // Only meaningful for carrier transport -- enforced below via superRefine,
+  // not just hidden in the UI, so a direct API call can't skip the rule.
+  enclosed: z.enum(["open", "enclosed"]).optional(),
+  pickupZip: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit ZIP code."),
+  dropoffZip: z.string().trim().regex(/^\d{5}$/, "Enter a 5-digit ZIP code."),
+  roundTrip: z.boolean().optional(),
+  preferredPickupDate: z.string().trim().min(1, "Pick a preferred date.").max(50),
+  flexibilityWindow: z.enum(["exact", "plus_minus_2", "plus_minus_5", "flexible"]),
+  contactName: z.string().trim().min(1, "Name is required.").max(200),
+  contactPhone: z
+    .string()
+    .trim()
+    .regex(/^[\d\s()+-]{7,20}$/, "Enter a valid phone number."),
+  contactEmail: z.string().trim().email("Enter a valid email address.").max(254),
+  agreedToTerms: z.literal(true, {
+    errorMap: () => ({ message: "You must agree to the Terms of Service and Privacy Policy to continue." }),
+  }),
+});
+
+export const quoteRequestSchema = quoteRequestFields.superRefine((data, ctx) => {
+  if (data.serviceType === "carrier" && !data.enclosed) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Choose open or enclosed transport.",
+      path: ["enclosed"],
+    });
+  }
+});
 
 export type QuoteRequestInput = z.infer<typeof quoteRequestSchema>;
+
+// Same field rules as the customer-facing form, but every field optional and
+// `agreedToTerms` dropped -- this is for the owner correcting a detail on an
+// already-submitted request (typo'd phone, wrong ZIP), not resubmitting the
+// whole form. No serviceType/enclosed cross-check here since a partial edit
+// only touches the fields it sends.
+export const quoteRequestEditSchema = quoteRequestFields.omit({ agreedToTerms: true }).partial();
+export type QuoteRequestEditInput = z.infer<typeof quoteRequestEditSchema>;
 
 export const FLEXIBILITY_LABELS: Record<QuoteRequestInput["flexibilityWindow"], string> = {
   exact: "Exact date only",

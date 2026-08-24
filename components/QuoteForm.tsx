@@ -1192,11 +1192,11 @@ export default function QuoteForm() {
                 <p className="mt-3 rounded-sm border border-highway/30 bg-highway/5 p-3 text-sm text-ink">
                   Round trip runs about{" "}
                   <span className="font-mono font-semibold text-highway">
-                    +${((roundTripEstimate.lowCents - estimate.lowCents) / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                    ${(roundTripEstimate.lowCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                     –$
-                    {((roundTripEstimate.highCents - estimate.highCents) / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                    {(roundTripEstimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                   </span>{" "}
-                  more than one-way.
+                  total.
                 </p>
               )}
               <div className="mt-5 flex justify-end gap-3">
