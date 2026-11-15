@@ -182,10 +182,13 @@ export function FaqSection({ as, limit }: { as?: HeadingLevel; limit?: number })
   );
 }
 
-export function ContactSection({ as: H = "h2" }: { as?: HeadingLevel }) {
+export function ContactSection({ as: H = "h2", fill = false }: { as?: HeadingLevel; fill?: boolean }) {
   return (
-    <section id="contact" className="on-navy scroll-mt-24 bg-navy">
-      <div className="mx-auto max-w-4xl px-6 py-20 md:py-24">
+    <section
+      id="contact"
+      className={`on-navy scroll-mt-24 bg-navy ${fill ? "flex min-h-[calc(100vh-14rem)] items-center" : ""}`}
+    >
+      <div className="mx-auto w-full max-w-4xl px-6 py-20 md:py-24">
         <H className="text-4xl md:text-5xl">Talk to a person</H>
         <p className="mt-5 max-w-xl text-lg text-navy-muted">
           Questions before you request a quote, or a tricky pickup to talk through?
