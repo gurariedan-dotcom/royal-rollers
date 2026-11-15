@@ -262,7 +262,7 @@ export default function AdminQuotesPage() {
             className="mt-2 w-full rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
           />
         </label>
-        {loadError && <p className="text-sm text-brass-dark">{loadError}</p>}
+        {loadError && <p className="text-sm text-danger">{loadError}</p>}
         <button
           type="submit"
           className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
@@ -338,16 +338,16 @@ export default function AdminQuotesPage() {
                   <td className="py-3 pr-4">
                     {q.vehicle || "—"}
                     {q.vehicleType && <div className="text-xs text-ink/50">{q.vehicleType}</div>}
-                    {q.isRunning === false && <div className="text-xs text-brass-dark">Not running</div>}
+                    {q.isRunning === false && <div className="text-xs text-danger">Not running</div>}
                   </td>
                   <td className="py-3 pr-4 font-mono text-xs">{q.route}</td>
                   <td className="py-3 pr-4">
                     <span
                       className={
                         q.status === "pending"
-                          ? "text-brass-dark"
+                          ? "text-danger"
                           : q.status === "quoted"
-                            ? "text-brass-dark"
+                            ? "text-danger"
                             : "text-highway"
                       }
                     >
@@ -414,7 +414,7 @@ export default function AdminQuotesPage() {
                         </button>
                         <button
                           onClick={() => setPendingDeleteId(q.id)}
-                          className="text-xs text-brass-dark/70 underline hover:text-brass-dark"
+                          className="text-xs text-danger/70 underline hover:text-danger"
                         >
                           Delete
                         </button>
@@ -423,7 +423,7 @@ export default function AdminQuotesPage() {
                     {rowMessages[q.id] && (
                       <p
                         className={`mt-1 max-w-[180px] text-xs ${
-                          rowMessages[q.id] === "Quote sent!" ? "text-highway" : "text-brass-dark"
+                          rowMessages[q.id] === "Quote sent!" ? "text-highway" : "text-danger"
                         }`}
                       >
                         {rowMessages[q.id]}
@@ -596,7 +596,7 @@ export default function AdminQuotesPage() {
                           />
                         </label>
                       </div>
-                      {editError && <p className="mt-3 text-xs text-brass-dark">{editError}</p>}
+                      {editError && <p className="mt-3 text-xs text-danger">{editError}</p>}
                       <div className="mt-4 flex items-center gap-3">
                         <button
                           onClick={() => handleSaveEdit(q.id)}

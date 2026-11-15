@@ -3,12 +3,13 @@ import { z } from "zod";
 import { getDb } from "@/lib/db";
 import { createDepositCheckoutSession } from "@/lib/stripe";
 import { rateLimit, readJsonBody } from "@/lib/http";
+import { depositFor } from "@/lib/deposit";
 
 // Deposit/balance amounts are deliberately NOT accepted from the client --
-// they're derived here from the quote's stored quoted_amount_cents (see
-// app/api/quote/[id]/route.ts), the same way that route computes them for
-// display. A client-supplied amount would let anyone book at any price.
-const DEPOSIT_PERCENT = Number(process.env.DEPOSIT_PERCENT ?? "20") / 100;
+// they're derived here from the quote's stored quoted_amount_cents via
+// lib/deposit.ts (flat $500, capped at the quote), the same way
+// app/api/quote/[id]/route.ts computes them for display. A client-supplied
+// amount would let anyone book at any price.
 
 const bookingSchema = z.object({
   quoteRequestId: z.string().uuid(),
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const depositAmountCents = Math.round(quote.quoted_amount_cents * DEPOSIT_PERCENT);
+  const depositAmountCents = depositFor(quote.quoted_amount_cents);
   const balanceAmountCents = quote.quoted_amount_cents - depositAmountCents;
 
   // Stripe rejects any Checkout Session whose total is under $0.50 USD. A

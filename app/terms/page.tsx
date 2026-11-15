@@ -1,3 +1,5 @@
+import { DEPOSIT_DISPLAY } from "@/lib/deposit";
+
 export const metadata = {
   title: "Terms of Service",
   description: "The terms that govern requesting a quote, booking, and using royal-rollers.com.",
@@ -8,7 +10,7 @@ export default function TermsPage() {
     <div className="mx-auto max-w-3xl px-6 py-16">
       <p className="manifest-label">Legal</p>
       <h1 className="mt-2 text-3xl">Terms of Service</h1>
-      <p className="mt-4 text-sm text-ink/60">Last updated August 10, 2026</p>
+      <p className="mt-4 text-sm text-ink/60">Last updated November 15, 2026</p>
 
       <div className="mt-10 space-y-10 text-ink/75">
         <section>
@@ -44,7 +46,8 @@ export default function TermsPage() {
         <section>
           <h2 className="font-display text-xl text-ink">Booking, deposit, and balance</h2>
           <p className="mt-3">
-            Booking requires a deposit, charged at the time you book, and a
+            Booking requires a non-refundable {DEPOSIT_DISPLAY} deposit (or the
+            full quote, if it is less), charged at the time you book, and a
             card saved on file. The remaining balance is charged
             automatically to that card once your vehicle is delivered. You
             must explicitly acknowledge and agree to this automatic charge

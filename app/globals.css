@@ -31,7 +31,15 @@
   }
 
   h1, h2, h3, h4 {
-    @apply font-display font-extrabold uppercase tracking-signage text-ink;
+    @apply font-display font-extrabold tracking-signage text-ink;
+    text-wrap: balance;
+  }
+  .on-navy :is(h1, h2, h3, h4) {
+    @apply text-paper;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   /* Visible keyboard focus everywhere -- not just on inputs. */
@@ -40,8 +48,15 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid theme("colors.brass.DEFAULT");
+    outline: 2px solid theme("colors.navy.DEFAULT");
     outline-offset: 2px;
+  }
+
+  /* On navy surfaces a navy ring disappears -- switch to amber (9.6:1). */
+  .on-navy a:focus-visible,
+  .on-navy button:focus-visible,
+  .on-navy input:focus-visible {
+    outline-color: theme("colors.amber.DEFAULT");
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -57,15 +72,88 @@
 }
 
 @layer components {
-  /* Solid 2px rule -- the Modernist system dividing line, used under
-     section headers and in the hero. */
+  /* Hairline section divider. */
   .route-rule {
-    background-color: rgba(32, 30, 29, 0.4);
-    height: 2px;
+    background-color: theme("colors.line");
+    height: 1px;
   }
 
+  /* Small tracked gray label -- field groups, comparison rows. */
   .manifest-label {
-    @apply font-mono text-xs uppercase tracking-wideish text-slate;
+    @apply font-body text-xs font-bold uppercase tracking-kicker text-slate;
+  }
+
+  /* One amber kicker per page, above the page title. */
+  .kicker {
+    @apply font-body text-xs font-bold uppercase tracking-kicker text-amber-ink;
+  }
+  .on-navy .kicker {
+    @apply text-amber;
+  }
+
+  .card {
+    @apply rounded-xl border border-line bg-card;
+  }
+
+  /* Form fields (quote form, date picker). */
+  .field-label {
+    @apply mb-2 block text-base font-bold text-ink;
+  }
+  .field {
+    @apply block w-full rounded-lg border-2 border-line bg-card px-4 py-3 text-lg text-ink transition-colors duration-150 placeholder:text-slate-light hover:border-slate-light focus:border-navy focus:outline-none;
+  }
+  .field-error {
+    @apply border-danger hover:border-danger;
+  }
+
+  /* Selectable tile: service cards, option buttons. */
+  .choice {
+    @apply rounded-lg border-2 border-line bg-card text-left text-ink transition-colors duration-150 hover:border-slate-light active:scale-[0.98];
+  }
+  .choice-on {
+    @apply border-navy bg-[#EEF2FB] hover:border-navy;
+  }
+
+  /* Hero: navy gradient lifting toward the top right, with faint
+     horizontal "lane" lines, per the mockup. */
+  .hero-bg {
+    background-color: theme("colors.navy.DEFAULT");
+    background-image:
+      repeating-linear-gradient(to bottom, transparent 0 65px, rgb(255 255 255 / 0.035) 65px 66px),
+      linear-gradient(135deg, theme("colors.navy.DEFAULT") 0%, #142344 55%, theme("colors.navy.3") 100%);
+  }
+
+  /* Truck rolls in, then cars settle onto the decks. Transform only, so
+     the illustration is fully visible even if the animation never runs. */
+  .truck-in {
+    animation: truck-in 0.9s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  .car-drop {
+    animation: car-drop 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  @keyframes truck-in {
+    from {
+      transform: translateX(-28px);
+    }
+  }
+  @keyframes car-drop {
+    from {
+      transform: translateY(-10px);
+    }
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-btn px-6 py-3 font-body text-base font-bold transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.98];
+  }
+  .btn-amber {
+    @apply btn bg-amber text-navy hover:bg-amber-dark;
+  }
+  /* Outlined: navy on light surfaces, white on navy surfaces. */
+  .btn-outline {
+    @apply btn border-2 border-navy text-navy hover:bg-navy hover:text-paper;
+  }
+  .on-navy .btn-outline {
+    @apply border-paper text-paper hover:bg-paper hover:text-navy;
   }
 
   /* Smooth continuous-motion spinner for inline async status (VIN decode,

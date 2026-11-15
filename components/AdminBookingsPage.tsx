@@ -150,7 +150,7 @@ export default function AdminBookingsPage() {
             className="mt-2 w-full rounded-sm border border-slate-light/60 bg-paper px-3 py-2 text-ink"
           />
         </label>
-        {loadError && <p className="text-sm text-brass-dark">{loadError}</p>}
+        {loadError && <p className="text-sm text-danger">{loadError}</p>}
         <button
           type="submit"
           className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
@@ -295,13 +295,13 @@ export default function AdminBookingsPage() {
                         )}
                         <button
                           onClick={() => setPendingAction({ id: b.id, type: "delete" })}
-                          className="block text-xs text-brass-dark/70 underline hover:text-brass-dark"
+                          className="block text-xs text-danger/70 underline hover:text-danger"
                         >
                           Delete customer
                         </button>
                       </div>
                     )}
-                    {rowMessages[b.id] && <p className="mt-1 text-xs text-brass-dark">{rowMessages[b.id]}</p>}
+                    {rowMessages[b.id] && <p className="mt-1 text-xs text-danger">{rowMessages[b.id]}</p>}
                   </td>
                 </tr>
               );

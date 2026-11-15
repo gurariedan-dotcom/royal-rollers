@@ -56,6 +56,15 @@ export async function POST(req: NextRequest) {
   if (b.balance_charge_status === "charged") {
     return NextResponse.json({ status: "already_charged" }, { status: 200 });
   }
+
+  // Quotes at or under the flat deposit are paid in full at booking
+  // (lib/deposit.ts caps the deposit at the quote), leaving nothing to
+  // charge. Complete the booking instead of failing on a $0 charge.
+  if (b.balance_amount_cents === 0) {
+    await db.from("bookings").update({ balance_charge_status: "charged" }).eq("id", b.id);
+    await db.from("quote_requests").update({ status: "completed" }).eq("id", b.quote_request_id);
+    return NextResponse.json({ status: "nothing_due" });
+  }
   if (!b.stripe_customer_id || !b.stripe_payment_method_id || !b.balance_amount_cents) {
     return NextResponse.json({ error: "Booking is missing payment details." }, { status: 422 });
   }

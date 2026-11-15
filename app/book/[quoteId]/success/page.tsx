@@ -15,8 +15,8 @@ function formatDollars(cents: number) {
 function ErrorPanel({ quoteId, message }: { quoteId: string; message: string }) {
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <div className="rounded-sm border border-brass-dark bg-brass-dark/10 p-8 text-center">
-        <p className="font-display text-xl uppercase tracking-signage text-brass-dark">Something went wrong</p>
+      <div className="rounded-sm border border-danger bg-danger/10 p-8 text-center">
+        <p className="font-display text-xl uppercase tracking-signage text-danger">Something went wrong</p>
         <p className="mt-3 text-ink/80">{message}</p>
         <Link
           href={`/book/${quoteId}`}

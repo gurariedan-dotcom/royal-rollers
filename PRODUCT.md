@@ -25,15 +25,15 @@ Submit your vehicle and route once, and get an actual priced quote back by email
 - Primary and secondary CTA: Primary — "Get a Quote" (routes to `/quote`, present in the header on every page and repeated at section ends). Secondary — "Compare Options" / "See the full side-by-side comparison" (routes to `/services`), for visitors not ready to commit.
 - The line a visitor remembers after 10 seconds: "A priced quote sent straight to your inbox."
 - Belief ladder: (1) this broker will actually give me a number, not just a sales call; (2) the two transport options (insured carrier vs. personal driver) are explained clearly enough to pick one; (3) the price I get is real and the deposit is safe to pay; (4) the company follows through after I've paid.
-- Proof on hand: none yet. `/reviews` exists but currently holds placeholder testimonial copy (`app/reviews/page.tsx`) — swap for real customer quotes once available.
+- Proof on hand: USDOT/MC numbers in the hero. `/reviews` is an honest "reviews are on the way" state (`ReviewsSection` in `components/Sections.tsx`) — swap in real customer quotes once available, never invented ones.
 
 ## Brand Personality
 
-Precise, trustworthy, no-nonsense. The voice favors real numbers over vague promises and treats data as data — VINs, ZIPs, and dollar amounts render in monospace rather than being dressed up as prose. The existing "transport manifest" visual concept (ink-navy on cool paper, a brass VIN-plate accent, condensed uppercase interstate-signage display type, a dashed "route" rule standing in for section dividers) already carries this personality; new work should extend it rather than introduce a different tone. Emotional goal: a visitor should feel like they're dealing with a logistics operation that has its act together, not a lead-gen funnel.
+Precise, trustworthy, no-nonsense. The voice favors real numbers over vague promises and treats data as data — VINs, ZIPs, and dollar amounts render in monospace rather than being dressed up as prose. The visual system (2026-11 redesign, from the owner's mockups) carries this with deep navy and a single amber accent, sentence-case bold headings, and plain white cards on a warm off-white ground; see DESIGN.md. Emotional goal: a visitor should feel like they're dealing with a logistics operation that has its act together, not a lead-gen funnel.
 
 ## Anti-references
 
-Not a generic SaaS look — no gradient-heavy hero, no rounded soft-shadow cards, no generic-tech-startup visual language. This is explicitly called out in `tailwind.config.ts`'s own comments and should stay a hard constraint on future work.
+Not a lead-gen funnel or generic SaaS page — no fake testimonials, no hero metrics, no glassmorphism, no stock "happy customer" imagery. Rounded cards are part of the current system (per the owner's mockups); decoration beyond that is not.
 
 ## Design Principles
 
