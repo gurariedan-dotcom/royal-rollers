@@ -3,7 +3,7 @@
 // and components/QuoteForm.tsx). This NEVER touches the real price -- the
 // only binding, enforceable price is the one the owner manually sets via
 // PATCH /api/quote/[id]/price. These figures are placeholders pending a
-// real pricing decision, the same status DEPOSIT_PERCENT had before that
+// real pricing decision, the same open status the deposit had before it
 // got decided -- see README.md "Still open".
 //
 // Unlike payment-related env vars (e.g. STRIPE_SECRET_KEY), a missing or

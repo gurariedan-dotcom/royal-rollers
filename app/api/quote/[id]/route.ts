@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { unstable_noStore as noStore } from "next/cache";
 import { getDb, type QuoteRequestRow } from "@/lib/db";
 import { rateLimit } from "@/lib/http";
+import { depositFor } from "@/lib/deposit";
 
 // This handler never touches a Next.js "dynamic" API (no headers(), no
 // request access), which makes it eligible for Next's default Route Handler
@@ -14,14 +15,9 @@ import { rateLimit } from "@/lib/http";
 // the documented, unambiguous per-request opt-out, so both are set.
 export const dynamic = "force-dynamic";
 
-// Deposit split lives here, server-side, so it's never something a client
-// request can override (see app/api/booking/checkout-session/route.ts,
-// which reads the same stored quoted_amount_cents rather than trusting a
-// client-supplied number).
-// The percentage itself is a placeholder -- the handoff doc explicitly
-// leaves "deposit amount or structure" as an open decision (Section 10).
-// Swap this for whatever the owner decides (flat fee vs. percentage).
-const DEPOSIT_PERCENT = Number(process.env.DEPOSIT_PERCENT ?? "20") / 100;
+// Deposit split lives server-side (lib/deposit.ts: flat $500, capped at the
+// quote), so it's never something a client request can override -- see
+// app/api/booking/checkout-session/route.ts, which uses the same helper.
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const limited = rateLimit(req, "quote-status", 30, 5 * 60_000);
@@ -63,7 +59,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     );
   }
 
-  const depositAmountCents = Math.round(quote.quoted_amount_cents * DEPOSIT_PERCENT);
+  const depositAmountCents = depositFor(quote.quoted_amount_cents);
   const balanceAmountCents = quote.quoted_amount_cents - depositAmountCents;
 
   return NextResponse.json({
