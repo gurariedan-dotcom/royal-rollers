@@ -17,11 +17,20 @@ function SectionHeading({ kicker, title, as: H = "h2" }: { kicker: string; title
   );
 }
 
-export function ServicesSection({ as }: { as?: HeadingLevel }) {
+// `detailed` adds the original /services page copy (intro, insurance and
+// mileage notes, CTA); the homepage shows the compact version.
+export function ServicesSection({ as, detailed = false }: { as?: HeadingLevel; detailed?: boolean }) {
   return (
     <section id="services" className="scroll-mt-24 bg-paper">
       <div className="mx-auto max-w-6xl px-6 py-20 md:py-24">
         <SectionHeading kicker="Pick what fits your timeline" title="Carrier or personal driver" as={as} />
+        {detailed && (
+          <p className="mt-6 max-w-2xl text-lg text-slate">
+            Both options get your car wherever it&apos;s headed, anywhere in the country. The
+            difference is how it gets there, and that difference matters for cost, timing, and what
+            happens to your odometer along the way.
+          </p>
+        )}
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           <div className="on-navy rounded-2xl bg-navy-2 p-8 text-paper md:p-10">
@@ -94,6 +103,40 @@ export function ServicesSection({ as }: { as?: HeadingLevel }) {
           Personal Driver asks that your car carry full coverage (comprehensive and collision) during
           the drive. Enclosed transport is available on Carrier Transport.
         </p>
+
+        {detailed && (
+          <>
+            <div className="mt-12 grid gap-5 md:grid-cols-2">
+              <div className="card p-7 md:p-8">
+                <h3 className="text-2xl">A note on insurance</h3>
+                <p className="mt-4 text-slate">
+                  <strong className="text-ink">Carrier Transport:</strong> Your vehicle is covered by
+                  our carrier&apos;s cargo insurance for the full duration of transport &mdash;
+                  protecting against collision and damage from pickup to delivery.
+                </p>
+                <p className="mt-3 text-slate">
+                  <strong className="text-ink">Personal Driver:</strong> We want your car protected
+                  every mile of the way. That&apos;s why we ask that your vehicle carry full coverage
+                  insurance (comprehensive and collision) during the drive &mdash; the standard
+                  protection most vehicles already have. Don&apos;t worry, this is common and easy to
+                  confirm with your insurance provider if you&apos;re not sure.
+                </p>
+              </div>
+              <div className="card p-7 md:p-8">
+                <h3 className="text-2xl">A note on mileage</h3>
+                <p className="mt-4 text-slate">
+                  Only Personal Driver adds mileage &mdash; a person is physically driving your car to
+                  its destination, so it accumulates miles in transit. Carrier Transport avoids this
+                  entirely since your car rides on a hauler.
+                </p>
+              </div>
+            </div>
+
+            <Link href="/quote" className="btn-amber mt-10 px-8 py-3.5 text-lg">
+              Get a quote for either option
+            </Link>
+          </>
+        )}
       </div>
     </section>
   );
@@ -139,6 +182,11 @@ export function HowItWorksSection({ as }: { as?: HeadingLevel }) {
             </p>
           </div>
         </div>
+
+        <p className="mt-6 max-w-[75ch] text-slate">
+          The automatic balance charge is only made after you&apos;ve explicitly agreed to it at
+          booking. We&apos;ll never charge a saved card without that acknowledgment on file.
+        </p>
       </div>
     </section>
   );
@@ -150,12 +198,36 @@ export function ReviewsSection({ as }: { as?: HeadingLevel }) {
       <div className="mx-auto max-w-4xl px-6 py-20 md:py-24">
         <SectionHeading kicker="Reviews" title="Real reviews are on the way" as={as} />
         <p className="mt-6 max-w-2xl text-lg text-slate">
-          We are collecting feedback from recent moves. Meanwhile,{" "}
-          <Link href="/contact" className="font-semibold text-ink underline underline-offset-4 hover:text-amber-ink">
-            ask us for references
-          </Link>{" "}
-          from a past route like yours.
+          We&apos;re collecting feedback from recent moves and will start posting real customer
+          reviews here. In the meantime, feel free to ask us directly for references from a past
+          route like yours.
         </p>
+        <div className="mt-8 flex flex-wrap gap-4">
+          <Link href="/contact" className="btn-outline">
+            Ask for references
+          </Link>
+          <Link href="/quote" className="btn-amber">
+            Get a quote
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Closing line from the original homepage -- the one PRODUCT.md says a
+// visitor should remember.
+export function QuoteCtaSection() {
+  return (
+    <section className="bg-paper-dim">
+      <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-24">
+        <h2 className="text-4xl md:text-5xl">A priced quote sent straight to your inbox</h2>
+        <p className="mx-auto mt-5 max-w-xl text-lg text-slate">
+          Submit your vehicle and route details once. You&apos;ll get a real number back by email.
+        </p>
+        <Link href="/quote" className="btn-amber mt-8 px-8 py-3.5 text-lg">
+          Get a quote
+        </Link>
       </div>
     </section>
   );

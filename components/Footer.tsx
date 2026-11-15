@@ -1,7 +1,11 @@
 import Link from "next/link";
-import { COMPANY_LINE } from "@/lib/content";
+import { COMPANY_LINE, TAGLINE } from "@/lib/content";
 
 const LINKS = [
+  { href: "/quote", label: "Get a quote" },
+  { href: "/services", label: "Services" },
+  { href: "/how-it-works", label: "How it works" },
+  { href: "/faq", label: "FAQ" },
   { href: "/reviews", label: "Reviews" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
@@ -13,7 +17,8 @@ export default function Footer() {
   return (
     <footer className="on-navy border-t border-navy-line/60 bg-navy-deep text-navy-muted">
       <div className="mx-auto max-w-6xl px-6 py-8 text-center text-sm">
-        <p>{COMPANY_LINE}</p>
+        <p className="text-base text-paper">{TAGLINE}</p>
+        <p className="mt-3">{COMPANY_LINE}</p>
         <nav aria-label="Footer" className="mt-4">
           <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             {LINKS.map((link) => (

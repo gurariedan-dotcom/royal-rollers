@@ -9,7 +9,7 @@ export const metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <ServicesSection as="h1" />
+      <ServicesSection as="h1" detailed />
       <ContactSection />
     </>
   );

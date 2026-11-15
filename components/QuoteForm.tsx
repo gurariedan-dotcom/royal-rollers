@@ -608,7 +608,7 @@ export default function QuoteForm() {
               >
                 <p className="text-xl font-extrabold text-ink">Personal Driver</p>
                 <p className="mt-1.5 text-slate">
-                  A driver takes it directly. 24-30 hours. Adds mileage. Needs your own full coverage.
+                  A driver takes it directly. Faster, 24-30 hours. Adds mileage to the vehicle. Requires your own full coverage insurance.
                 </p>
               </button>
             </div>

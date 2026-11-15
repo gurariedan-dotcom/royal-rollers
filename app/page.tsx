@@ -3,6 +3,7 @@ import TruckIllustration from "@/components/TruckIllustration";
 import {
   ContactSection,
   FaqSection,
+  QuoteCtaSection,
   HowItWorksSection,
   ReviewsSection,
   ServicesSection,
@@ -60,6 +61,7 @@ export default function HomePage() {
       <HowItWorksSection />
       <ReviewsSection />
       <FaqSection limit={5} />
+      <QuoteCtaSection />
       <ContactSection />
     </>
   );
