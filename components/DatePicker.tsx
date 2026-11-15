@@ -72,11 +72,7 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
         value={value}
         min={toKey(today)}
         onChange={(e) => onChange(e.target.value)}
-        className={[
-          "block w-full rounded-sm border bg-paper px-3 py-2 text-ink sm:hidden",
-          "focus:outline-none",
-          hasError ? "border-danger" : "border-slate-light/60",
-        ].join(" ")}
+        className={`field sm:hidden ${hasError ? "field-error" : ""}`}
       />
 
       <button
@@ -84,16 +80,12 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className={[
-          "hidden w-full items-center justify-between gap-2 rounded-sm border bg-paper px-3 py-2 text-left text-ink transition-colors duration-150 sm:flex",
-          "focus:outline-none",
-          hasError ? "border-danger" : "border-slate-light/60 hover:border-slate-light",
-        ].join(" ")}
+        className={`field hidden items-center justify-between gap-2 text-left sm:flex ${hasError ? "field-error" : ""}`}
       >
         <span className={value ? "text-ink" : "text-slate-light"}>
           {value ? DISPLAY.format(fromKey(value)) : "Select a date…"}
         </span>
-        <svg viewBox="0 0 20 20" className="h-4 w-4 shrink-0 stroke-slate" fill="none">
+        <svg viewBox="0 0 20 20" className="h-5 w-5 shrink-0 stroke-slate" fill="none">
           <rect x="3" y="4.5" width="14" height="12" strokeWidth="1.5" />
           <path d="M3 8.5h14M7 3v3M13 3v3" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
@@ -109,27 +101,27 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
             exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: -4 }}
             transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
             style={{ transformOrigin: "top left" }}
-            className="absolute left-0 top-full z-20 mt-2 w-72 border border-slate-light/60 bg-paper p-3 shadow-panel"
+            className="absolute left-0 top-full z-20 mt-2 w-80 rounded-xl border border-line bg-card p-4 shadow-panel-lg"
           >
             <div className="flex items-center justify-between">
               <button
                 type="button"
                 aria-label="Previous month"
                 onClick={() => setViewMonth((m) => new Date(m.getFullYear(), m.getMonth() - 1, 1))}
-                className="flex h-7 w-7 items-center justify-center text-ink/70 transition-colors duration-150 hover:text-highway active:scale-[0.92]"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-ink/70 transition-colors duration-150 hover:bg-paper-dim hover:text-navy active:scale-[0.92]"
               >
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-current stroke-[2]">
                   <path d="M10 3l-5 5 5 5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-              <span className="font-display text-xs uppercase tracking-wideish text-ink">
+              <span className="text-sm font-bold text-ink">
                 {MONTH_LABEL.format(firstOfMonth)}
               </span>
               <button
                 type="button"
                 aria-label="Next month"
                 onClick={() => setViewMonth((m) => new Date(m.getFullYear(), m.getMonth() + 1, 1))}
-                className="flex h-7 w-7 items-center justify-center text-ink/70 transition-colors duration-150 hover:text-highway active:scale-[0.92]"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-ink/70 transition-colors duration-150 hover:bg-paper-dim hover:text-navy active:scale-[0.92]"
               >
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-current stroke-[2]">
                   <path d="M6 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
@@ -157,14 +149,14 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
                       setOpen(false);
                     }}
                     className={[
-                      "flex h-8 w-8 items-center justify-center text-sm transition-colors duration-150 active:scale-[0.94]",
+                      "flex h-9 w-9 items-center justify-center rounded-lg text-sm transition-colors duration-150 active:scale-[0.94]",
                       isSelected
-                        ? "bg-brass text-paper"
+                        ? "bg-navy font-bold text-paper"
                         : isPast
                         ? "text-slate-light/50"
                         : isToday
-                        ? "border border-brass/50 text-ink hover:bg-brass/10"
-                        : "text-ink hover:bg-brass/10",
+                        ? "border border-navy/40 text-ink hover:bg-paper-dim"
+                        : "text-ink hover:bg-paper-dim",
                     ].join(" ")}
                   >
                     {date.getDate()}

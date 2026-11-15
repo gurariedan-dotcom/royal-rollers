@@ -64,37 +64,14 @@ const EMPTY_FORM: FormState = {
 };
 
 function inputClass(hasError: boolean) {
-  return [
-    "w-full rounded-sm border bg-paper px-3 py-2 text-ink placeholder:text-slate-light",
-    "focus:outline-none",
-    hasError ? "border-danger" : "border-slate-light/60",
-  ].join(" ");
+  return hasError ? "field field-error" : "field";
 }
 
-function selectClass(hasError: boolean) {
-  return [
-    inputClass(hasError),
-    "cursor-pointer appearance-none pr-9 transition-colors duration-150",
-    hasError ? "" : "hover:border-slate-light",
-  ].join(" ");
-}
-
-// Manual vehicle-entry fields (Year/Make/Model) only: same floating look as
-// the vehicle-type picker on mobile -- rounded-btn + shadow-button-sm,
-// reverting to the flat bordered rounded-sm/no-shadow look at sm+. This is
-// still a real <select>/<input>, so native pickers (iOS wheel, etc.) are
-// untouched -- only the closed trigger's paint changes.
-function vehicleFieldClass(hasError: boolean) {
-  return [
-    "w-full rounded-btn sm:rounded-sm border bg-paper px-3 py-2 text-ink placeholder:text-slate-light",
-    "shadow-button-sm hover:shadow-button sm:shadow-none sm:hover:shadow-none transition-[box-shadow,border-color] duration-150 ease-out",
-    "focus:outline-none",
-    hasError ? "border-danger" : "border-slate-light/60 sm:hover:border-slate-light",
-  ].join(" ");
-}
+// Year/Make/Model use the same field style; selects add room for the chevron.
+const vehicleFieldClass = inputClass;
 
 function vehicleSelectClass(hasError: boolean) {
-  return [vehicleFieldClass(hasError), "cursor-pointer appearance-none pr-9"].join(" ");
+  return `${inputClass(hasError)} cursor-pointer appearance-none pr-10`;
 }
 
 // Solid-silhouette side-profile icons for the vehicle-type picker, styled
@@ -219,45 +196,28 @@ function SelectChevron() {
   );
 }
 
-// The pill/checkbox look the Round Trip control used to have alone, now
-// shared by every exclusive-choice control (Running, Transport type,
-// Flexibility) so they all read as the same kind of control.
+// Shared exclusive-choice / toggle control (Running, Transport type,
+// Flexibility, Round trip): a tile with a check box, navy when selected.
 function OptionButton({
   selected,
   onClick,
   children,
-  accent = "highway",
 }: {
   selected: boolean;
   onClick: () => void;
   children: React.ReactNode;
-  accent?: "highway" | "rust";
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={[
-        // Mobile (<640px): filled pill, elevated. sm+ reverts every changed
-        // property back to the original flat/bordered desktop look untouched.
-        "flex items-center gap-2.5 rounded-pill sm:rounded-sm border px-4 py-2.5 font-display text-sm uppercase tracking-wideish",
-        "transition-[transform,box-shadow,background-color,color,border-color] duration-150 ease-out active:scale-[0.97] sm:active:scale-100",
-        selected
-          ? accent === "rust"
-            ? "border-rust bg-rust text-paper shadow-button hover:shadow-button-hover hover:-translate-y-px sm:bg-rust/10 sm:text-rust sm:shadow-none sm:hover:shadow-none sm:hover:translate-y-0"
-            : "border-highway bg-highway text-paper shadow-button hover:shadow-button-hover hover:-translate-y-px sm:bg-highway/10 sm:text-highway sm:shadow-none sm:hover:shadow-none sm:hover:translate-y-0"
-          : "border-transparent bg-paper text-ink/70 shadow-button-sm hover:shadow-button hover:-translate-y-px sm:border-slate-light/50 sm:bg-transparent sm:shadow-none sm:hover:border-slate-light sm:hover:shadow-none sm:hover:translate-y-0",
-      ].join(" ")}
+      className={`choice flex items-center gap-3 px-4 py-3 text-base font-semibold ${selected ? "choice-on" : ""}`}
     >
       <span
         className={[
-          "flex h-5 w-5 shrink-0 items-center justify-center rounded-full sm:rounded-sm border-2 transition-colors duration-150",
-          selected
-            ? accent === "rust"
-              ? "border-paper/70 bg-transparent sm:border-rust sm:bg-rust"
-              : "border-paper/70 bg-transparent sm:border-highway sm:bg-highway"
-            : "border-slate-light/60 bg-paper",
+          "flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors duration-150",
+          selected ? "border-navy bg-navy" : "border-slate-light bg-card",
         ].join(" ")}
       >
         {selected && (
@@ -594,9 +554,9 @@ export default function QuoteForm() {
         initial={reduce ? false : { opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-sm border border-highway bg-highway/10 p-8 text-center shadow-panel"
+        className="rounded-xl border-2 border-navy bg-[#EEF2FB] p-8 text-center"
       >
-        <p className="font-display text-xl uppercase tracking-signage text-highway">
+        <p className="text-2xl font-extrabold text-navy">
           Request received
         </p>
         <p className="mt-3 text-ink/80">
@@ -611,22 +571,9 @@ export default function QuoteForm() {
 
   return (
     <div>
-      {/* Mobile-only: the in-flow Back link at the bottom is hidden on
-          mobile (the Next/Submit button below becomes a floating button
-          there, same idea as ContactButton, so it no longer sits next to
-          Back), so each step gets its own top-left return control instead. */}
-      <button
-        type="button"
-        onClick={goBack}
-        disabled={stepIndex === 0}
-        className="mb-4 inline-flex items-center gap-1 font-display text-sm uppercase tracking-wideish text-ink/60 disabled:opacity-0 sm:hidden"
-      >
-        &larr; Back
-      </button>
-
       <RouteProgress steps={STEPS} currentIndex={stepIndex} />
 
-      <div className="mt-10 space-y-5">
+      <div className="mt-8 space-y-5 sm:mt-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -638,38 +585,30 @@ export default function QuoteForm() {
           >
         {step === "Service" && (
           <fieldset>
-            <legend className="font-display text-lg uppercase tracking-wideish text-ink">
+            <legend className="sr-only">
               How should your car get there?
             </legend>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <button
                 type="button"
                 onClick={() => update("serviceType", "carrier")}
-                className={[
-                  "rounded-btn sm:rounded-sm border p-5 text-left transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out active:scale-[0.98] sm:active:scale-100",
-                  form.serviceType === "carrier"
-                    ? "border-highway bg-highway/10 shadow-button hover:-translate-y-0.5 sm:shadow-none sm:hover:translate-y-0"
-                    : "border-slate-light/50 shadow-button-sm hover:-translate-y-0.5 hover:shadow-button sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none",
-                ].join(" ")}
+                aria-pressed={form.serviceType === "carrier"}
+                className={`choice p-5 sm:p-6 ${form.serviceType === "carrier" ? "choice-on" : ""}`}
               >
-                <p className="font-display uppercase tracking-wideish text-highway">Carrier Transport</p>
-                <p className="mt-2 text-sm text-ink/70">
+                <p className="text-xl font-extrabold text-ink">Carrier Transport</p>
+                <p className="mt-1.5 text-slate">
                   Hauled by an insured carrier. No mileage added. 1-4 days.
                 </p>
               </button>
               <button
                 type="button"
                 onClick={() => update("serviceType", "personal_driver")}
-                className={[
-                  "rounded-btn sm:rounded-sm border p-5 text-left transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out active:scale-[0.98] sm:active:scale-100",
-                  form.serviceType === "personal_driver"
-                    ? "border-rust bg-rust/10 shadow-button hover:-translate-y-0.5 sm:shadow-none sm:hover:translate-y-0"
-                    : "border-slate-light/50 shadow-button-sm hover:-translate-y-0.5 hover:shadow-button sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none",
-                ].join(" ")}
+                aria-pressed={form.serviceType === "personal_driver"}
+                className={`choice p-5 sm:p-6 ${form.serviceType === "personal_driver" ? "choice-on" : ""}`}
               >
-                <p className="font-display uppercase tracking-wideish text-rust">Personal Driver</p>
-                <p className="mt-2 text-sm text-ink/70">
-                  A driver takes it directly. Faster, 24-30 hours. Adds mileage to the vehicle. Requires your own full coverage insurance.
+                <p className="text-xl font-extrabold text-ink">Personal Driver</p>
+                <p className="mt-1.5 text-slate">
+                  A driver takes it directly. 24-30 hours. Adds mileage. Needs your own full coverage.
                 </p>
               </button>
             </div>
@@ -681,7 +620,7 @@ export default function QuoteForm() {
           <div className="space-y-5">
             {entryMode === "vin" ? (
               <div>
-                <label htmlFor="vin" className="manifest-label">VIN</label>
+                <label htmlFor="vin" className="field-label">VIN</label>
                 <input
                   id="vin"
                   autoCapitalize="characters"
@@ -690,10 +629,10 @@ export default function QuoteForm() {
                   value={form.vin}
                   onChange={(e) => update("vin", e.target.value.toUpperCase())}
                   maxLength={17}
-                  placeholder="17-character Vehicle ID Number"
+                  placeholder="17 characters"
                   className={`${inputClass(!!fieldErrors.vin)} font-mono uppercase`}
                 />
-                <p className="mt-1 text-xs text-slate">
+                <p className="mt-2 text-sm text-slate">
                   On your registration, insurance card, or the dashboard on the driver&apos;s side.
                 </p>
                 <AnimatePresence mode="wait">
@@ -707,8 +646,8 @@ export default function QuoteForm() {
                       className="mt-2 flex items-center gap-2"
                       aria-live="polite"
                     >
-                      <span className="apple-spinner text-brass" aria-hidden="true" />
-                      <p className="text-xs text-slate">Looking up your vehicle&hellip;</p>
+                      <span className="apple-spinner text-navy" aria-hidden="true" />
+                      <p className="text-sm text-slate">Looking up your vehicle&hellip;</p>
                     </motion.div>
                   )}
                   {vinDecodeStatus === "done" && (
@@ -718,7 +657,7 @@ export default function QuoteForm() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-                      className="mt-1 font-mono text-xs text-slate-light"
+                      className="mt-2 font-mono text-sm text-slate"
                       aria-live="polite"
                     >
                       {[form.vehicleYear, form.vehicleMake, form.vehicleModel].filter(Boolean).join(" ")}
@@ -738,14 +677,14 @@ export default function QuoteForm() {
                 <button
                   type="button"
                   onClick={switchToManual}
-                  className="mt-2 text-sm text-highway underline underline-offset-2"
+                  className="mt-3 text-sm font-semibold text-navy underline underline-offset-4"
                 >
                   Don&apos;t have the VIN handy? Enter vehicle details manually
                 </button>
               </div>
             ) : (
               <div>
-                <p className="mb-4 text-xs text-slate">
+                <p className="mb-4 text-sm text-slate">
                   No VIN needed to get your quote — we&apos;ll just need it before your vehicle ships.
                 </p>
                 {/* Year always shows here. Type also lived in this same grid
@@ -753,7 +692,7 @@ export default function QuoteForm() {
                     <640px now uses the wheel picker further down instead. */}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="max-w-xs sm:max-w-none">
-                    <label htmlFor="vehicleYear" className="manifest-label">Year</label>
+                    <label htmlFor="vehicleYear" className="field-label">Year</label>
                     <div className="relative">
                       <select
                         id="vehicleYear"
@@ -774,7 +713,7 @@ export default function QuoteForm() {
 
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="vehicleMake" className="manifest-label">Make</label>
+                    <label htmlFor="vehicleMake" className="field-label">Make</label>
                     {makeIsOther ? (
                       <input
                         id="vehicleMake"
@@ -810,7 +749,7 @@ export default function QuoteForm() {
                     {fieldErrors.vehicleMake && <p className="mt-1 text-sm text-danger">{fieldErrors.vehicleMake}</p>}
                   </div>
                   <div>
-                    <label htmlFor="vehicleModel" className="manifest-label">Model</label>
+                    <label htmlFor="vehicleModel" className="field-label">Model</label>
                     <input
                       id="vehicleModel"
                       value={form.vehicleModel}
@@ -824,7 +763,7 @@ export default function QuoteForm() {
                 <button
                   type="button"
                   onClick={switchToVin}
-                  className="mt-3 text-sm text-highway underline underline-offset-2"
+                  className="mt-3 text-sm font-semibold text-navy underline underline-offset-4"
                 >
                   Have the VIN? Enter it instead
                 </button>
@@ -832,7 +771,7 @@ export default function QuoteForm() {
             )}
 
             <div>
-              <span className="manifest-label">Vehicle type</span>
+              <span className="field-label">Vehicle type</span>
 
               {/* Mobile (<640px): horizontal scroll-snap row, same icons/data as the grid below. */}
               <div
@@ -853,17 +792,15 @@ export default function QuoteForm() {
                         e.currentTarget.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
                       }}
                       className={[
-                        "flex w-[4.75rem] shrink-0 snap-center flex-col items-center gap-1 rounded-btn border px-2 py-2.5 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out active:scale-[0.95]",
-                        selected
-                          ? "border-transparent bg-highway/10 shadow-button -translate-y-px"
-                          : "border-transparent bg-paper shadow-button-sm hover:shadow-button hover:-translate-y-px",
+                        "choice flex w-[5rem] shrink-0 snap-center flex-col items-center gap-1 px-2 py-2.5",
+                        selected ? "choice-on" : "",
                       ].join(" ")}
                     >
                       <VehicleIcon type={type} active={selected} />
                       <span
                         className={[
-                          "w-full text-center font-display text-xs uppercase leading-tight tracking-wideish [overflow-wrap:anywhere]",
-                          selected ? "text-highway" : "text-ink/70",
+                          "w-full text-center text-xs font-semibold leading-tight [overflow-wrap:anywhere]",
+                          selected ? "text-navy" : "text-ink",
                         ].join(" ")}
                       >
                         {VEHICLE_TYPE_LABELS[type]}
@@ -884,15 +821,15 @@ export default function QuoteForm() {
                       onClick={() => update("vehicleType", type)}
                       aria-pressed={selected}
                       className={[
-                        "flex flex-col items-center gap-1 rounded-sm border px-3 py-2.5 transition-colors duration-150 ease-out active:scale-[0.97]",
-                        selected ? "border-highway bg-highway/10" : "border-slate-light/50 hover:border-slate-light",
+                        "choice flex flex-col items-center gap-1 px-3 py-3",
+                        selected ? "choice-on" : "",
                       ].join(" ")}
                     >
                       <VehicleIcon type={type} active={selected} />
                       <span
                         className={[
-                          "font-display text-xs uppercase tracking-wideish",
-                          selected ? "text-highway" : "text-ink/70",
+                          "text-sm font-semibold",
+                          selected ? "text-navy" : "text-ink",
                         ].join(" ")}
                       >
                         {VEHICLE_TYPE_LABELS[type]}
@@ -905,7 +842,7 @@ export default function QuoteForm() {
             </div>
 
             <div>
-              <span className="manifest-label">Condition</span>
+              <span className="field-label">Does it run and drive?</span>
               <div className="mt-2 flex flex-wrap gap-3">
                 {(["running", "not_running"] as const).map((val) => (
                   <OptionButton key={val} selected={form.isRunning === val} onClick={() => update("isRunning", val)}>
@@ -918,11 +855,11 @@ export default function QuoteForm() {
 
             {form.serviceType === "carrier" && (
               <div>
-                <span className="manifest-label">Transport type</span>
+                <span className="field-label">Transport type</span>
                 <div className="mt-2 flex flex-wrap gap-3">
                   {(["open", "enclosed"] as const).map((val) => (
                     <OptionButton key={val} selected={form.enclosed === val} onClick={() => update("enclosed", val)}>
-                      <span>{val}</span>
+                      <span className="capitalize">{val}</span>
                     </OptionButton>
                   ))}
                 </div>
@@ -936,7 +873,7 @@ export default function QuoteForm() {
           <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="pickupZip" className="manifest-label">Pickup ZIP</label>
+                <label htmlFor="pickupZip" className="field-label">Pickup ZIP code</label>
                 <input
                   id="pickupZip"
                   inputMode="numeric"
@@ -947,7 +884,7 @@ export default function QuoteForm() {
                 {fieldErrors.pickupZip && <p className="mt-1 text-sm text-danger">{fieldErrors.pickupZip}</p>}
               </div>
               <div>
-                <label htmlFor="dropoffZip" className="manifest-label">Dropoff ZIP</label>
+                <label htmlFor="dropoffZip" className="field-label">Dropoff ZIP code</label>
                 <input
                   id="dropoffZip"
                   inputMode="numeric"
@@ -959,59 +896,36 @@ export default function QuoteForm() {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => update("roundTrip", !form.roundTrip)}
-              aria-pressed={form.roundTrip}
-              className={[
-                "flex items-center gap-3 rounded-pill sm:rounded-sm border px-4 py-2 font-display text-sm uppercase tracking-wideish",
-                "transition-[transform,box-shadow,background-color,color,border-color] duration-150 ease-out active:scale-[0.97] sm:active:scale-100",
-                form.roundTrip
-                  ? "border-highway bg-highway text-paper shadow-button hover:shadow-button-hover hover:-translate-y-px sm:bg-highway/10 sm:text-highway sm:shadow-none sm:hover:shadow-none sm:hover:translate-y-0"
-                  : "border-transparent bg-paper text-ink/70 shadow-button-sm hover:shadow-button hover:-translate-y-px sm:border-slate-light/50 sm:bg-transparent sm:shadow-none sm:hover:border-slate-light sm:hover:shadow-none sm:hover:translate-y-0",
-              ].join(" ")}
-            >
-              <span
-                className={[
-                  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full sm:rounded-sm border-2",
-                  form.roundTrip
-                    ? "border-paper/70 bg-transparent sm:border-highway sm:bg-highway"
-                    : "border-slate-light/60 bg-paper",
-                ].join(" ")}
-              >
-                {form.roundTrip && (
-                  <svg viewBox="0 0 16 16" className="h-3 w-3 fill-none stroke-paper stroke-[3]">
-                    <path d="M3 8l3.5 3.5L13 4.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </span>
-              Round Trip
-            </button>
+            <div>
+              <OptionButton selected={form.roundTrip} onClick={() => update("roundTrip", !form.roundTrip)}>
+                Round trip (we bring it back too)
+              </OptionButton>
+            </div>
 
             {estimateStatus === "loading" && (
               <motion.div
                 initial={reduce ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
-                className="flex items-center gap-2 rounded-sm border border-brass/40 bg-brass/5 p-3"
+                className="flex items-center gap-2 rounded-lg border border-line bg-paper p-4"
                 aria-live="polite"
               >
-                <span className="apple-spinner text-brass" aria-hidden="true" />
-                <p className="text-xs text-slate">Estimating cost&hellip;</p>
+                <span className="apple-spinner text-navy" aria-hidden="true" />
+                <p className="text-sm text-slate">Estimating cost&hellip;</p>
               </motion.div>
             )}
             {estimateStatus === "done" && estimate && (
-              <div className="rounded-sm border border-brass/40 bg-brass/5 p-3 text-sm text-ink/80">
-                <span className="font-mono text-ink">
+              <div className="rounded-lg border border-line bg-paper p-4 text-ink">
+                <span className="font-mono text-lg font-semibold text-navy">
                   ${(estimate.lowCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                   {"-"}
                   ${(estimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                 </span>{" "}
                 estimated cost{form.roundTrip ? " for the round trip" : ""}. We&apos;ll email you your exact quote after you submit.
                 {form.serviceType === "personal_driver" && (
-                  <p className="mt-1 text-xs text-ink/50">Doesn&apos;t include gas or tolls.</p>
+                  <p className="mt-2 text-sm text-slate">Doesn&apos;t include gas or tolls.</p>
                 )}
-                <p className="mt-1 text-xs text-ink/50">
+                <p className="mt-2 text-sm text-slate">
                   A quick note on pricing: Shorter travel distances don&apos;t always mean a lower
                   fare. Fixed operational costs still apply, which can make short trips a bit more
                   expensive relative to longer ones.
@@ -1019,7 +933,7 @@ export default function QuoteForm() {
               </div>
             )}
             {estimateStatus === "error" && (
-              <p className="rounded-sm border border-danger/40 bg-danger/5 p-3 text-sm text-danger">
+              <p className="rounded-lg border border-danger/40 bg-danger/5 p-4 text-sm text-danger">
                 Couldn&apos;t estimate a cost for those ZIP codes right now. Double-check
                 they&apos;re valid, five-digit ZIPs -- you can still submit and we&apos;ll
                 email you a priced quote either way.
@@ -1031,7 +945,7 @@ export default function QuoteForm() {
         {step === "Timing" && (
           <div className="space-y-5">
             <div>
-              <label htmlFor="preferredPickupDate" className="manifest-label">Preferred pickup date</label>
+              <label htmlFor="preferredPickupDate" className="field-label">Preferred pickup date</label>
               <DatePicker
                 id="preferredPickupDate"
                 value={form.preferredPickupDate}
@@ -1043,7 +957,7 @@ export default function QuoteForm() {
               )}
             </div>
             <div>
-              <span className="manifest-label">Flexibility</span>
+              <span className="field-label">How flexible is that date?</span>
               <div className="mt-2 grid gap-3 sm:grid-cols-2">
                 {(Object.keys(FLEXIBILITY_LABELS) as (keyof typeof FLEXIBILITY_LABELS)[]).map((key) => (
                   <OptionButton
@@ -1065,7 +979,7 @@ export default function QuoteForm() {
         {step === "Contact" && (
           <div className="space-y-5">
             <div>
-              <label htmlFor="contactName" className="manifest-label">Full name</label>
+              <label htmlFor="contactName" className="field-label">Full name</label>
               <input
                 id="contactName"
                 autoComplete="name"
@@ -1078,7 +992,7 @@ export default function QuoteForm() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="contactPhone" className="manifest-label">Phone</label>
+                <label htmlFor="contactPhone" className="field-label">Phone</label>
                 <input
                   id="contactPhone"
                   type="tel"
@@ -1091,7 +1005,7 @@ export default function QuoteForm() {
                 {fieldErrors.contactPhone && <p className="mt-1 text-sm text-danger">{fieldErrors.contactPhone}</p>}
               </div>
               <div>
-                <label htmlFor="contactEmail" className="manifest-label">Email</label>
+                <label htmlFor="contactEmail" className="field-label">Email (your quote is sent here)</label>
                 <input
                   id="contactEmail"
                   type="email"
@@ -1105,18 +1019,18 @@ export default function QuoteForm() {
               </div>
             </div>
             <div>
-              <label className="flex items-start gap-3 text-sm text-ink/80">
+              <label className="flex items-start gap-3 text-ink">
                 <input
                   type="checkbox"
                   checked={form.agreedToTerms}
                   onChange={(e) => update("agreedToTerms", e.target.checked)}
-                  className="mt-1"
+                  className="mt-1 h-5 w-5 shrink-0 accent-navy"
                 />
                 <span>
                   I agree to the{" "}
-                  <Link href="/terms" target="_blank" className="underline hover:text-brass">Terms of Service</Link>
+                  <Link href="/terms" target="_blank" className="font-semibold underline underline-offset-4 hover:text-amber-ink">Terms of Service</Link>
                   {" "}and{" "}
-                  <Link href="/privacy" target="_blank" className="underline hover:text-brass">Privacy Policy</Link>.
+                  <Link href="/privacy" target="_blank" className="font-semibold underline underline-offset-4 hover:text-amber-ink">Privacy Policy</Link>.
                 </span>
               </label>
               {fieldErrors.agreedToTerms && <p className="mt-1 text-sm text-danger">{fieldErrors.agreedToTerms}</p>}
@@ -1127,37 +1041,35 @@ export default function QuoteForm() {
         </AnimatePresence>
 
         {submitState === "error" && (
-          <p className="rounded-sm border border-danger bg-danger/10 p-3 text-sm text-danger">{submitMessage}</p>
+          <p role="alert" className="rounded-lg border border-danger bg-danger/10 p-4 text-sm text-danger">{submitMessage}</p>
         )}
 
-        <div className="flex items-center justify-between pt-4">
-          {/* Mobile has its own top-left return control instead (above). */}
-          <button
-            type="button"
-            onClick={goBack}
-            disabled={stepIndex === 0}
-            className="hidden font-display text-sm uppercase tracking-wideish text-ink/60 disabled:opacity-0 sm:inline-block"
-          >
-            &larr; Back
-          </button>
+        <div className="flex items-center justify-between gap-4 pt-4">
+          {stepIndex > 0 ? (
+            <button type="button" onClick={goBack} className="btn-outline px-6">
+              Back
+            </button>
+          ) : (
+            <span />
+          )}
 
           {stepIndex < STEPS.length - 1 ? (
             <button
               type="button"
               onClick={goNext}
               disabled={!isStepValid(stepIndex)}
-              className="fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom,0px)+0.75rem))] right-4 z-50 rounded-pill bg-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper shadow-button-hover transition-[transform,box-shadow,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:bg-brass-dark active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:opacity-60 sm:static sm:right-auto sm:bottom-auto sm:rounded-sm sm:px-6 sm:py-2.5 sm:shadow-none sm:hover:translate-y-0 sm:disabled:shadow-none"
+              className="btn-amber px-8 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Next
+              Continue
             </button>
           ) : (
             <button
               type="button"
               onClick={handleSubmit}
               disabled={submitState === "submitting" || !isStepValid(stepIndex)}
-              className="fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom,0px)+0.75rem))] right-4 z-50 rounded-pill bg-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper shadow-button-hover transition-[transform,box-shadow,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:bg-brass-dark active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:opacity-60 sm:static sm:right-auto sm:bottom-auto sm:rounded-sm sm:px-6 sm:py-2.5 sm:shadow-none sm:hover:translate-y-0 sm:disabled:shadow-none"
+              className="btn-amber px-8 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {submitState === "submitting" ? "Submitting\u2026" : "Submit Request"}
+              {submitState === "submitting" ? "Submitting\u2026" : "Submit request"}
             </button>
           )}
         </div>
@@ -1180,18 +1092,18 @@ export default function QuoteForm() {
               animate={{ opacity: 1, scale: 1 }}
               exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-              className="w-full max-w-sm border border-slate-light/60 bg-paper p-6 shadow-panel"
+              className="w-full max-w-sm rounded-2xl border border-line bg-card p-6 shadow-panel-lg"
             >
-              <p id="round-trip-prompt-heading" className="font-display text-base uppercase tracking-wideish text-ink">
+              <p id="round-trip-prompt-heading" className="text-xl font-extrabold text-ink">
                 Just the one-way trip?
               </p>
-              <p className="mt-2 text-sm text-ink/70">
+              <p className="mt-2 text-slate">
                 We&apos;ll quote pickup to dropoff only. Say the word if you also need it brought back.
               </p>
               {estimate && roundTripEstimate && (
-                <p className="mt-3 rounded-sm border border-highway/30 bg-highway/5 p-3 text-sm text-ink">
+                <p className="mt-4 rounded-lg border border-line bg-paper p-3 text-ink">
                   Round trip runs about{" "}
-                  <span className="font-mono font-semibold text-highway">
+                  <span className="font-mono font-semibold text-navy">
                     ${(roundTripEstimate.lowCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                     –$
                     {(roundTripEstimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
@@ -1199,18 +1111,18 @@ export default function QuoteForm() {
                   total.
                 </p>
               )}
-              <div className="mt-5 flex justify-end gap-3">
+              <div className="mt-6 flex flex-wrap justify-end gap-3">
                 <button
                   type="button"
                   onClick={confirmOneWay}
-                  className="font-display text-sm uppercase tracking-wideish text-ink/60 transition-colors duration-150 hover:text-highway active:scale-[0.97]"
+                  className="btn-outline px-4 py-2.5 text-sm"
                 >
                   One-way is right
                 </button>
                 <button
                   type="button"
                   onClick={switchToRoundTrip}
-                  className="rounded-pill sm:rounded-sm bg-brass px-5 py-2 font-display text-sm uppercase tracking-wideish text-paper shadow-button transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-0.5 hover:bg-brass-dark hover:shadow-button-hover active:translate-y-0 active:scale-[0.97] sm:shadow-none sm:hover:translate-y-0 sm:hover:shadow-none sm:active:scale-100"
+                  className="btn-amber px-4 py-2.5 text-sm"
                 >
                   Add round trip
                 </button>

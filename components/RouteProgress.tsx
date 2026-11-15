@@ -1,6 +1,5 @@
-// Step tracker for the quote form. Deliberately not a generic "1 2 3 4"
-// circle row -- each step is a literal stop on the request, reusing the
-// same dashed route-rule line language used elsewhere on the site.
+// Step tracker for the quote form, per the redesign mockup: numbered
+// circles, amber when done, navy for the current step, gray when upcoming.
 type RouteProgressProps = {
   steps: string[];
   currentIndex: number;
@@ -8,52 +7,37 @@ type RouteProgressProps = {
 
 export default function RouteProgress({ steps, currentIndex }: RouteProgressProps) {
   return (
-    <ol className="flex w-full items-center" aria-label="Quote request progress">
+    <ol className="grid grid-cols-5 gap-1" aria-label="Quote request progress">
       {steps.map((step, i) => {
         const isComplete = i < currentIndex;
         const isCurrent = i === currentIndex;
         return (
-          <li key={step} className="flex flex-1 items-center last:flex-none">
-            <div className="flex flex-col items-center gap-1.5 sm:gap-2">
-              <span
-                aria-current={isCurrent ? "step" : undefined}
-                className={[
-                  "flex h-6 w-6 items-center justify-center rounded-full border-2 font-mono text-xs transition-colors duration-300 sm:h-8 sm:w-8",
-                  isComplete
-                    ? "border-highway bg-highway text-paper"
-                    : isCurrent
-                    ? "border-brass bg-brass text-paper"
-                    : "border-slate-light bg-paper text-slate",
-                ].join(" ")}
-              >
-                {i + 1}
-              </span>
-              <span
-                className={[
-                  "manifest-label whitespace-nowrap",
-                  isCurrent ? "block text-ink" : "hidden text-slate sm:block",
-                ].join(" ")}
-              >
-                {step}
-              </span>
-            </div>
-            {i < steps.length - 1 && (
-              <div
-                aria-hidden="true"
-                className={[
-                  "mx-1 mb-4 h-[2px] flex-1 transition-colors duration-300 sm:mx-2 sm:mb-5",
-                  isComplete ? "bg-highway" : "bg-slate-light/40",
-                ].join(" ")}
-                style={
-                  !isComplete
-                    ? {
-                        backgroundImage:
-                          "repeating-linear-gradient(to right, currentColor 0, currentColor 6px, transparent 6px, transparent 12px)",
-                      }
-                    : undefined
-                }
-              />
-            )}
+          <li
+            key={step}
+            aria-current={isCurrent ? "step" : undefined}
+            className="flex flex-col items-center gap-2 text-center"
+          >
+            <span
+              className={[
+                "flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-colors duration-300 sm:h-10 sm:w-10",
+                isComplete
+                  ? "bg-amber text-navy"
+                  : isCurrent
+                  ? "bg-navy text-paper"
+                  : "bg-paper-dim text-slate",
+              ].join(" ")}
+            >
+              {i + 1}
+              {isComplete && <span className="sr-only"> (done)</span>}
+            </span>
+            <span
+              className={[
+                "text-xs sm:text-sm",
+                isCurrent ? "font-bold text-ink" : "hidden text-slate sm:block",
+              ].join(" ")}
+            >
+              {step}
+            </span>
           </li>
         );
       })}
