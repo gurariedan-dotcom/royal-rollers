@@ -21,9 +21,9 @@ function envNumber(name: string, fallback: number): number {
 const BASE_FEE_CENTS = envNumber("ESTIMATE_BASE_FEE_CENTS", 15000);
 const CARRIER_PER_MILE_CENTS = envNumber("ESTIMATE_CARRIER_PER_MILE_CENTS", 100);
 const PERSONAL_DRIVER_PER_MILE_CENTS = envNumber("ESTIMATE_PERSONAL_DRIVER_PER_MILE_CENTS", 80);
-const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 30);
-const NOT_RUNNING_FLAT_ADD_CENTS = envNumber("ESTIMATE_NOT_RUNNING_FLAT_ADD_CENTS", 10000);
-const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 5);
+const ENCLOSED_SURCHARGE_PERCENT = envNumber("ESTIMATE_ENCLOSED_SURCHARGE_PERCENT", 40);
+const NOT_RUNNING_FLAT_ADD_CENTS = envNumber("ESTIMATE_NOT_RUNNING_FLAT_ADD_CENTS", 20000);
+const RANGE_SPREAD_PERCENT = envNumber("ESTIMATE_RANGE_SPREAD_PERCENT", 15);
 // Carrier long-haul discount -- checked against the one-way distance, not
 // the round-trip total (a 900mi one-way stays undiscounted even though the
 // round trip sums to 1800mi).
