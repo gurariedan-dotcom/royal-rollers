@@ -8,7 +8,7 @@ export const metadata = {
 export default function NotFound() {
   return (
     <div className="mx-auto max-w-lg px-6 py-24 text-center">
-      <MapPinLine size={40} weight="duotone" className="mx-auto text-brass-dark" />
+      <MapPinLine size={40} weight="duotone" className="mx-auto text-danger" />
       <h1 className="mt-4 font-display text-2xl uppercase tracking-signage text-ink">
         This route doesn&apos;t exist
       </h1>

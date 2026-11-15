@@ -1,65 +1,72 @@
 import type { Config } from "tailwindcss";
 
-// Design tokens for Royal Rollers.
-// Concept: "Modernist manifest" -- flat, architectural, black on off-white
-// with one red accent. No shadows, no corner radius, 2px rules dividing
-// every section. Token names (brass/highway/rust) are kept from the
-// original palette so component code doesn't need to change, only the hex
-// values: brass is now the single red accent; highway/rust (used to tell
-// Carrier vs Personal Driver apart at a glance) are the accent and ink,
-// respectively, since the system has no room for a second hue.
+// Design tokens for Royal Rollers -- navy + amber, sampled from the
+// 2026-11 redesign mockups. Legacy token names (brass/highway/rust/paper)
+// are kept and remapped so form, booking, and admin components restyle
+// without edits: brass = the navy accent, highway = Carrier (navy),
+// rust = Personal Driver (ink). Amber is the CTA color and always carries
+// dark text (white on amber is 1.8:1).
 const config: Config = {
-  content: [
-    "./app/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-  ],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     borderRadius: {
       none: "0px",
-      sm: "0px",
-      DEFAULT: "0px",
-      md: "0px",
-      lg: "0px",
-      xl: "0px",
-      "2xl": "0px",
-      "3xl": "0px",
-      full: "0px",
+      sm: "6px",
+      DEFAULT: "8px",
+      md: "10px",
+      lg: "12px",
+      xl: "16px",
+      "2xl": "20px",
+      "3xl": "28px",
+      full: "9999px",
     },
     extend: {
-      // Buttons opt into real elevation/roundness via these tokens
-      // (rounded-btn/rounded-pill, shadow-button/shadow-button-hover)
-      // without touching the flat 0-radius/no-shadow scale everything
-      // else in the system still uses.
       borderRadius: {
-        btn: "14px",
-        pill: "999px",
+        btn: "10px",
+        pill: "9999px",
       },
       colors: {
         ink: {
-          DEFAULT: "#201E1D", // primary text, headers
-          soft: "#403C3A",
+          DEFAULT: "#15171C", // headings, primary text
+          soft: "#3A3F4A",
         },
         paper: {
-          DEFAULT: "#F3F2F2", // off-white background
-          dim: "#E7E5E4",
+          DEFAULT: "#F5F4EF", // page background
+          dim: "#ECE9E0", // alternate band background
+        },
+        card: "#FFFFFF",
+        line: "#DDD8CE", // card + input borders
+        navy: {
+          DEFAULT: "#0F1B33",
+          2: "#16264A", // cards on navy, Carrier card
+          3: "#1C2D5B", // hero gradient highlight
+          deep: "#0A1226", // footer base
+          muted: "#C3CBDD", // body text on navy (10.5:1)
+          line: "#2A3653", // borders on navy
+        },
+        amber: {
+          DEFAULT: "#F2B84C", // CTAs, highlights on navy
+          dark: "#E3A532", // CTA hover
+          ink: "#8A6200", // amber text on light backgrounds (AA)
         },
         brass: {
-          DEFAULT: "#2E4573", // the one accent — primary CTAs, focus rings
-          dark: "#1B2A4A",
-          light: "#8CA0C4",
+          DEFAULT: "#0F1B33", // legacy accent name -> navy
+          dark: "#0A1226",
+          light: "#A5B0CE",
         },
         highway: {
-          DEFAULT: "#2E4573", // Carrier / insured — accent navy
-          light: "#8CA0C4",
+          DEFAULT: "#0F1B33", // Carrier Transport
+          light: "#C3CBDD",
         },
         rust: {
-          DEFAULT: "#201E1D", // Personal Driver — ink black
-          light: "#403C3A",
+          DEFAULT: "#15171C", // Personal Driver
+          light: "#3A3F4A",
         },
         slate: {
-          DEFAULT: "#605D5D",
-          light: "#8A8785",
+          DEFAULT: "#5E626D", // muted text (5.5:1 on paper)
+          light: "#8A8F98",
         },
+        danger: "#B42318", // errors and destructive actions only
       },
       fontFamily: {
         display: ["var(--font-archivo)", "sans-serif"],
@@ -68,17 +75,15 @@ const config: Config = {
       },
       letterSpacing: {
         wideish: "0.03em",
-        signage: "0.02em",
+        signage: "-0.02em",
+        kicker: "0.18em",
       },
       boxShadow: {
-        // Flat design system everywhere else -- panels stay shadowless.
-        panel: "none",
-        "panel-lg": "none",
-        // Buttons only: real elevation, so primary/interactive controls
-        // read as tappable, floating surfaces rather than flat rects.
-        button: "0 1px 2px rgba(32,30,29,0.08), 0 10px 24px -8px rgba(32,30,29,0.35)",
-        "button-hover": "0 2px 4px rgba(32,30,29,0.10), 0 16px 32px -8px rgba(32,30,29,0.4)",
-        "button-sm": "0 1px 2px rgba(32,30,29,0.08), 0 6px 14px -6px rgba(32,30,29,0.3)",
+        panel: "0 24px 48px -28px rgba(15, 27, 51, 0.28)",
+        "panel-lg": "0 32px 64px -32px rgba(15, 27, 51, 0.45)",
+        button: "none",
+        "button-hover": "none",
+        "button-sm": "none",
       },
       keyframes: {
         "pop-in": {

@@ -67,7 +67,7 @@ function inputClass(hasError: boolean) {
   return [
     "w-full rounded-sm border bg-paper px-3 py-2 text-ink placeholder:text-slate-light",
     "focus:outline-none",
-    hasError ? "border-brass-dark" : "border-slate-light/60",
+    hasError ? "border-danger" : "border-slate-light/60",
   ].join(" ");
 }
 
@@ -89,7 +89,7 @@ function vehicleFieldClass(hasError: boolean) {
     "w-full rounded-btn sm:rounded-sm border bg-paper px-3 py-2 text-ink placeholder:text-slate-light",
     "shadow-button-sm hover:shadow-button sm:shadow-none sm:hover:shadow-none transition-[box-shadow,border-color] duration-150 ease-out",
     "focus:outline-none",
-    hasError ? "border-brass-dark" : "border-slate-light/60 sm:hover:border-slate-light",
+    hasError ? "border-danger" : "border-slate-light/60 sm:hover:border-slate-light",
   ].join(" ");
 }
 
@@ -673,7 +673,7 @@ export default function QuoteForm() {
                 </p>
               </button>
             </div>
-            {fieldErrors.serviceType && <p className="mt-2 text-sm text-brass-dark">{fieldErrors.serviceType}</p>}
+            {fieldErrors.serviceType && <p className="mt-2 text-sm text-danger">{fieldErrors.serviceType}</p>}
           </fieldset>
         )}
 
@@ -726,12 +726,12 @@ export default function QuoteForm() {
                   )}
                 </AnimatePresence>
                 {vinDecodeStatus === "error" && (
-                  <p className="mt-1 text-xs text-brass-dark">
+                  <p className="mt-1 text-xs text-danger">
                     Couldn&apos;t look that VIN up. You can try again, or enter the details manually below.
                   </p>
                 )}
                 {(fieldErrors.vin || fieldErrors.vehicleYear || fieldErrors.vehicleMake || fieldErrors.vehicleModel) && (
-                  <p className="mt-1 text-sm text-brass-dark">
+                  <p className="mt-1 text-sm text-danger">
                     {fieldErrors.vin ?? "We need a valid VIN, or you can enter the vehicle details manually."}
                   </p>
                 )}
@@ -768,7 +768,7 @@ export default function QuoteForm() {
                       </select>
                       <SelectChevron />
                     </div>
-                    {fieldErrors.vehicleYear && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleYear}</p>}
+                    {fieldErrors.vehicleYear && <p className="mt-1 text-sm text-danger">{fieldErrors.vehicleYear}</p>}
                   </div>
                 </div>
 
@@ -807,7 +807,7 @@ export default function QuoteForm() {
                         <SelectChevron />
                       </div>
                     )}
-                    {fieldErrors.vehicleMake && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleMake}</p>}
+                    {fieldErrors.vehicleMake && <p className="mt-1 text-sm text-danger">{fieldErrors.vehicleMake}</p>}
                   </div>
                   <div>
                     <label htmlFor="vehicleModel" className="manifest-label">Model</label>
@@ -817,7 +817,7 @@ export default function QuoteForm() {
                       onChange={(e) => update("vehicleModel", e.target.value)}
                       className={vehicleFieldClass(!!fieldErrors.vehicleModel)}
                     />
-                    {fieldErrors.vehicleModel && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleModel}</p>}
+                    {fieldErrors.vehicleModel && <p className="mt-1 text-sm text-danger">{fieldErrors.vehicleModel}</p>}
                   </div>
                 </div>
 
@@ -901,7 +901,7 @@ export default function QuoteForm() {
                   );
                 })}
               </div>
-              {fieldErrors.vehicleType && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.vehicleType}</p>}
+              {fieldErrors.vehicleType && <p className="mt-1 text-sm text-danger">{fieldErrors.vehicleType}</p>}
             </div>
 
             <div>
@@ -913,7 +913,7 @@ export default function QuoteForm() {
                   </OptionButton>
                 ))}
               </div>
-              {fieldErrors.isRunning && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.isRunning}</p>}
+              {fieldErrors.isRunning && <p className="mt-1 text-sm text-danger">{fieldErrors.isRunning}</p>}
             </div>
 
             {form.serviceType === "carrier" && (
@@ -926,7 +926,7 @@ export default function QuoteForm() {
                     </OptionButton>
                   ))}
                 </div>
-                {fieldErrors.enclosed && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.enclosed}</p>}
+                {fieldErrors.enclosed && <p className="mt-1 text-sm text-danger">{fieldErrors.enclosed}</p>}
               </div>
             )}
           </div>
@@ -944,7 +944,7 @@ export default function QuoteForm() {
                   onChange={(e) => update("pickupZip", e.target.value)}
                   className={`${inputClass(!!fieldErrors.pickupZip)} font-mono`}
                 />
-                {fieldErrors.pickupZip && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.pickupZip}</p>}
+                {fieldErrors.pickupZip && <p className="mt-1 text-sm text-danger">{fieldErrors.pickupZip}</p>}
               </div>
               <div>
                 <label htmlFor="dropoffZip" className="manifest-label">Dropoff ZIP</label>
@@ -955,7 +955,7 @@ export default function QuoteForm() {
                   onChange={(e) => update("dropoffZip", e.target.value)}
                   className={`${inputClass(!!fieldErrors.dropoffZip)} font-mono`}
                 />
-                {fieldErrors.dropoffZip && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.dropoffZip}</p>}
+                {fieldErrors.dropoffZip && <p className="mt-1 text-sm text-danger">{fieldErrors.dropoffZip}</p>}
               </div>
             </div>
 
@@ -1019,7 +1019,7 @@ export default function QuoteForm() {
               </div>
             )}
             {estimateStatus === "error" && (
-              <p className="rounded-sm border border-brass-dark/40 bg-brass-dark/5 p-3 text-sm text-brass-dark">
+              <p className="rounded-sm border border-danger/40 bg-danger/5 p-3 text-sm text-danger">
                 Couldn&apos;t estimate a cost for those ZIP codes right now. Double-check
                 they&apos;re valid, five-digit ZIPs -- you can still submit and we&apos;ll
                 email you a priced quote either way.
@@ -1039,7 +1039,7 @@ export default function QuoteForm() {
                 hasError={!!fieldErrors.preferredPickupDate}
               />
               {fieldErrors.preferredPickupDate && (
-                <p className="mt-1 text-sm text-brass-dark">{fieldErrors.preferredPickupDate}</p>
+                <p className="mt-1 text-sm text-danger">{fieldErrors.preferredPickupDate}</p>
               )}
             </div>
             <div>
@@ -1056,7 +1056,7 @@ export default function QuoteForm() {
                 ))}
               </div>
               {fieldErrors.flexibilityWindow && (
-                <p className="mt-1 text-sm text-brass-dark">{fieldErrors.flexibilityWindow}</p>
+                <p className="mt-1 text-sm text-danger">{fieldErrors.flexibilityWindow}</p>
               )}
             </div>
           </div>
@@ -1074,7 +1074,7 @@ export default function QuoteForm() {
                 onChange={(e) => update("contactName", e.target.value)}
                 className={inputClass(!!fieldErrors.contactName)}
               />
-              {fieldErrors.contactName && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.contactName}</p>}
+              {fieldErrors.contactName && <p className="mt-1 text-sm text-danger">{fieldErrors.contactName}</p>}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
@@ -1088,7 +1088,7 @@ export default function QuoteForm() {
                   onChange={(e) => update("contactPhone", e.target.value)}
                   className={inputClass(!!fieldErrors.contactPhone)}
                 />
-                {fieldErrors.contactPhone && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.contactPhone}</p>}
+                {fieldErrors.contactPhone && <p className="mt-1 text-sm text-danger">{fieldErrors.contactPhone}</p>}
               </div>
               <div>
                 <label htmlFor="contactEmail" className="manifest-label">Email</label>
@@ -1101,7 +1101,7 @@ export default function QuoteForm() {
                   onChange={(e) => update("contactEmail", e.target.value)}
                   className={inputClass(!!fieldErrors.contactEmail)}
                 />
-                {fieldErrors.contactEmail && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.contactEmail}</p>}
+                {fieldErrors.contactEmail && <p className="mt-1 text-sm text-danger">{fieldErrors.contactEmail}</p>}
               </div>
             </div>
             <div>
@@ -1119,7 +1119,7 @@ export default function QuoteForm() {
                   <Link href="/privacy" target="_blank" className="underline hover:text-brass">Privacy Policy</Link>.
                 </span>
               </label>
-              {fieldErrors.agreedToTerms && <p className="mt-1 text-sm text-brass-dark">{fieldErrors.agreedToTerms}</p>}
+              {fieldErrors.agreedToTerms && <p className="mt-1 text-sm text-danger">{fieldErrors.agreedToTerms}</p>}
             </div>
           </div>
         )}
@@ -1127,7 +1127,7 @@ export default function QuoteForm() {
         </AnimatePresence>
 
         {submitState === "error" && (
-          <p className="rounded-sm border border-brass-dark bg-brass-dark/10 p-3 text-sm text-brass-dark">{submitMessage}</p>
+          <p className="rounded-sm border border-danger bg-danger/10 p-3 text-sm text-danger">{submitMessage}</p>
         )}
 
         <div className="flex items-center justify-between pt-4">

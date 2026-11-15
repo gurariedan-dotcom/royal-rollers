@@ -85,7 +85,7 @@ function InnerBookingForm({ quote, canceled }: { quote: QuoteSummary; canceled: 
         </span>
       </label>
 
-      {message && <p className="rounded-sm border border-brass-dark bg-brass-dark/10 p-3 text-sm text-brass-dark">{message}</p>}
+      {message && <p className="rounded-sm border border-danger bg-danger/10 p-3 text-sm text-danger">{message}</p>}
 
       <button
         type="submit"
@@ -123,7 +123,7 @@ export default function BookingForm({ quoteId, canceled }: { quoteId: string; ca
 
   if (loadError) {
     return (
-      <p className="rounded-sm border border-brass-dark bg-brass-dark/10 p-4 text-sm text-brass-dark">{loadError}</p>
+      <p className="rounded-sm border border-danger bg-danger/10 p-4 text-sm text-danger">{loadError}</p>
     );
   }
   if (!quote) {

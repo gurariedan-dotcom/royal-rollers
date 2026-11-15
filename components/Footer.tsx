@@ -1,52 +1,33 @@
 import Link from "next/link";
+import { COMPANY_LINE } from "@/lib/content";
+
+const LINKS = [
+  { href: "/reviews", label: "Reviews" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/accessibility", label: "Accessibility" },
+];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-ink/10 bg-ink text-paper">
-      <div className="mx-auto max-w-6xl px-6 py-12">
-        <div className="grid gap-10 md:grid-cols-3">
-          <div>
-            <p className="font-display text-lg font-semibold uppercase tracking-signage">
-              Royal Rollers
-            </p>
-            <p className="mt-3 max-w-xs text-sm text-paper/70">
-              Nationwide vehicle transport, by carrier or by a personal
-              driver, your call.
-            </p>
-          </div>
-
-          <div>
-            <p className="manifest-label text-paper/60">Company</p>
-            <ul className="mt-3 space-y-2 text-sm">
-              <li><Link href="/reviews" className="hover:text-brass-light">Reviews</Link></li>
-              <li><Link href="/services" className="hover:text-brass-light">Services</Link></li>
-              <li><Link href="/how-it-works" className="hover:text-brass-light">How It Works</Link></li>
-              <li><Link href="/faq" className="hover:text-brass-light">FAQ</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="manifest-label text-paper/60">Get Started</p>
-            <ul className="mt-3 space-y-2 text-sm">
-              <li><Link href="/quote" className="hover:text-brass-light">Get a Quote</Link></li>
-              <li><Link href="/contact" className="hover:text-brass-light">Contact Us</Link></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="route-rule mt-10 opacity-40" />
-
-        <p className="mt-6 text-xs text-paper/50">
-          Royal Rollers LLC &middot; 393 Beach 12th Street, Far Rockaway, NY 11691
-          &middot; USDOT# 6895738 &middot; MC# 73292138
-        </p>
-        <p className="mt-2 text-xs text-paper/50">
-          &copy; {new Date().getFullYear()} Royal Rollers LLC. Quotes are estimates until confirmed in writing.{" "}
-          <Link href="/privacy" className="underline hover:text-brass-light">Privacy Policy</Link>
-          {" "}&middot;{" "}
-          <Link href="/terms" className="underline hover:text-brass-light">Terms of Service</Link>
-          {" "}&middot;{" "}
-          <Link href="/accessibility" className="underline hover:text-brass-light">Accessibility</Link>
+    <footer className="on-navy border-t border-navy-line/60 bg-navy-deep text-navy-muted">
+      <div className="mx-auto max-w-6xl px-6 py-8 text-center text-sm">
+        <p>{COMPANY_LINE}</p>
+        <nav aria-label="Footer" className="mt-4">
+          <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="underline-offset-4 hover:text-paper hover:underline">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <p className="mt-4 text-xs">
+          &copy; {new Date().getFullYear()} Royal Rollers LLC. Quotes are estimates until confirmed in
+          writing.
         </p>
       </div>
     </footer>

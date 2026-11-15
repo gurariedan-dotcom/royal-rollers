@@ -75,7 +75,7 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
         className={[
           "block w-full rounded-sm border bg-paper px-3 py-2 text-ink sm:hidden",
           "focus:outline-none",
-          hasError ? "border-brass-dark" : "border-slate-light/60",
+          hasError ? "border-danger" : "border-slate-light/60",
         ].join(" ")}
       />
 
@@ -87,7 +87,7 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
         className={[
           "hidden w-full items-center justify-between gap-2 rounded-sm border bg-paper px-3 py-2 text-left text-ink transition-colors duration-150 sm:flex",
           "focus:outline-none",
-          hasError ? "border-brass-dark" : "border-slate-light/60 hover:border-slate-light",
+          hasError ? "border-danger" : "border-slate-light/60 hover:border-slate-light",
         ].join(" ")}
       >
         <span className={value ? "text-ink" : "text-slate-light"}>
