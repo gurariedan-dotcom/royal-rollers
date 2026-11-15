@@ -48,23 +48,47 @@ export function ServicesSection({ as }: { as?: HeadingLevel }) {
           </div>
         </div>
 
-        <dl className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {COMPARISON.map((row) => (
-            <div key={row.label} className="card p-6">
-              <dt className="manifest-label">{row.label}</dt>
-              <dd className="mt-4 space-y-3 text-ink">
-                <p>
-                  <span className="kicker mr-2 tracking-wideish">Carrier</span>
-                  {row.carrier}
-                </p>
-                <p>
-                  <span className="kicker mr-2 tracking-wideish">Driver</span>
-                  {row.driver}
-                </p>
-              </dd>
-            </div>
-          ))}
-        </dl>
+        {/* Side-by-side chart. md+: label | carrier | driver columns.
+            Below md the label column is hidden and each label becomes a
+            full-width row above its two values, so it fits a phone. */}
+        <div className="card mt-10 overflow-hidden">
+          <table className="w-full table-fixed border-collapse text-left">
+            <caption className="sr-only">Carrier Transport compared with Personal Driver</caption>
+            <thead>
+              <tr className="bg-paper-dim/60">
+                <td className="hidden md:table-cell md:w-[24%]" />
+                <th scope="col" className="px-4 py-4 text-sm font-bold text-ink sm:px-6 sm:text-base">
+                  <span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-navy align-middle" aria-hidden="true" />
+                  Carrier Transport
+                </th>
+                <th scope="col" className="border-l border-line px-4 py-4 text-sm font-bold text-ink sm:px-6 sm:text-base">
+                  <span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-amber align-middle" aria-hidden="true" />
+                  Personal Driver
+                </th>
+              </tr>
+            </thead>
+            {COMPARISON.map((row) => (
+              <tbody key={row.label} className="border-t border-line">
+                <tr className="md:hidden">
+                  <th scope="colgroup" colSpan={2} className="manifest-label px-4 pb-1 pt-4 sm:px-6">
+                    {row.label}
+                  </th>
+                </tr>
+                <tr>
+                  <th scope="row" className="manifest-label hidden px-6 py-5 align-top md:table-cell">
+                    {row.label}
+                  </th>
+                  <td className="px-4 pb-4 align-top text-sm text-ink sm:px-6 sm:text-base md:py-5">
+                    {row.carrier}
+                  </td>
+                  <td className="border-l border-line px-4 pb-4 align-top text-sm text-ink sm:px-6 sm:text-base md:py-5">
+                    {row.driver}
+                  </td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+        </div>
 
         <p className="mt-6 max-w-[75ch] text-slate">
           Personal Driver asks that your car carry full coverage (comprehensive and collision) during
