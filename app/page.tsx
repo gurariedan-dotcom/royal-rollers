@@ -1,5 +1,6 @@
-import Link from "next/link";
-import TruckIllustration from "@/components/TruckIllustration";
+import Image from "next/image";
+import { Coins, EnvelopeSimple, ShieldCheck } from "@phosphor-icons/react/dist/ssr";
+import HeroQuoteCard from "@/components/HeroQuoteCard";
 import {
   ContactSection,
   FaqSection,
@@ -10,51 +11,60 @@ import {
 } from "@/components/Sections";
 
 // "Live tracking" is deliberately absent -- no tracking feature exists.
-const TRUST_POINTS = ["Insured carriers", "No hidden fees", "Quote by email, no phone tag"];
+const TRUST_POINTS = [
+  { Icon: ShieldCheck, label: "Insured carriers" },
+  { Icon: Coins, label: "No hidden fees" },
+  { Icon: EnvelopeSimple, label: "Quote by email, no phone tag" },
+];
 
 export default function HomePage() {
   return (
     <>
-      <section className="on-navy hero-bg text-paper">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 pb-20 pt-16 md:pb-28 md:pt-24 lg:grid-cols-[1.15fr_1fr]">
-          <div>
-            <p className="kicker leading-relaxed">
-              Vehicle transport broker
-              <span aria-hidden="true"> · </span>
-              <span className="whitespace-nowrap">USDOT 6895738</span>
-              <span aria-hidden="true"> · </span>
-              <span className="whitespace-nowrap">MC 73292138</span>
-            </p>
-            <h1 className="mt-5 text-[clamp(3rem,7.5vw,6rem)] leading-[1.02]">
-              Your car, moved anywhere.{" "}
-              <span className="text-amber">Your call how.</span>
-            </h1>
-            <p className="mt-7 max-w-xl text-lg text-navy-muted md:text-xl">
-              Royal Rollers arranges car shipping across the United States, on an insured multi-car
-              hauler or with a personal driver who takes your car directly.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-4">
-              <Link href="/quote" className="btn-amber px-8 py-3.5 text-lg">
-                Get a quote
-              </Link>
-              <Link href="/#services" className="btn-outline px-8 py-3.5 text-lg">
-                Compare options
-              </Link>
-            </div>
-            <ul className="mt-8 flex flex-wrap gap-3">
-              {TRUST_POINTS.map((point) => (
-                <li
-                  key={point}
-                  className="rounded-full border border-navy-line px-5 py-2 text-navy-muted"
-                >
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <TruckIllustration />
+      {/* Hero, per the owner's 2026-11 photo mockup: highway photo on the
+          right, quote card on the left, trust strip along the bottom. */}
+      <section className="on-navy relative overflow-hidden bg-navy text-paper">
+        {/* ponytail: photo cropped from the owner's mockup (734px wide); swap in the original high-res shot when available. */}
+        <div className="absolute inset-0 lg:left-[38%]">
+          <Image
+            src="/hero-truck.jpg"
+            alt="Car carrier truck hauling vehicles on a highway at dusk"
+            fill
+            priority
+            sizes="(min-width: 1024px) 62vw, 100vw"
+            className="object-cover object-center"
+          />
+          <div aria-hidden="true" className="absolute inset-0 hidden bg-gradient-to-r from-navy via-navy/30 via-25% to-transparent lg:block" />
         </div>
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-navy/85 via-navy/75 to-navy lg:hidden"
+        />
+
+        <div className="relative mx-auto max-w-6xl px-6 pt-10 md:pt-14">
+          <p className="kicker leading-relaxed">
+            Vehicle transport broker
+            <span aria-hidden="true"> · </span>
+            <span className="whitespace-nowrap">USDOT 6895738</span>
+            <span aria-hidden="true"> · </span>
+            <span className="whitespace-nowrap">MC 73292138</span>
+          </p>
+
+          <div className="mt-6 max-w-xl pb-12 md:pb-16">
+            <HeroQuoteCard />
+          </div>
+        </div>
+
+        <ul className="relative mx-auto grid max-w-6xl gap-5 border-t border-navy-line px-6 py-8 sm:grid-cols-3">
+          {TRUST_POINTS.map(({ Icon, label }, i) => (
+            <li
+              key={label}
+              className={`flex items-center gap-3 text-lg text-paper ${i > 0 ? "sm:border-l sm:border-navy-line sm:pl-6" : ""}`}
+            >
+              <Icon size={32} weight="duotone" className="shrink-0 text-amber" />
+              {label}
+            </li>
+          ))}
+        </ul>
       </section>
 
       <ServicesSection />

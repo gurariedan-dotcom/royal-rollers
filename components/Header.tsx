@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { List, X } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
+import { List, Phone, X } from "@phosphor-icons/react/dist/ssr";
+import { CONTACT } from "@/lib/content";
 
 // Reviews lives in the footer only, per the redesign mockup.
 const NAV_LINKS = [
@@ -19,12 +21,15 @@ export default function Header() {
   return (
     <header className="on-navy sticky top-0 z-50 border-b border-navy-line/60 bg-navy text-paper">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
-        <Link href="/" className="flex flex-col leading-none" onClick={() => setOpen(false)}>
-          <span className="font-display text-xl font-extrabold uppercase tracking-wideish">
-            Royal Rollers
-          </span>
-          <span className="mt-1 text-xs uppercase tracking-kicker text-navy-muted">
-            Nationwide transport
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3" onClick={() => setOpen(false)}>
+          <Image src="/logo-crest.jpg" alt="" width={44} height={44} priority className="h-9 w-9 shrink-0 rounded-full sm:h-11 sm:w-11" />
+          <span className="flex flex-col leading-none">
+            <span className="whitespace-nowrap font-display text-xl font-extrabold uppercase tracking-wideish">
+              Royal Rollers
+            </span>
+            <span className="mt-1 whitespace-nowrap text-xs uppercase tracking-kicker text-navy-muted">
+              Nationwide transport
+            </span>
           </span>
         </Link>
 
@@ -41,6 +46,14 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <a
+            href={CONTACT.phoneHref}
+            aria-label={`Call ${CONTACT.phoneDisplay}`}
+            className="flex h-11 items-center gap-2 rounded-btn px-2 text-base font-bold text-paper transition-colors hover:text-amber lg:px-3"
+          >
+            <Phone size={20} weight="bold" className="text-amber" />
+            <span className="hidden lg:inline">{CONTACT.phoneDisplay}</span>
+          </a>
           <Link href="/quote" className="btn-amber hidden px-6 py-2.5 sm:inline-flex">
             Get a quote
           </Link>
