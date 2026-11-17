@@ -3,7 +3,7 @@ import QuoteForm from "@/components/QuoteForm";
 export const metadata = {
   title: "Request a Quote",
   description:
-    "Get a priced vehicle transport quote by email in five short steps. No obligation to book, no phone tag.",
+    "Get a priced vehicle transport quote by email in five short steps. No obligation to book.",
 };
 
 const ZIP = /^\d{5}$/;
