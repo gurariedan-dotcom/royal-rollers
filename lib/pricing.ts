@@ -100,8 +100,9 @@ export function computeEstimate(input: EstimateInput): EstimateResult {
   // Rounded to the nearest $50 -- this is a rough estimate, not a quote, no
   // need for cent-level precision.
   const roundToFiftyDollars = (cents: number) => Math.round(cents / 5000) * 5000;
-  return {
-    lowCents: Math.max(MINIMUM_ESTIMATE_CENTS, roundToFiftyDollars(midpoint - spread)),
-    highCents: Math.max(MINIMUM_ESTIMATE_CENTS, roundToFiftyDollars(midpoint + spread)),
-  };
+  const lowCents = Math.max(MINIMUM_ESTIMATE_CENTS, roundToFiftyDollars(midpoint - spread));
+  // Short trips can clamp/round both ends to the same figure ("$50 - $50");
+  // keep it a real range, at least one $50 step wide.
+  const highCents = Math.max(lowCents + 5000, roundToFiftyDollars(midpoint + spread));
+  return { lowCents, highCents };
 }
