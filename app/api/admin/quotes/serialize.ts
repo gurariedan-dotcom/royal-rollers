@@ -14,6 +14,8 @@ export function serializeQuoteForAdmin(q: QuoteRequestRow) {
     vehicle: [q.vehicle_year, q.vehicle_make, q.vehicle_model].filter(Boolean).join(" "),
     vehicleType: q.vehicle_type,
     isRunning: q.is_running,
+    hasPersonalItems: q.has_personal_items,
+    personalItemsDescription: q.personal_items_description,
     enclosed: q.enclosed,
     pickupZip: q.pickup_zip,
     dropoffZip: q.dropoff_zip,

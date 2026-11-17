@@ -9,6 +9,7 @@ export type OwnerNewQuoteAlertProps = {
   vin: string;
   vehicle: string;
   running: string;
+  personalItems: string | null;
   enclosed: string | null;
   route: string;
   preferredDate: string;
@@ -24,6 +25,7 @@ export default function OwnerNewQuoteAlert({
   vin,
   vehicle,
   running,
+  personalItems,
   enclosed,
   route,
   preferredDate,
@@ -44,6 +46,7 @@ export default function OwnerNewQuoteAlert({
       <DataRow label="VIN" value={vin} />
       <DataRow label="Vehicle" value={vehicle} />
       <DataRow label="Running" value={running} />
+      {personalItems && <DataRow label="Personal items" value={personalItems} />}
       {enclosed && <DataRow label="Enclosed" value={enclosed} />}
       <DataRow label="Route" value={route} />
       <DataRow label="Preferred date" value={preferredDate} />
@@ -59,6 +62,7 @@ OwnerNewQuoteAlert.PreviewProps = {
   vin: "1HGCM82633A004352",
   vehicle: "2021 Toyota Camry (Sedan)",
   running: "Yes",
+  personalItems: "Yes: two suitcases and a bike rack",
   enclosed: "No (open)",
   route: "90210 → 10001",
   preferredDate: "2026-08-20 (± 3 days)",

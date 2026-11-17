@@ -65,6 +65,10 @@ const quoteRequestFields = z.object({
   vehicleModel: z.string().trim().min(1, "Model is required.").max(100),
   vehicleType: z.enum(VEHICLE_TYPES, { required_error: "Choose a vehicle type." }),
   isRunning: z.enum(["running", "not_running"]),
+  // Required yes/no so belongings are always disclosed up front; the
+  // description is optional (but encouraged in the UI).
+  hasPersonalItems: z.enum(["yes", "no"], { required_error: "Let us know if anything will be inside the vehicle." }),
+  personalItemsDescription: z.string().trim().max(500, "Keep it under 500 characters.").optional(),
   // Only meaningful for carrier transport -- enforced below via superRefine,
   // not just hidden in the UI, so a direct API call can't skip the rule.
   enclosed: z.enum(["open", "enclosed"]).optional(),

@@ -49,12 +49,22 @@ type DetailRow = { label: string; value: string };
 // Every field on the quote, for the "Full shipment details" disclosure.
 // Templates that already show vehicle/route inline drop those two rows to
 // avoid repeating them (see the .filter() calls below).
+// "No", "Yes", or "Yes: two suitcases, a bike rack" -- null for quotes
+// submitted before the question existed (callers skip the row then).
+function personalItemsLabel(quote: QuoteRequestRow): string {
+  if (!quote.has_personal_items) return "No";
+  return quote.personal_items_description ? `Yes: ${quote.personal_items_description}` : "Yes (not described)";
+}
+
 function shipmentDetailRows(quote: QuoteRequestRow): DetailRow[] {
   const rows: DetailRow[] = [
     { label: "VIN", value: quote.vin ?? "Not provided" },
     { label: "Vehicle", value: vehicleLabel(quote) || "—" },
     { label: "Running", value: quote.is_running ? "Yes" : "No" },
   ];
+  if (quote.has_personal_items != null) {
+    rows.push({ label: "Personal items", value: personalItemsLabel(quote) });
+  }
   if (quote.service_type === "carrier") {
     rows.push({ label: "Enclosed", value: quote.enclosed ? "Yes" : "No (open)" });
   }
@@ -115,6 +125,7 @@ export async function sendOwnerAlertEmail(quote: QuoteRequestRow) {
       vin: quote.vin ?? "not provided — confirm with customer",
       vehicle: vehicleLabel(quote) || "—",
       running: quote.is_running ? "Yes" : "No",
+      personalItems: quote.has_personal_items == null ? null : personalItemsLabel(quote),
       enclosed: quote.service_type === "carrier" ? (quote.enclosed ? "Yes" : "No (open)") : null,
       route: routeLabel(quote),
       preferredDate: `${quote.preferred_pickup_date ?? "—"} (${quote.flexibility_window ?? "—"})`,

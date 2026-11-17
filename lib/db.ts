@@ -54,6 +54,8 @@ export type QuoteRequestRow = {
   round_trip: boolean;
   preferred_pickup_date: string | null;
   flexibility_window: string | null;
+  has_personal_items: boolean | null;
+  personal_items_description: string | null;
   contact_name: string;
   contact_phone: string;
   contact_email: string;

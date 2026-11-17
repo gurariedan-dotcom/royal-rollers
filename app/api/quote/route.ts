@@ -31,6 +31,9 @@ export async function POST(req: NextRequest) {
       vehicle_model: data.vehicleModel,
       vehicle_type: data.vehicleType ?? null,
       is_running: data.isRunning === "running",
+      has_personal_items: data.hasPersonalItems === "yes",
+      personal_items_description:
+        data.hasPersonalItems === "yes" ? data.personalItemsDescription || null : null,
       enclosed: data.serviceType === "carrier" ? data.enclosed === "enclosed" : null,
       pickup_zip: data.pickupZip,
       dropoff_zip: data.dropoffZip,
