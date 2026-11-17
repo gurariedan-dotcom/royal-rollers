@@ -24,21 +24,11 @@ export default function HomePage() {
           right, quote card on the left, trust strip along the bottom. */}
       <section className="on-navy relative overflow-hidden bg-navy text-paper">
         {/* ponytail: photo cropped from the owner's mockup (734px wide); swap in the original high-res shot when available. */}
-        <div className="absolute inset-0 lg:left-[38%]">
-          <Image
-            src="/hero-truck.jpg"
-            alt="Car carrier truck hauling vehicles on a highway at dusk"
-            fill
-            priority
-            sizes="(min-width: 1024px) 62vw, 100vw"
-            className="object-cover object-center"
-          />
-          <div aria-hidden="true" className="absolute inset-0 hidden bg-gradient-to-r from-navy via-navy/30 via-25% to-transparent lg:block" />
+        {/* Below lg: the photo sits behind the card as a faded background. */}
+        <div className="absolute inset-0 lg:hidden">
+          <Image src="/hero-truck.jpg" alt="" fill priority sizes="100vw" className="object-cover object-center" />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-navy/85 via-navy/75 to-navy" />
         </div>
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-navy/85 via-navy/75 to-navy lg:hidden"
-        />
 
         <div className="relative mx-auto max-w-6xl px-6 pt-10 md:pt-14">
           <p className="kicker leading-relaxed">
@@ -49,8 +39,21 @@ export default function HomePage() {
             <span className="whitespace-nowrap">MC 73292138</span>
           </p>
 
-          <div className="mt-6 max-w-xl pb-12 md:pb-16">
-            <HeroQuoteCard />
+          <div className="mt-6 pb-12 md:pb-16 lg:grid lg:grid-cols-[minmax(0,34rem)_1fr] lg:items-center lg:gap-10">
+            <div className="max-w-xl">
+              <HeroQuoteCard />
+            </div>
+            {/* lg+: framed at the photo's own aspect ratio so the whole truck shows, uncropped. */}
+            <div className="relative hidden aspect-[734/690] overflow-hidden rounded-3xl border border-navy-line shadow-panel-lg lg:block">
+              <Image
+                src="/hero-truck.jpg"
+                alt="Car carrier truck hauling vehicles on a highway at dusk"
+                fill
+                priority
+                sizes="(min-width: 1024px) 45vw, 0px"
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
 
