@@ -14,7 +14,7 @@ import {
 const TRUST_POINTS = [
   { Icon: ShieldCheck, label: "Insured carriers" },
   { Icon: Coins, label: "No hidden fees" },
-  { Icon: EnvelopeSimple, label: "Quote by email, no phone tag" },
+  { Icon: EnvelopeSimple, label: "Quote by email" },
 ];
 
 export default function HomePage() {
