@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
     .select(
       "id, order_number, service_type, vin, vehicle_year, vehicle_make, vehicle_model, vehicle_type, is_running, " +
         "enclosed, pickup_zip, dropoff_zip, round_trip, preferred_pickup_date, flexibility_window, " +
+        "has_personal_items, personal_items_description, " +
         "contact_name, contact_phone, contact_email, status, quoted_amount_cents, created_at"
     )
     .order("created_at", { ascending: false });

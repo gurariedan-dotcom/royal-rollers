@@ -28,6 +28,8 @@ create table quote_requests (
   round_trip boolean not null default false,
   preferred_pickup_date date,
   flexibility_window text,
+  has_personal_items boolean,
+  personal_items_description text,
   contact_name text not null,
   contact_phone text not null,
   contact_email text not null,

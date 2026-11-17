@@ -15,6 +15,8 @@ type QuoteListItem = {
   vehicle: string;
   vehicleType: string | null;
   isRunning: boolean | null;
+  hasPersonalItems: boolean | null;
+  personalItemsDescription: string | null;
   enclosed: boolean | null;
   pickupZip: string;
   dropoffZip: string;
@@ -339,6 +341,11 @@ export default function AdminQuotesPage() {
                     {q.vehicle || "—"}
                     {q.vehicleType && <div className="text-xs text-ink/50">{q.vehicleType}</div>}
                     {q.isRunning === false && <div className="text-xs text-danger">Not running</div>}
+                    {q.hasPersonalItems && (
+                      <div className="max-w-[16rem] text-xs text-amber-ink">
+                        Personal items{q.personalItemsDescription ? `: ${q.personalItemsDescription}` : " (not described)"}
+                      </div>
+                    )}
                   </td>
                   <td className="py-3 pr-4 font-mono text-xs">{q.route}</td>
                   <td className="py-3 pr-4">

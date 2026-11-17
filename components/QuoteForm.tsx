@@ -31,6 +31,8 @@ type FormState = {
   vehicleModel: string;
   vehicleType: (typeof VEHICLE_TYPES)[number] | "";
   isRunning: "running" | "not_running" | "";
+  hasPersonalItems: "yes" | "no" | "";
+  personalItemsDescription: string;
   enclosed: "open" | "enclosed" | "";
   pickupZip: string;
   dropoffZip: string;
@@ -51,6 +53,8 @@ const EMPTY_FORM: FormState = {
   vehicleModel: "",
   vehicleType: "",
   isRunning: "",
+  hasPersonalItems: "",
+  personalItemsDescription: "",
   enclosed: "",
   pickupZip: "",
   dropoffZip: "",
@@ -250,6 +254,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
   const [estimate, setEstimate] = useState<{ lowCents: number; highCents: number } | null>(null);
   const [estimateStatus, setEstimateStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [roundTripPromptOpen, setRoundTripPromptOpen] = useState(false);
+  const [itemsNoticeOpen, setItemsNoticeOpen] = useState(false);
   const [roundTripEstimate, setRoundTripEstimate] = useState<{ lowCents: number; highCents: number } | null>(null);
   const roundTripAsked = useRef(false);
 
@@ -429,9 +434,10 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
           entryMode === "vin"
             ? ["vin", "vehicleYear", "vehicleMake", "vehicleModel", "vehicleType"]
             : ["vehicleYear", "vehicleMake", "vehicleModel", "vehicleType"];
+        const common: (keyof FormState)[] = ["isRunning", "hasPersonalItems", "personalItemsDescription"];
         return form.serviceType === "carrier"
-          ? [...vehicleFields, "isRunning", "enclosed"]
-          : [...vehicleFields, "isRunning"];
+          ? [...vehicleFields, ...common, "enclosed"]
+          : [...vehicleFields, ...common];
       }
       case "Route":
         return ["pickupZip", "dropoffZip"];
@@ -453,6 +459,8 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
       vehicleYear: f.vehicleYear || undefined,
       vehicleType: f.vehicleType || undefined,
       enclosed: f.serviceType === "carrier" ? f.enclosed || undefined : undefined,
+      hasPersonalItems: f.hasPersonalItems || undefined,
+      personalItemsDescription: f.hasPersonalItems === "yes" ? f.personalItemsDescription || undefined : undefined,
     };
   }
 
@@ -859,6 +867,52 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
               {fieldErrors.isRunning && <p className="mt-1 text-sm text-danger">{fieldErrors.isRunning}</p>}
             </div>
 
+            <div>
+              <span className="field-label">Will you have any personal belongings or luggage inside your vehicle?</span>
+              <div className="mt-2 flex flex-wrap gap-3">
+                {(["yes", "no"] as const).map((val) => (
+                  <OptionButton
+                    key={val}
+                    selected={form.hasPersonalItems === val}
+                    onClick={() => {
+                      // Show the insurance/weight notice every time "Yes" is newly chosen.
+                      if (val === "yes" && form.hasPersonalItems !== "yes") setItemsNoticeOpen(true);
+                      update("hasPersonalItems", val);
+                    }}
+                  >
+                    {val === "yes" ? "Yes" : "No"}
+                  </OptionButton>
+                ))}
+              </div>
+              {fieldErrors.hasPersonalItems && (
+                <p className="mt-1 text-sm text-danger">{fieldErrors.hasPersonalItems}</p>
+              )}
+
+              {form.hasPersonalItems === "yes" && (
+                <div className="mt-4">
+                  <label htmlFor="personalItemsDescription" className="field-label">
+                    What will be inside? <span className="font-normal text-slate">(optional)</span>
+                  </label>
+                  <textarea
+                    id="personalItemsDescription"
+                    rows={3}
+                    maxLength={500}
+                    value={form.personalItemsDescription}
+                    onChange={(e) => update("personalItemsDescription", e.target.value)}
+                    placeholder="e.g. two suitcases in the trunk, a car seat"
+                    className={`${inputClass(!!fieldErrors.personalItemsDescription)} resize-y`}
+                  />
+                  <p className="mt-1 text-sm text-slate">
+                    An accurate description helps us arrange the right carrier and avoid surprise charges.
+                    Personal items aren&apos;t covered by the carrier&apos;s insurance.
+                  </p>
+                  {fieldErrors.personalItemsDescription && (
+                    <p className="mt-1 text-sm text-danger">{fieldErrors.personalItemsDescription}</p>
+                  )}
+                </div>
+              )}
+            </div>
+
             {form.serviceType === "carrier" && (
               <div>
                 <span className="field-label">Transport type</span>
@@ -1080,6 +1134,55 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
           )}
         </div>
       </div>
+
+      <AnimatePresence>
+        {itemsNoticeOpen && (
+          <motion.div
+            className="fixed inset-0 z-30 flex items-center justify-center bg-ink/40 p-4"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            onKeyDown={(e) => e.key === "Escape" && setItemsNoticeOpen(false)}
+          >
+            <motion.div
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="items-notice-heading"
+              aria-describedby="items-notice-body"
+              initial={reduce ? false : { opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+              className="w-full max-w-md rounded-2xl border border-line bg-card p-6 shadow-panel-lg"
+            >
+              <p id="items-notice-heading" className="text-xl font-extrabold text-ink">
+                Before you pack the car
+              </p>
+              <ul id="items-notice-body" className="mt-3 list-disc space-y-2 pl-5 text-slate">
+                <li>
+                  <span className="font-bold text-ink">Not insured:</span> personal belongings and luggage left
+                  inside the vehicle are not covered by the carrier&apos;s vehicle transport insurance.
+                </li>
+                <li>
+                  <span className="font-bold text-ink">Weight limits:</span> extra weight beyond the carrier&apos;s
+                  permitted allowance may result in an additional transportation charge.
+                </li>
+              </ul>
+              <div className="mt-6 flex justify-end">
+                <button
+                  type="button"
+                  autoFocus
+                  onClick={() => setItemsNoticeOpen(false)}
+                  className="btn-amber px-5 py-2.5 text-sm"
+                >
+                  I understand
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {roundTripPromptOpen && (
