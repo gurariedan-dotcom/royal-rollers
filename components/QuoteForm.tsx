@@ -231,9 +231,15 @@ function OptionButton({
   );
 }
 
-export default function QuoteForm() {
+export default function QuoteForm({ initial }: { initial?: Partial<FormState> }) {
   const reduce = useReducedMotion();
-  const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  const [form, setForm] = useState<FormState>(() => ({
+    ...EMPTY_FORM,
+    ...initial,
+    // Open/enclosed only applies to carrier, so a pre-filled choice from the
+    // homepage quote card implies Carrier Transport.
+    ...(initial?.enclosed ? { serviceType: "carrier" as const } : {}),
+  }));
   const [stepIndex, setStepIndex] = useState(0);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");

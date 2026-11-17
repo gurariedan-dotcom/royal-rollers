@@ -28,7 +28,7 @@ function haversineMiles(lat1: number, lon1: number, lat2: number, lon2: number):
 }
 
 // ZIP -> {lat, lon} via Zippopotam.us -- free, no signup, no API key.
-async function geocodeZip(zip: string): Promise<{ lat: number; lon: number } | null> {
+async function geocodeZip(zip: string): Promise<{ lat: number; lon: number; place: string } | null> {
   let res: Response;
   try {
     res = await fetch(`http://api.zippopotam.us/us/${zip}`, { signal: AbortSignal.timeout(5000) });
@@ -39,7 +39,11 @@ async function geocodeZip(zip: string): Promise<{ lat: number; lon: number } | n
   const data = await res.json();
   const place = data?.places?.[0];
   if (!place?.latitude || !place?.longitude) return null;
-  return { lat: Number(place.latitude), lon: Number(place.longitude) };
+  return {
+    lat: Number(place.latitude),
+    lon: Number(place.longitude),
+    place: [place["place name"], place["state abbreviation"]].filter(Boolean).join(", "),
+  };
 }
 
 // Turns two ZIPs into an approximate driving-mile figure (free, no signup --
@@ -93,6 +97,9 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     miles: Math.round(miles),
+    // Display-only labels for the homepage estimate card, e.g. "New York, NY".
+    pickupPlace: pickup.place,
+    dropoffPlace: dropoff.place,
     estimateLowCents: lowCents,
     estimateHighCents: highCents,
   });

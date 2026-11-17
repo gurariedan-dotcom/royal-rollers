@@ -41,7 +41,7 @@ export function ServicesSection({ as, detailed = false }: { as?: HeadingLevel; d
             </p>
             <p className="mt-5 text-lg font-bold text-amber">Typically 1-4 days</p>
             <Link href="/quote?service=carrier" className="btn-amber mt-6">
-              Quote this
+              Quote me
             </Link>
           </div>
           <div className="card p-8 md:p-10">
@@ -52,7 +52,7 @@ export function ServicesSection({ as, detailed = false }: { as?: HeadingLevel; d
             </p>
             <p className="mt-5 text-lg font-bold text-amber-ink">Typically 24-30 hours</p>
             <Link href="/quote?service=personal_driver" className="btn-outline mt-6">
-              Quote this
+              Quote me
             </Link>
           </div>
         </div>
