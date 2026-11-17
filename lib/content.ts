@@ -33,7 +33,7 @@ export const FAQS: FaqItem[] = [
   },
   {
     q: "How will I get my quote?",
-    a: "We'll email you a priced quote directly. No phone tag, no callback promise.",
+    a: "You'll receive an email from one of our representatives with your priced quote as soon as possible.",
   },
   {
     q: "How does payment work?",
