@@ -17,6 +17,8 @@ const TRUST_POINTS = [
   { Icon: EnvelopeSimple, label: "Quote by email" },
 ];
 
+export const metadata = { alternates: { canonical: "/" } };
+
 // Reviews section reads from the DB; refreshed by /admin/reviews changes.
 export const revalidate = 3600;
 

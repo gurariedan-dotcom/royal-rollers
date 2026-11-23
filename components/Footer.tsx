@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { COMPANY_LINE, TAGLINE } from "@/lib/content";
+import { COMPANY_LINE, ROUTES, TAGLINE } from "@/lib/content";
 
 const LINKS = [
   { href: "/quote", label: "Get a quote" },
@@ -25,6 +25,17 @@ export default function Footer() {
               <li key={link.href}>
                 <Link href={link.href} className="underline-offset-4 hover:text-paper hover:underline">
                   {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <nav aria-label="Popular routes" className="mt-4">
+          <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            {ROUTES.map((r) => (
+              <li key={r.slug}>
+                <Link href={`/routes/${r.slug}`} className="underline-offset-4 hover:text-paper hover:underline">
+                  {r.from} to {r.to}
                 </Link>
               </li>
             ))}

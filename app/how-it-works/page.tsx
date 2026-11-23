@@ -2,9 +2,10 @@ import Link from "next/link";
 import { ContactSection, HowItWorksSection } from "@/components/Sections";
 
 export const metadata = {
-  title: "How It Works",
+  title: "How Car Shipping Works",
   description:
-    "The five steps from requesting a quote to your vehicle arriving, including how and when payment happens.",
+    "How shipping your car state to state works with Royal Rollers: five steps from requesting a quote to your vehicle arriving, including when payment happens.",
+  alternates: { canonical: "/how-it-works" },
 };
 
 export default function HowItWorksPage() {
