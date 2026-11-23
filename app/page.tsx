@@ -17,6 +17,9 @@ const TRUST_POINTS = [
   { Icon: EnvelopeSimple, label: "Quote by email" },
 ];
 
+// Reviews section reads from the DB; refreshed by /admin/reviews changes.
+export const revalidate = 3600;
+
 export default function HomePage() {
   return (
     <>
@@ -72,7 +75,7 @@ export default function HomePage() {
 
       <ServicesSection />
       <HowItWorksSection />
-      <ReviewsSection />
+      <ReviewsSection limit={3} />
       <FaqSection limit={5} />
       <QuoteCtaSection />
       <ContactSection />

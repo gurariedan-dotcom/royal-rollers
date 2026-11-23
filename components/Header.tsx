@@ -7,9 +7,9 @@ import Image from "next/image";
 import { List, Phone, X } from "@phosphor-icons/react/dist/ssr";
 import { CONTACT } from "@/lib/content";
 
-// Reviews lives in the footer only, per the redesign mockup.
 const NAV_LINKS = [
   { href: "/how-it-works", label: "How it works" },
+  { href: "/reviews", label: "Reviews" },
   { href: "/services", label: "Services" },
   { href: "/faq", label: "FAQ" },
 ];
@@ -33,12 +33,12 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav aria-label="Main" className="hidden gap-9 md:flex">
+        <nav aria-label="Main" className="hidden gap-7 lg:flex xl:gap-9">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-base font-bold text-navy-muted transition-colors hover:text-paper"
+              className="whitespace-nowrap text-base font-bold text-navy-muted transition-colors hover:text-paper"
             >
               {link.label}
             </Link>
@@ -52,9 +52,9 @@ export default function Header() {
             className="flex h-11 items-center gap-2 rounded-btn px-2 text-base font-bold text-paper transition-colors hover:text-amber lg:px-3"
           >
             <Phone size={20} weight="bold" className="text-amber" />
-            <span className="hidden lg:inline">{CONTACT.phoneDisplay}</span>
+            <span className="hidden whitespace-nowrap xl:inline">{CONTACT.phoneDisplay}</span>
           </a>
-          <Link href="/quote" className="btn-amber hidden px-6 py-2.5 sm:inline-flex">
+          <Link href="/quote" className="btn-amber hidden whitespace-nowrap px-6 py-2.5 sm:inline-flex">
             Get a quote
           </Link>
 
@@ -64,7 +64,7 @@ export default function Header() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="flex h-11 w-11 items-center justify-center rounded-btn border border-navy-line text-paper md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-btn border border-navy-line text-paper lg:hidden"
           >
             {open ? <X size={20} weight="bold" /> : <List size={20} weight="bold" />}
           </button>
@@ -76,7 +76,7 @@ export default function Header() {
           <motion.nav
             id="mobile-nav"
             aria-label="Main mobile"
-            className="overflow-hidden border-t border-navy-line/60 bg-navy md:hidden"
+            className="overflow-hidden border-t border-navy-line/60 bg-navy lg:hidden"
             initial={reduce ? false : { height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={reduce ? {} : { height: 0, opacity: 0 }}

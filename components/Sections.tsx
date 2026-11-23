@@ -5,6 +5,7 @@ import Link from "next/link";
 import FaqAccordion from "@/components/FaqAccordion";
 import { COMPARISON, CONTACT, FAQS, STEPS } from "@/lib/content";
 import { DEPOSIT_DISPLAY } from "@/lib/deposit";
+import { countReviews, getReviews } from "@/lib/reviews";
 
 type HeadingLevel = "h1" | "h2";
 
@@ -192,7 +193,49 @@ export function HowItWorksSection({ as }: { as?: HeadingLevel }) {
   );
 }
 
-export function ReviewsSection({ as }: { as?: HeadingLevel }) {
+// Owner-entered past-customer reviews (/admin/reviews). `limit` is the
+// homepage's newest-three teaser; /reviews shows them all. Falls back to the
+// "on the way" note while there are none.
+export async function ReviewsSection({ as, limit }: { as?: HeadingLevel; limit?: number }) {
+  const [reviews, total] = await Promise.all([getReviews(limit), limit ? countReviews() : Promise.resolve(0)]);
+
+  if (reviews.length > 0) {
+    return (
+      <section id="reviews" className="scroll-mt-24 bg-paper-dim">
+        <div className="mx-auto max-w-6xl px-6 py-20 md:py-24">
+          <SectionHeading kicker="Reviews" title="What our customers say" as={as} />
+          <ul className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((r) => (
+              <li key={r.id} className="card flex flex-col p-6 md:p-7">
+                {r.rating && (
+                  <p className="text-xl tracking-widest text-amber-dark" aria-label={`${r.rating} out of 5 stars`}>
+                    {"★".repeat(r.rating)}
+                    <span className="text-line">{"★".repeat(5 - r.rating)}</span>
+                  </p>
+                )}
+                <blockquote className={`${r.rating ? "mt-3" : ""} flex-1 whitespace-pre-line text-lg text-ink`}>
+                  &ldquo;{r.body}&rdquo;
+                </blockquote>
+                <p className="mt-5 font-bold text-ink">{r.customer_name}</p>
+                {r.route && <p className="text-sm text-slate">{r.route}</p>}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-10 flex flex-wrap gap-4">
+            {limit && total > reviews.length && (
+              <Link href="/reviews" className="btn-outline">
+                See all {total} reviews
+              </Link>
+            )}
+            <Link href="/quote" className="btn-amber">
+              Get a quote
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="reviews" className="scroll-mt-24 bg-paper-dim">
       <div className="mx-auto max-w-4xl px-6 py-20 md:py-24">

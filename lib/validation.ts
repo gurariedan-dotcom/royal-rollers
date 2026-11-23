@@ -114,3 +114,13 @@ export const FLEXIBILITY_LABELS: Record<QuoteRequestInput["flexibilityWindow"], 
   plus_minus_5: "\u00B1 5 days",
   flexible: "Flexible / no rush",
 };
+
+// Owner-entered past-customer review (/admin/reviews). Blank optional fields
+// arrive as "" from the form and are stored as null.
+export const reviewSchema = z.object({
+  customerName: z.string().trim().min(1, "Name is required.").max(80),
+  route: z.string().trim().max(120).optional(),
+  rating: z.number().int().min(1).max(5).nullable().optional(),
+  body: z.string().trim().min(1, "Review text is required.").max(1000, "Keep it under 1000 characters."),
+});
+export type ReviewInput = z.infer<typeof reviewSchema>;
