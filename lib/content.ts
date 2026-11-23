@@ -149,5 +149,31 @@ export const CONTACT = {
 
 export const TAGLINE = "Nationwide vehicle transport, by carrier or by a personal driver, your call.";
 
-export const COMPANY_LINE =
-  "Royal Rollers LLC · 393 Beach 12th Street, Far Rockaway, NY 11691 · USDOT# 6895738 · MC# 73292138";
+// The one real address of the site. royal-rollers.com redirects here, so
+// Google/AI should only ever see www.
+export const SITE_URL = "https://www.royal-rollers.com";
+
+export const ADDRESS = {
+  street: "393 Beach 12th Street",
+  city: "Far Rockaway",
+  state: "NY",
+  zip: "11691",
+};
+export const USDOT = "6895738";
+export const MC = "73292138";
+
+export const COMPANY_LINE = `Royal Rollers LLC · ${ADDRESS.street}, ${ADDRESS.city}, ${ADDRESS.state} ${ADDRESS.zip} · USDOT# ${USDOT} · MC# ${MC}`;
+
+// Route landing pages (/routes/[slug]) -- one per real lane people search
+// for ("new york to florida car shipping"). Miles are approximate road
+// miles between the named cities. Keep this list short and real; mass
+// produced city-pair pages get treated as spam.
+export type RouteInfo = { slug: string; from: string; to: string; fromCity: string; toCity: string; miles: number };
+export const ROUTES: RouteInfo[] = [
+  { slug: "new-york-to-florida", from: "New York", to: "Florida", fromCity: "New York City", toCity: "Miami", miles: 1280 },
+  { slug: "new-jersey-to-florida", from: "New Jersey", to: "Florida", fromCity: "Newark", toCity: "Orlando", miles: 1030 },
+  { slug: "connecticut-to-florida", from: "Connecticut", to: "Florida", fromCity: "Hartford", toCity: "Miami", miles: 1410 },
+  { slug: "florida-to-new-york", from: "Florida", to: "New York", fromCity: "Miami", toCity: "New York City", miles: 1280 },
+  { slug: "new-york-to-california", from: "New York", to: "California", fromCity: "New York City", toCity: "Los Angeles", miles: 2790 },
+  { slug: "new-york-to-texas", from: "New York", to: "Texas", fromCity: "New York City", toCity: "Dallas", miles: 1550 },
+];

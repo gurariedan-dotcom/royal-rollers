@@ -1,9 +1,10 @@
 import { ContactSection, ServicesSection } from "@/components/Sections";
 
 export const metadata = {
-  title: "Services",
+  title: "Car Transport Services: Carrier vs. Personal Driver",
   description:
-    "Compare Carrier Transport and Personal Driver vehicle shipping side by side: insurance, mileage, fees, and typical turnaround.",
+    "Compare state-to-state car transport options side by side: insured carrier shipping vs. a personal driver. Insurance, mileage, fees, and typical turnaround.",
+  alternates: { canonical: "/services" },
 };
 
 export default function ServicesPage() {
