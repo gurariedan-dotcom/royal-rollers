@@ -64,6 +64,15 @@ export type QuoteRequestRow = {
   created_at: string;
 };
 
+export type ReviewRow = {
+  id: string;
+  customer_name: string;
+  route: string | null;
+  rating: number | null;
+  body: string;
+  created_at: string;
+};
+
 export type BookingRow = {
   id: string;
   quote_request_id: string;

@@ -54,5 +54,15 @@ create table bookings (
   created_at timestamptz not null default now()
 );
 
+-- Past-customer reviews the owner adds from /admin/reviews.
+create table reviews (
+  id uuid primary key default gen_random_uuid(),
+  customer_name text not null,
+  route text,
+  rating smallint check (rating between 1 and 5),
+  body text not null,
+  created_at timestamptz not null default now()
+);
+
 create index quote_requests_status_idx on quote_requests(status);
 create index bookings_quote_request_id_idx on bookings(quote_request_id);

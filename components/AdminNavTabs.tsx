@@ -12,12 +12,13 @@ import {
 const TABS = [
   { value: "quotes", label: "Quotes", href: "/admin/quotes" },
   { value: "bookings", label: "Bookings", href: "/admin/bookings" },
+  { value: "reviews", label: "Reviews", href: "/admin/reviews" },
 ] as const;
 
 export default function AdminNavTabs() {
   const pathname = usePathname();
   const router = useRouter();
-  const current = pathname?.includes("bookings") ? "bookings" : "quotes";
+  const current = TABS.find((t) => pathname?.startsWith(t.href))?.value ?? "quotes";
 
   return (
     <Tabs

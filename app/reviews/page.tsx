@@ -2,11 +2,13 @@ import { ContactSection, ReviewsSection } from "@/components/Sections";
 
 export const metadata = {
   title: "Reviews",
-  description: "Customer reviews for Royal Rollers vehicle transport are coming soon.",
+  description: "Reviews from Royal Rollers vehicle transport customers.",
 };
 
-// No fabricated testimonials: an honest empty state until real customer
-// reviews exist. Swap ReviewsSection's body for real quotes when they do.
+// Reviews are added by the owner from /admin/reviews; the admin API
+// revalidates this page on every change, the hourly revalidate is a backstop.
+export const revalidate = 3600;
+
 export default function ReviewsPage() {
   return (
     <>
