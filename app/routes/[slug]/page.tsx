@@ -97,17 +97,17 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
           </p>
 
           <dl className="mt-10 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-line bg-white p-5">
+            <div className="rounded-2xl border border-line bg-card p-5">
               <dt className="text-sm text-slate">Distance ({route.fromCity.name} to {route.toCity.name})</dt>
               <dd className="mt-1 font-mono text-2xl">~{miles} mi</dd>
             </div>
-            <div className="rounded-2xl border border-line bg-white p-5">
+            <div className="rounded-2xl border border-line bg-card p-5">
               <dt className="text-sm text-slate">Carrier estimate</dt>
               <dd className="mt-1 font-mono text-2xl">
                 {dollars(carrier.lowCents)}–{dollars(carrier.highCents)}
               </dd>
             </div>
-            <div className="rounded-2xl border border-line bg-white p-5">
+            <div className="rounded-2xl border border-line bg-card p-5">
               <dt className="text-sm text-slate">Personal driver estimate</dt>
               <dd className="mt-1 font-mono text-2xl">
                 {dollars(driver.lowCents)}–{dollars(driver.highCents)}

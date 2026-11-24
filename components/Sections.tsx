@@ -34,7 +34,7 @@ export function ServicesSection({ as, detailed = false }: { as?: HeadingLevel; d
         )}
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
-          <div className="on-navy rounded-2xl bg-navy-2 p-8 text-paper md:p-10">
+          <div className="on-navy rounded-2xl bg-navy-2 p-8 text-ink md:p-10">
             <h3 className="text-2xl md:text-3xl">Carrier Transport</h3>
             <p className="mt-4 max-w-md text-lg text-navy-muted">
               Your vehicle rides on an insured, licensed carrier&apos;s hauler. No mileage added. No

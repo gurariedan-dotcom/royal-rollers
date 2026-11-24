@@ -19,7 +19,7 @@ export default function Header() {
   const reduce = useReducedMotion();
 
   return (
-    <header className="on-navy sticky top-0 z-50 border-b border-navy-line/60 bg-navy text-paper">
+    <header className="on-navy sticky top-0 z-50 border-b border-navy-line/60 bg-navy text-ink">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
         <Link href="/" className="flex items-center gap-2.5 sm:gap-3" onClick={() => setOpen(false)}>
           <Image src="/logo-crest.jpg" alt="" width={44} height={44} priority className="h-9 w-9 shrink-0 rounded-full sm:h-11 sm:w-11" />
@@ -38,7 +38,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="whitespace-nowrap text-base font-bold text-navy-muted transition-colors hover:text-paper"
+              className="whitespace-nowrap text-base font-bold text-navy-muted transition-colors hover:text-ink"
             >
               {link.label}
             </Link>
@@ -49,7 +49,7 @@ export default function Header() {
           <a
             href={CONTACT.phoneHref}
             aria-label={`Call ${CONTACT.phoneDisplay}`}
-            className="flex h-11 items-center gap-2 rounded-btn px-2 text-base font-bold text-paper transition-colors hover:text-amber lg:px-3"
+            className="flex h-11 items-center gap-2 rounded-btn px-2 text-base font-bold text-ink transition-colors hover:text-amber lg:px-3"
           >
             <Phone size={20} weight="bold" className="text-amber" />
             <span className="hidden whitespace-nowrap xl:inline">{CONTACT.phoneDisplay}</span>
@@ -64,7 +64,7 @@ export default function Header() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="flex h-11 w-11 items-center justify-center rounded-btn border border-navy-line text-paper lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-btn border border-navy-line text-ink lg:hidden"
           >
             {open ? <X size={20} weight="bold" /> : <List size={20} weight="bold" />}
           </button>
@@ -88,7 +88,7 @@ export default function Header() {
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="block py-2.5 text-base font-bold text-navy-muted hover:text-paper"
+                    className="block py-2.5 text-base font-bold text-navy-muted hover:text-ink"
                   >
                     {link.label}
                   </Link>

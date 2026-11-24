@@ -172,13 +172,13 @@ export default function HeroQuoteCard() {
               <div className="pt-6">
                 {status === "loading" && (
                   <div className="flex items-center gap-3 rounded-xl border border-line bg-paper px-5 py-4">
-                    <span className="apple-spinner text-navy" aria-hidden="true" />
+                    <span className="apple-spinner text-accent" aria-hidden="true" />
                     <p className="text-slate">Calculating your estimate&hellip;</p>
                   </div>
                 )}
 
                 {status === "done" && estimate && (
-                  <div className="on-navy rounded-xl bg-navy px-5 py-5 text-paper sm:px-6">
+                  <div className="on-navy rounded-xl bg-navy px-5 py-5 text-ink sm:px-6">
                     <p className="kicker">Estimated cost</p>
                     <p className="mt-2 whitespace-nowrap font-display text-[1.75rem] font-extrabold tracking-signage text-amber min-[400px]:text-4xl sm:text-5xl">
                       <CountUp to={estimate.lowCents} />

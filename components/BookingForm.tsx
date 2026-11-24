@@ -79,9 +79,9 @@ function InnerBookingForm({ quote, canceled }: { quote: QuoteSummary; canceled: 
           {quote.balanceAmountCents ? formatDollars(quote.balanceAmountCents) : "the balance"}{" "}
           will be charged automatically once my vehicle is delivered, without further action on my part,
           and I agree to the{" "}
-          <Link href="/terms" target="_blank" className="underline hover:text-brass">Terms of Service</Link>
+          <Link href="/terms" target="_blank" className="underline hover:text-accent">Terms of Service</Link>
           {" "}and{" "}
-          <Link href="/privacy" target="_blank" className="underline hover:text-brass">Privacy Policy</Link>.
+          <Link href="/privacy" target="_blank" className="underline hover:text-accent">Privacy Policy</Link>.
         </span>
       </label>
 
@@ -90,7 +90,7 @@ function InnerBookingForm({ quote, canceled }: { quote: QuoteSummary; canceled: 
       <button
         type="submit"
         disabled={submitState === "submitting"}
-        className="w-full rounded-sm bg-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-60"
+        className="w-full rounded-sm bg-brass px-6 py-3 font-display text-sm uppercase tracking-wideish text-ink hover:bg-brass-dark disabled:opacity-60"
       >
         {submitState === "submitting"
           ? "Redirecting to checkout…"
@@ -156,7 +156,7 @@ export default function BookingForm({ quoteId, canceled }: { quoteId: string; ca
           <dt className="text-ink/60">Total quote</dt>
           <dd className="text-ink">{quote.quotedAmountCents ? formatDollars(quote.quotedAmountCents) : ""}</dd>
           <dt className="text-ink/60">Deposit due now</dt>
-          <dd className="font-semibold text-brass">
+          <dd className="font-semibold text-accent">
             {quote.depositAmountCents ? formatDollars(quote.depositAmountCents) : ""}
           </dd>
         </dl>

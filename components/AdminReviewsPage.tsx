@@ -111,7 +111,7 @@ export default function AdminReviewsPage() {
         {loadError && <p className="text-sm text-danger">{loadError}</p>}
         <button
           type="submit"
-          className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
+          className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-ink hover:bg-brass-dark"
         >
           Unlock
         </button>

@@ -108,7 +108,7 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
                 type="button"
                 aria-label="Previous month"
                 onClick={() => setViewMonth((m) => new Date(m.getFullYear(), m.getMonth() - 1, 1))}
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-ink/70 transition-colors duration-150 hover:bg-paper-dim hover:text-navy active:scale-[0.92]"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-ink/70 transition-colors duration-150 hover:bg-paper-dim hover:text-accent active:scale-[0.92]"
               >
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-current stroke-[2]">
                   <path d="M10 3l-5 5 5 5" strokeLinecap="round" strokeLinejoin="round" />
@@ -121,7 +121,7 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
                 type="button"
                 aria-label="Next month"
                 onClick={() => setViewMonth((m) => new Date(m.getFullYear(), m.getMonth() + 1, 1))}
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-ink/70 transition-colors duration-150 hover:bg-paper-dim hover:text-navy active:scale-[0.92]"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-ink/70 transition-colors duration-150 hover:bg-paper-dim hover:text-accent active:scale-[0.92]"
               >
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-current stroke-[2]">
                   <path d="M6 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
@@ -151,11 +151,11 @@ export default function DatePicker({ id, value, onChange, hasError }: DatePicker
                     className={[
                       "flex h-9 w-9 items-center justify-center rounded-lg text-sm transition-colors duration-150 active:scale-[0.94]",
                       isSelected
-                        ? "bg-navy font-bold text-paper"
+                        ? "bg-selected font-bold text-accent ring-1 ring-inset ring-accent"
                         : isPast
                         ? "text-slate-light/50"
                         : isToday
-                        ? "border border-navy/40 text-ink hover:bg-paper-dim"
+                        ? "border border-accent/40 text-ink hover:bg-paper-dim"
                         : "text-ink hover:bg-paper-dim",
                     ].join(" ")}
                   >

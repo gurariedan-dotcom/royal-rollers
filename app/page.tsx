@@ -27,7 +27,7 @@ export default function HomePage() {
     <>
       {/* Hero, per the owner's 2026-11 photo mockup: highway photo on the
           right, quote card on the left, trust strip along the bottom. */}
-      <section className="on-navy relative overflow-hidden bg-navy text-paper">
+      <section className="on-navy relative overflow-hidden bg-navy text-ink">
         {/* ponytail: photo cropped from the owner's mockup (734px wide); swap in the original high-res shot when available. */}
         {/* Below lg: the photo sits behind the card as a faded background. */}
         <div className="absolute inset-0 lg:hidden">
@@ -66,7 +66,7 @@ export default function HomePage() {
           {TRUST_POINTS.map(({ Icon, label }, i) => (
             <li
               key={label}
-              className={`flex items-center gap-3 text-lg text-paper ${i > 0 ? "sm:border-l sm:border-navy-line sm:pl-6" : ""}`}
+              className={`flex items-center gap-3 text-lg text-ink ${i > 0 ? "sm:border-l sm:border-navy-line sm:pl-6" : ""}`}
             >
               <Icon size={32} weight="duotone" className="shrink-0 text-amber" />
               {label}

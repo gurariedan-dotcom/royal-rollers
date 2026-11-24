@@ -4,6 +4,7 @@
 
 @layer base {
   html {
+    color-scheme: dark;
     scroll-behavior: smooth;
     /* Exposed for the handful of inline-style gradients (SVG/motion
        backgroundImage) that Tailwind's theme() can't reach from a .tsx
@@ -34,9 +35,6 @@
     @apply font-display font-extrabold tracking-signage text-ink;
     text-wrap: balance;
   }
-  .on-navy :is(h1, h2, h3, h4) {
-    @apply text-paper;
-  }
 
   p {
     text-wrap: pretty;
@@ -48,7 +46,7 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid theme("colors.navy.DEFAULT");
+    outline: 2px solid theme("colors.accent");
     outline-offset: 2px;
   }
 
@@ -100,7 +98,7 @@
     @apply mb-2 block text-base font-bold text-ink;
   }
   .field {
-    @apply block w-full rounded-lg border-2 border-line bg-card px-4 py-3 text-lg text-ink transition-colors duration-150 placeholder:text-slate-light hover:border-slate-light focus:border-navy focus:outline-none;
+    @apply block w-full rounded-lg border-2 border-line bg-card px-4 py-3 text-lg text-ink transition-colors duration-150 placeholder:text-slate-light hover:border-slate-light focus:border-accent focus:outline-none;
   }
   .field-error {
     @apply border-danger hover:border-danger;
@@ -111,7 +109,7 @@
     @apply rounded-lg border-2 border-line bg-card text-left text-ink transition-colors duration-150 hover:border-slate-light active:scale-[0.98];
   }
   .choice-on {
-    @apply border-navy bg-[#EEF2FB] hover:border-navy;
+    @apply border-accent bg-selected hover:border-accent;
   }
 
   /* Hero: navy gradient lifting toward the top right, with faint
@@ -148,12 +146,8 @@
   .btn-amber {
     @apply btn bg-amber text-navy hover:bg-amber-dark;
   }
-  /* Outlined: navy on light surfaces, white on navy surfaces. */
   .btn-outline {
-    @apply btn border-2 border-navy text-navy hover:bg-navy hover:text-paper;
-  }
-  .on-navy .btn-outline {
-    @apply border-paper text-paper hover:bg-paper hover:text-navy;
+    @apply btn border-2 border-accent text-accent hover:bg-accent hover:text-navy;
   }
 
   /* Smooth continuous-motion spinner for inline async status (VIN decode,
@@ -188,7 +182,7 @@
     background-image: linear-gradient(
       90deg,
       transparent,
-      rgba(30, 42, 58, 0.08),
+      rgb(238 242 250 / 0.10),
       transparent
     );
     background-size: 400px 100%;

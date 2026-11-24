@@ -1,11 +1,6 @@
 import type { Config } from "tailwindcss";
 
-// Design tokens for Royal Rollers -- navy + amber, sampled from the
-// 2026-11 redesign mockups. Legacy token names (brass/highway/rust/paper)
-// are kept and remapped so form, booking, and admin components restyle
-// without edits: brass = the navy accent, highway = Carrier (navy),
-// rust = Personal Driver (ink). Amber is the CTA color and always carries
-// dark text (white on amber is 1.8:1).
+// Dark surfaces, cool foregrounds, and amber calls to action.
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
@@ -27,15 +22,17 @@ const config: Config = {
       },
       colors: {
         ink: {
-          DEFAULT: "#15171C", // headings, primary text
-          soft: "#3A3F4A",
+          DEFAULT: "#EEF2FA", // headings, primary text
+          soft: "#C1CCDE",
         },
         paper: {
-          DEFAULT: "#F5F4EF", // page background
-          dim: "#ECE9E0", // alternate band background
+          DEFAULT: "#0C1424", // page background
+          dim: "#131E32", // alternate band background
         },
-        card: "#FFFFFF",
-        line: "#DDD8CE", // card + input borders
+        card: "#19263D",
+        accent: "#AAC2FF",
+        selected: "#243657",
+        line: "#475773", // card + input borders
         navy: {
           DEFAULT: "#0F1B33",
           2: "#16264A", // cards on navy, Carrier card
@@ -47,7 +44,7 @@ const config: Config = {
         amber: {
           DEFAULT: "#F2B84C", // CTAs, highlights on navy
           dark: "#E3A532", // CTA hover
-          ink: "#8A6200", // amber text on light backgrounds (AA)
+          ink: "#F2B84C", // amber text on dark surfaces
         },
         brass: {
           DEFAULT: "#0F1B33", // legacy accent name -> navy
@@ -63,10 +60,10 @@ const config: Config = {
           light: "#3A3F4A",
         },
         slate: {
-          DEFAULT: "#5E626D", // muted text (5.5:1 on paper)
-          light: "#8A8F98",
+          DEFAULT: "#B4BFD3", // muted text
+          light: "#A0ADC5",
         },
-        danger: "#B42318", // errors and destructive actions only
+        danger: "#FF918A", // errors and destructive actions only
       },
       fontFamily: {
         display: ["var(--font-archivo)", "sans-serif"],
