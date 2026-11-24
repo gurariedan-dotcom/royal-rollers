@@ -2,30 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { computeEstimate } from "@/lib/pricing";
 import { VEHICLE_TYPES, toPricingVehicleType } from "@/lib/validation";
 import { rateLimit } from "@/lib/http";
+import { roadMiles } from "@/lib/distance";
 
 const ZIP_REGEX = /^\d{5}$/;
-
-// Straight-line (great-circle) distance tends to undercount actual driving
-// distance -- roads aren't straight lines. This multiplier is a standard
-// rough correction (commonly cited in the 1.2-1.3x range for US road
-// networks) to turn "as the crow flies" into a closer approximation of
-// "as you'd actually drive it." This is an estimate feeding a non-binding
-// estimate, not a precision instrument.
-const ROAD_DISTANCE_FACTOR = 1.25;
-const EARTH_RADIUS_MILES = 3958.8;
-
-function toRadians(degrees: number): number {
-  return (degrees * Math.PI) / 180;
-}
-
-function haversineMiles(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const dLat = toRadians(lat2 - lat1);
-  const dLon = toRadians(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
-  return EARTH_RADIUS_MILES * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
 
 // ZIP -> {lat, lon} via Zippopotam.us -- free, no signup, no API key.
 async function geocodeZip(zip: string): Promise<{ lat: number; lon: number; place: string } | null> {
@@ -85,7 +64,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Could not locate one of those ZIP codes." }, { status: 422 });
   }
 
-  const miles = haversineMiles(pickup.lat, pickup.lon, dropoff.lat, dropoff.lon) * ROAD_DISTANCE_FACTOR;
+  const miles = roadMiles(pickup, dropoff);
   const { lowCents, highCents } = computeEstimate({
     miles,
     serviceType,
