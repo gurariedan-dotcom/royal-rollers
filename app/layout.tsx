@@ -65,10 +65,7 @@ const BUSINESS = {
     postalCode: ADDRESS.zip,
     addressCountry: "US",
   },
-  areaServed: [
-    { "@type": "Country", name: "United States" },
-    { "@type": "Country", name: "Canada" },
-  ],
+  areaServed: { "@type": "Country", name: "United States" },
   identifier: [
     { "@type": "PropertyValue", name: "USDOT", value: USDOT },
     { "@type": "PropertyValue", name: "MC", value: MC },

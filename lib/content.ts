@@ -53,7 +53,7 @@ export const FAQS: FaqItem[] = [
   },
   {
     q: "Do you ship internationally or only within the U.S.?",
-    a: "We service both the United States and Canada.",
+    a: "We currently ship within the United States only.",
   },
   {
     q: "Can I ship a car I just bought at auction or from a dealer?",
@@ -165,15 +165,29 @@ export const MC = "73292138";
 export const COMPANY_LINE = `Royal Rollers LLC · ${ADDRESS.street}, ${ADDRESS.city}, ${ADDRESS.state} ${ADDRESS.zip} · USDOT# ${USDOT} · MC# ${MC}`;
 
 // Route landing pages (/routes/[slug]) -- one per real lane people search
-// for ("new york to florida car shipping"). Miles are approximate road
-// miles between the named cities. Keep this list short and real; mass
-// produced city-pair pages get treated as spam.
-export type RouteInfo = { slug: string; from: string; to: string; fromCity: string; toCity: string; miles: number };
+// for ("new york to florida car shipping"). Keep this list short and real;
+// mass-produced city-pair pages get treated as spam.
+//
+// Each city is pinned to one ZIP, with the coordinates Zippopotam returns
+// for it (the same lookup /api/route-distance uses), so a route page shows
+// exactly what the homepage calculator gives for those two ZIPs.
+type RouteCity = { name: string; zip: string; lat: number; lon: number };
+const CITY = {
+  nyc: { name: "New York City", zip: "10001", lat: 40.7484, lon: -73.9967 },
+  miami: { name: "Miami", zip: "33101", lat: 25.7791, lon: -80.1978 },
+  newark: { name: "Newark", zip: "07102", lat: 40.732, lon: -74.1765 },
+  orlando: { name: "Orlando", zip: "32801", lat: 28.5399, lon: -81.3727 },
+  hartford: { name: "Hartford", zip: "06103", lat: 41.7672, lon: -72.676 },
+  losAngeles: { name: "Los Angeles", zip: "90012", lat: 34.0614, lon: -118.2385 },
+  dallas: { name: "Dallas", zip: "75201", lat: 32.7904, lon: -96.8044 },
+} satisfies Record<string, RouteCity>;
+
+export type RouteInfo = { slug: string; from: string; to: string; fromCity: RouteCity; toCity: RouteCity };
 export const ROUTES: RouteInfo[] = [
-  { slug: "new-york-to-florida", from: "New York", to: "Florida", fromCity: "New York City", toCity: "Miami", miles: 1280 },
-  { slug: "new-jersey-to-florida", from: "New Jersey", to: "Florida", fromCity: "Newark", toCity: "Orlando", miles: 1030 },
-  { slug: "connecticut-to-florida", from: "Connecticut", to: "Florida", fromCity: "Hartford", toCity: "Miami", miles: 1410 },
-  { slug: "florida-to-new-york", from: "Florida", to: "New York", fromCity: "Miami", toCity: "New York City", miles: 1280 },
-  { slug: "new-york-to-california", from: "New York", to: "California", fromCity: "New York City", toCity: "Los Angeles", miles: 2790 },
-  { slug: "new-york-to-texas", from: "New York", to: "Texas", fromCity: "New York City", toCity: "Dallas", miles: 1550 },
+  { slug: "new-york-to-florida", from: "New York", to: "Florida", fromCity: CITY.nyc, toCity: CITY.miami },
+  { slug: "new-jersey-to-florida", from: "New Jersey", to: "Florida", fromCity: CITY.newark, toCity: CITY.orlando },
+  { slug: "connecticut-to-florida", from: "Connecticut", to: "Florida", fromCity: CITY.hartford, toCity: CITY.miami },
+  { slug: "florida-to-new-york", from: "Florida", to: "New York", fromCity: CITY.miami, toCity: CITY.nyc },
+  { slug: "new-york-to-california", from: "New York", to: "California", fromCity: CITY.nyc, toCity: CITY.losAngeles },
+  { slug: "new-york-to-texas", from: "New York", to: "Texas", fromCity: CITY.nyc, toCity: CITY.dallas },
 ];

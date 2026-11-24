@@ -5,6 +5,7 @@ import JsonLd from "@/components/JsonLd";
 import { ContactSection } from "@/components/Sections";
 import { ROUTES, SITE_URL, type FaqItem } from "@/lib/content";
 import { DEPOSIT_DISPLAY } from "@/lib/deposit";
+import { roadMiles } from "@/lib/distance";
 import { computeEstimate } from "@/lib/pricing";
 
 // One landing page per real lane in ROUTES (lib/content.ts), so searches
@@ -20,29 +21,31 @@ const dollars = (cents: number) => `$${(cents / 100).toLocaleString("en-US")}`;
 function getRoute(slug: string) {
   const route = ROUTES.find((r) => r.slug === slug);
   if (!route) notFound();
-  const carrier = computeEstimate({ miles: route.miles, serviceType: "carrier", isRunning: "running", vehicleType: "sedan" });
-  const driver = computeEstimate({ miles: route.miles, serviceType: "personal_driver", isRunning: "running", vehicleType: "sedan" });
-  return { route, carrier, driver };
+  // Same distance + pricing path as the homepage calculator for these ZIPs.
+  const miles = roadMiles(route.fromCity, route.toCity);
+  const carrier = computeEstimate({ miles, serviceType: "carrier", isRunning: "running", vehicleType: "sedan" });
+  const driver = computeEstimate({ miles, serviceType: "personal_driver", isRunning: "running", vehicleType: "sedan" });
+  return { route, miles: Math.round(miles), carrier, driver };
 }
 
 export function generateMetadata({ params }: { params: { slug: string } }) {
-  const { route, carrier } = getRoute(params.slug);
+  const { route, miles, carrier } = getRoute(params.slug);
   return {
     title: `${route.from} to ${route.to} Car Shipping`,
-    description: `Ship your car from ${route.from} to ${route.to} (about ${route.miles.toLocaleString("en-US")} miles). Insured carrier or personal driver, instant estimates from ${dollars(carrier.lowCents)}. Get a priced quote by email.`,
+    description: `Ship your car from ${route.from} to ${route.to} (about ${miles.toLocaleString("en-US")} miles). Insured carrier or personal driver, instant estimates from ${dollars(carrier.lowCents)}. Get a priced quote by email.`,
     alternates: { canonical: `/routes/${route.slug}` },
   };
 }
 
 export default function RoutePage({ params }: { params: { slug: string } }) {
-  const { route, carrier, driver } = getRoute(params.slug);
+  const { route, miles: rawMiles, carrier, driver } = getRoute(params.slug);
   const lane = `${route.from} to ${route.to}`;
-  const miles = route.miles.toLocaleString("en-US");
+  const miles = rawMiles.toLocaleString("en-US");
 
   const faqs: FaqItem[] = [
     {
       q: `How much does it cost to ship a car from ${lane}?`,
-      a: `For a running sedan on open carrier transport, our instant estimate for ${route.fromCity} to ${route.toCity} (about ${miles} miles) is ${dollars(carrier.lowCents)} to ${dollars(carrier.highCents)}. A personal driver is about ${dollars(driver.lowCents)} to ${dollars(driver.highCents)}. Your exact ZIPs, vehicle, and dates set the final price, which we email you before you pay anything.`,
+      a: `For a running sedan on open carrier transport, our instant estimate for ${route.fromCity.name} to ${route.toCity.name} (about ${miles} miles) is ${dollars(carrier.lowCents)} to ${dollars(carrier.highCents)}. A personal driver is about ${dollars(driver.lowCents)} to ${dollars(driver.highCents)}. Your exact ZIPs, vehicle, and dates set the final price, which we email you before you pay anything.`,
     },
     {
       q: `Should I use a carrier or a personal driver from ${lane}?`,
@@ -95,7 +98,7 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
 
           <dl className="mt-10 grid gap-4 sm:grid-cols-3">
             <div className="rounded-2xl border border-line bg-white p-5">
-              <dt className="text-sm text-slate">Distance ({route.fromCity} to {route.toCity})</dt>
+              <dt className="text-sm text-slate">Distance ({route.fromCity.name} to {route.toCity.name})</dt>
               <dd className="mt-1 font-mono text-2xl">~{miles} mi</dd>
             </div>
             <div className="rounded-2xl border border-line bg-white p-5">
