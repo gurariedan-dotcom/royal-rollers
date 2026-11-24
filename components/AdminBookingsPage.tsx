@@ -38,7 +38,7 @@ function Spinner() {
 
 function CheckBadge() {
   return (
-    <svg className="h-4 w-4 animate-pop-in text-accent" viewBox="0 0 24 24" fill="none">
+    <svg className="h-4 w-4 animate-pop-in text-highway" viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15" />
       <path
         d="M8 12.5l2.5 2.5L16 9.5"
@@ -153,7 +153,7 @@ export default function AdminBookingsPage() {
         {loadError && <p className="text-sm text-danger">{loadError}</p>}
         <button
           type="submit"
-          className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-ink hover:bg-brass-dark"
+          className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
         >
           Unlock
         </button>
@@ -233,7 +233,7 @@ export default function AdminBookingsPage() {
                         {processing?.type === "delete" ? "Deleting…" : "Charging…"}
                       </div>
                     ) : approvedId === b.id ? (
-                      <div className="flex items-center gap-2 text-xs text-accent">
+                      <div className="flex items-center gap-2 text-xs text-highway">
                         <CheckBadge />
                         Approved
                       </div>
@@ -246,7 +246,7 @@ export default function AdminBookingsPage() {
                         <div className="mt-2 flex gap-2">
                           <button
                             onClick={() => handleChargeBalance(b.id)}
-                            className="rounded-sm bg-brass px-3 py-1.5 font-display text-xs uppercase tracking-wideish text-ink hover:bg-brass-dark"
+                            className="rounded-sm bg-brass px-3 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark"
                           >
                             Yes, Charge
                           </button>
@@ -267,7 +267,7 @@ export default function AdminBookingsPage() {
                         <div className="mt-2 flex gap-2">
                           <button
                             onClick={() => handleDeleteCustomer(b.id)}
-                            className="rounded-sm bg-brass px-3 py-1.5 font-display text-xs uppercase tracking-wideish text-ink hover:bg-brass-dark"
+                            className="rounded-sm bg-brass px-3 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark"
                           >
                             Yes, Delete
                           </button>
@@ -284,7 +284,7 @@ export default function AdminBookingsPage() {
                         {eligible ? (
                           <button
                             onClick={() => setPendingAction({ id: b.id, type: "charge" })}
-                            className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-ink hover:bg-brass-dark"
+                            className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark"
                           >
                             Mark Delivered & Charge {formatDollars(b.balanceAmountCents)}
                           </button>

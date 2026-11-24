@@ -57,7 +57,7 @@ export default function TermsPage() {
           <p className="mt-3">
             Cancellations are refundable except for the deposit, which is
             non-refundable. See our{" "}
-            <a href="/faq" className="underline hover:text-accent">FAQ</a>{" "}
+            <a href="/faq" className="underline hover:text-brass">FAQ</a>{" "}
             for current cancellation and rescheduling details.
           </p>
         </section>
@@ -126,11 +126,11 @@ export default function TermsPage() {
           <h2 className="font-display text-xl text-ink">Contact us</h2>
           <p className="mt-3">
             Questions about these terms? Email{" "}
-            <a href="mailto:support@royal-rollers.com" className="underline hover:text-accent">
+            <a href="mailto:support@royal-rollers.com" className="underline hover:text-brass">
               support@royal-rollers.com
             </a>{" "}
             or call{" "}
-            <a href="tel:+16465892334" className="underline hover:text-accent">
+            <a href="tel:+16465892334" className="underline hover:text-brass">
               (646) 589-2334
             </a>
             .

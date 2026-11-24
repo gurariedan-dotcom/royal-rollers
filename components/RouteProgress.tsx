@@ -23,7 +23,7 @@ export default function RouteProgress({ steps, currentIndex }: RouteProgressProp
                 isComplete
                   ? "bg-amber text-navy"
                   : isCurrent
-                  ? "bg-navy text-ink"
+                  ? "bg-navy text-paper"
                   : "bg-paper-dim text-slate",
               ].join(" ")}
             >

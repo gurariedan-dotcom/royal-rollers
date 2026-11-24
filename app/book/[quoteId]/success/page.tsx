@@ -20,7 +20,7 @@ function ErrorPanel({ quoteId, message }: { quoteId: string; message: string }) 
         <p className="mt-3 text-ink/80">{message}</p>
         <Link
           href={`/book/${quoteId}`}
-          className="mt-6 inline-block rounded-sm border border-accent px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-accent transition-colors hover:bg-brass hover:text-ink"
+          className="mt-6 inline-block rounded-sm border border-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-brass transition-colors hover:bg-brass hover:text-paper"
         >
           Back to booking
         </Link>
@@ -78,7 +78,7 @@ export default async function BookingSuccessPage({
       <h1 className="mt-2 text-3xl">You&apos;re booked</h1>
 
       <div className="mt-10 rounded-sm border border-highway bg-highway/10 p-8 text-center shadow-panel">
-        <p className="font-display text-xl uppercase tracking-signage text-accent">Booked</p>
+        <p className="font-display text-xl uppercase tracking-signage text-highway">Booked</p>
         <p className="mt-3 text-ink/80">
           Your deposit of {bookingRow?.deposit_amount_cents ? formatDollars(bookingRow.deposit_amount_cents) : ""} has
           been charged, and your card is on file for the remaining balance

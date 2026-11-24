@@ -172,12 +172,12 @@ function VehicleIcon({ type, active }: { type: (typeof VEHICLE_TYPES)[number]; a
     <svg viewBox="0 0 40 20" aria-hidden="true" className="h-6 w-10">
       <path d={body} className={tone} />
       {windows.map((w, i) => (
-        <path key={i} d={w} className="fill-ink" />
+        <path key={i} d={w} className="fill-paper" />
       ))}
       {wheels.map((cx, i) => (
         <g key={i}>
           <circle cx={cx} cy="16.5" r="3.1" className={tone} />
-          <circle cx={cx} cy="16.5" r="1.55" className="fill-ink" />
+          <circle cx={cx} cy="16.5" r="1.55" className="fill-paper" />
           <circle cx={cx} cy="16.5" r="0.5" className={tone} />
         </g>
       ))}
@@ -221,11 +221,11 @@ function OptionButton({
       <span
         className={[
           "flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors duration-150",
-          selected ? "border-accent bg-navy" : "border-slate-light bg-card",
+          selected ? "border-navy bg-navy" : "border-slate-light bg-card",
         ].join(" ")}
       >
         {selected && (
-          <svg viewBox="0 0 16 16" className="h-3 w-3 fill-none stroke-ink stroke-[3]">
+          <svg viewBox="0 0 16 16" className="h-3 w-3 fill-none stroke-paper stroke-[3]">
             <path d="M3 8l3.5 3.5L13 4.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
@@ -568,9 +568,9 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
         initial={reduce ? false : { opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="rounded-xl border-2 border-accent bg-selected p-8 text-center"
+        className="rounded-xl border-2 border-navy bg-[#EEF2FB] p-8 text-center"
       >
-        <p className="text-2xl font-extrabold text-accent">
+        <p className="text-2xl font-extrabold text-navy">
           Request received
         </p>
         <p className="mt-3 text-ink/80">
@@ -660,7 +660,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
                       className="mt-2 flex items-center gap-2"
                       aria-live="polite"
                     >
-                      <span className="apple-spinner text-accent" aria-hidden="true" />
+                      <span className="apple-spinner text-navy" aria-hidden="true" />
                       <p className="text-sm text-slate">Looking up your vehicle&hellip;</p>
                     </motion.div>
                   )}
@@ -691,7 +691,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
                 <button
                   type="button"
                   onClick={switchToManual}
-                  className="mt-3 text-sm font-semibold text-accent underline underline-offset-4"
+                  className="mt-3 text-sm font-semibold text-navy underline underline-offset-4"
                 >
                   Don&apos;t have the VIN handy? Enter vehicle details manually
                 </button>
@@ -777,7 +777,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
                 <button
                   type="button"
                   onClick={switchToVin}
-                  className="mt-3 text-sm font-semibold text-accent underline underline-offset-4"
+                  className="mt-3 text-sm font-semibold text-navy underline underline-offset-4"
                 >
                   Have the VIN? Enter it instead
                 </button>
@@ -814,7 +814,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
                       <span
                         className={[
                           "w-full text-center text-xs font-semibold leading-tight [overflow-wrap:anywhere]",
-                          selected ? "text-accent" : "text-ink",
+                          selected ? "text-navy" : "text-ink",
                         ].join(" ")}
                       >
                         {VEHICLE_TYPE_LABELS[type]}
@@ -843,7 +843,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
                       <span
                         className={[
                           "text-sm font-semibold",
-                          selected ? "text-accent" : "text-ink",
+                          selected ? "text-navy" : "text-ink",
                         ].join(" ")}
                       >
                         {VEHICLE_TYPE_LABELS[type]}
@@ -970,13 +970,13 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
                 className="flex items-center gap-2 rounded-lg border border-line bg-paper p-4"
                 aria-live="polite"
               >
-                <span className="apple-spinner text-accent" aria-hidden="true" />
+                <span className="apple-spinner text-navy" aria-hidden="true" />
                 <p className="text-sm text-slate">Estimating cost&hellip;</p>
               </motion.div>
             )}
             {estimateStatus === "done" && estimate && (
               <div className="rounded-lg border border-line bg-paper p-4 text-ink">
-                <span className="font-mono text-lg font-semibold text-accent">
+                <span className="font-mono text-lg font-semibold text-navy">
                   ${(estimate.lowCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                   {"-"}
                   ${(estimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
@@ -1138,7 +1138,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
       <AnimatePresence>
         {itemsNoticeOpen && (
           <motion.div
-            className="fixed inset-0 z-30 flex items-center justify-center bg-navy-deep/80 p-4"
+            className="fixed inset-0 z-30 flex items-center justify-center bg-ink/40 p-4"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -1187,7 +1187,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
       <AnimatePresence>
         {roundTripPromptOpen && (
           <motion.div
-            className="fixed inset-0 z-30 flex items-center justify-center bg-navy-deep/80 p-4"
+            className="fixed inset-0 z-30 flex items-center justify-center bg-ink/40 p-4"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0 }}
@@ -1212,7 +1212,7 @@ export default function QuoteForm({ initial }: { initial?: Partial<FormState> })
               {estimate && roundTripEstimate && (
                 <p className="mt-4 rounded-lg border border-line bg-paper p-3 text-ink">
                   Round trip runs about{" "}
-                  <span className="font-mono font-semibold text-accent">
+                  <span className="font-mono font-semibold text-navy">
                     ${(roundTripEstimate.lowCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                     –$
                     {(roundTripEstimate.highCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}

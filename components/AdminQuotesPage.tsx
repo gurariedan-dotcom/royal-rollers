@@ -267,7 +267,7 @@ export default function AdminQuotesPage() {
         {loadError && <p className="text-sm text-danger">{loadError}</p>}
         <button
           type="submit"
-          className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-ink hover:bg-brass-dark"
+          className="rounded-sm bg-brass px-6 py-2.5 font-display text-sm uppercase tracking-wideish text-paper hover:bg-brass-dark"
         >
           Unlock
         </button>
@@ -355,7 +355,7 @@ export default function AdminQuotesPage() {
                           ? "text-danger"
                           : q.status === "quoted"
                             ? "text-danger"
-                            : "text-accent"
+                            : "text-highway"
                       }
                     >
                       {STATUS_LABELS[q.status]}
@@ -390,7 +390,7 @@ export default function AdminQuotesPage() {
                           <button
                             onClick={() => handleDeleteQuote(q.id)}
                             disabled={deletingId === q.id}
-                            className="rounded-sm bg-brass px-3 py-1.5 font-display text-xs uppercase tracking-wideish text-ink hover:bg-brass-dark disabled:opacity-50"
+                            className="rounded-sm bg-brass px-3 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-50"
                           >
                             {deletingId === q.id ? "Deleting…" : "Yes, Delete"}
                           </button>
@@ -408,7 +408,7 @@ export default function AdminQuotesPage() {
                           <button
                             onClick={() => handleSendQuote(q.id)}
                             disabled={isSending}
-                            className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-ink hover:bg-brass-dark disabled:opacity-50"
+                            className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-50"
                           >
                             {isSending ? "Sending…" : q.status === "pending" ? "Send Quote" : "Resend"}
                           </button>
@@ -430,7 +430,7 @@ export default function AdminQuotesPage() {
                     {rowMessages[q.id] && (
                       <p
                         className={`mt-1 max-w-[180px] text-xs ${
-                          rowMessages[q.id] === "Quote sent!" ? "text-accent" : "text-danger"
+                          rowMessages[q.id] === "Quote sent!" ? "text-highway" : "text-danger"
                         }`}
                       >
                         {rowMessages[q.id]}
@@ -608,7 +608,7 @@ export default function AdminQuotesPage() {
                         <button
                           onClick={() => handleSaveEdit(q.id)}
                           disabled={editSaving}
-                          className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-ink hover:bg-brass-dark disabled:opacity-50"
+                          className="rounded-sm bg-brass px-4 py-1.5 font-display text-xs uppercase tracking-wideish text-paper hover:bg-brass-dark disabled:opacity-50"
                         >
                           {editSaving ? "Saving…" : "Save changes"}
                         </button>

@@ -47,11 +47,11 @@ export default function AccessibilityPage() {
           </p>
           <p className="mt-3">
             Email{" "}
-            <a href="mailto:support@royal-rollers.com" className="underline hover:text-accent">
+            <a href="mailto:support@royal-rollers.com" className="underline hover:text-brass">
               support@royal-rollers.com
             </a>{" "}
             or call{" "}
-            <a href="tel:+16465892334" className="underline hover:text-accent">
+            <a href="tel:+16465892334" className="underline hover:text-brass">
               (646) 589-2334
             </a>
             .
